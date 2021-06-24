@@ -1,0 +1,6 @@
+module Pods_groceryApp_groceryAppTests {
+  umbrella header "Pods-groceryApp-groceryAppTests-umbrella.h"
+
+  export *
+  module * { export * }
+}

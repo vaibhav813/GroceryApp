@@ -1,0 +1,1 @@
+export const imageBaseUrl = 'https://grocery.thezetacode.com/Upload/';

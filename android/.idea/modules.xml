@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/groceryApp.iml" filepath="$PROJECT_DIR$/.idea/modules/groceryApp.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/groceryApp.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/groceryApp.app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/-1103382970/groceryApp.react-native-community_async-storage.iml" filepath="$PROJECT_DIR$/.idea/modules/-1103382970/groceryApp.react-native-community_async-storage.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/-1620185405/groceryApp.react-native-community_masked-view.iml" filepath="$PROJECT_DIR$/.idea/modules/-1620185405/groceryApp.react-native-community_masked-view.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/-744756311/groceryApp.react-native-firebase-push-notifications.iml" filepath="$PROJECT_DIR$/.idea/modules/-744756311/groceryApp.react-native-firebase-push-notifications.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/-944923788/groceryApp.react-native-gesture-handler.iml" filepath="$PROJECT_DIR$/.idea/modules/-944923788/groceryApp.react-native-gesture-handler.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/589497452/groceryApp.react-native-razorpay.iml" filepath="$PROJECT_DIR$/.idea/modules/589497452/groceryApp.react-native-razorpay.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/821602856/groceryApp.react-native-reanimated.iml" filepath="$PROJECT_DIR$/.idea/modules/821602856/groceryApp.react-native-reanimated.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/-1182292259/groceryApp.react-native-safe-area-context.iml" filepath="$PROJECT_DIR$/.idea/modules/-1182292259/groceryApp.react-native-safe-area-context.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/-828405963/groceryApp.react-native-screens.iml" filepath="$PROJECT_DIR$/.idea/modules/-828405963/groceryApp.react-native-screens.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/-271584297/groceryApp.react-native-snackbar.iml" filepath="$PROJECT_DIR$/.idea/modules/-271584297/groceryApp.react-native-snackbar.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/309009088/groceryApp.react-native-splash-screen.iml" filepath="$PROJECT_DIR$/.idea/modules/309009088/groceryApp.react-native-splash-screen.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/533832210/groceryApp.react-native-svg.iml" filepath="$PROJECT_DIR$/.idea/modules/533832210/groceryApp.react-native-svg.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/1978618082/groceryApp.react-native-vector-icons.iml" filepath="$PROJECT_DIR$/.idea/modules/1978618082/groceryApp.react-native-vector-icons.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/-1569463385/groceryApp.react-native-webview.iml" filepath="$PROJECT_DIR$/.idea/modules/-1569463385/groceryApp.react-native-webview.iml" />
+    </modules>
+  </component>
+</project>
