@@ -3,6 +3,7 @@
 #import <React/RCTBridge.h>
 #import <React/RCTBundleURLProvider.h>
 #import <React/RCTRootView.h>
+#import <React/RCTDevLoadingView.h>
 
 #ifdef FB_SONARKIT_ENABLED
 #import <FlipperKit/FlipperClient.h>
@@ -12,6 +13,11 @@
 #import <SKIOSNetworkPlugin/SKIOSNetworkAdapter.h>
 #import <FlipperKitReactPlugin/FlipperKitReactPlugin.h>
 #import "RNSplashScreen.h"
+
+#import "Firebase.h"
+#import "RNFirebaseMessaging.h"
+#import "FirebasePushNotifications.h"
+#import "RNFirebaseMessaging.h"
 
 static void InitializeFlipper(UIApplication *application) {
   FlipperClient *client = [FlipperClient sharedClient];
@@ -33,6 +39,9 @@ static void InitializeFlipper(UIApplication *application) {
 #endif
 
   RCTBridge *bridge = [[RCTBridge alloc] initWithDelegate:self launchOptions:launchOptions];
+  
+  
+  
   RCTRootView *rootView = [[RCTRootView alloc] initWithBridge:bridge
                                                    moduleName:@"groceryApp"
                                             initialProperties:nil];
@@ -53,8 +62,32 @@ static void InitializeFlipper(UIApplication *application) {
       // or
     //  [RNSplashScreen showSplash:@"LaunchScreen" inRootView:rootView];
   
+//  [FIRApp configure];
+//         [FirebasePushNotifications configure];
+  
   return YES;
 }
+
+
+//
+//- (void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification {
+//[[FirebasePushNotifications instance] didReceiveLocalNotification:notification];
+//}
+
+
+//
+//- (void)application:(UIApplication *)application didReceiveRemoteNotification:(nonnull NSDictionary *)userInfo
+//                                                    fetchCompletionHandler:(nonnull void (^)(UIBackgroundFetchResult))completionHandler{
+//[[FirebasePushNotifications instance] didReceiveRemoteNotification:userInfo fetchCompletionHandler:completionHandler];
+//}
+//
+//- (void)application:(UIApplication *)application didRegisterUserNotificationSettings:(UIUserNotificationSettings *)notificationSettings {
+//
+//[[RNFirebaseMessaging instance] didRegisterUserNotificationSettings:notificationSettings];
+//}
+
+
+
 
 - (NSURL *)sourceURLForBridge:(RCTBridge *)bridge
 {

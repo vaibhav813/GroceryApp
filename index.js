@@ -29,7 +29,8 @@ import SeeMoreScreen from './app/Screens/Home/Seemore';
 import SplashScreen from './app/Screens/Splash/index'
  import {themeColor} from '././app/Component/config'
  import VenderList from '././app/Screens/Vender/index'
- import AllCategory from '././app/Screens/Home/AllCategory'
+ //import VendorCategory from '././app/Screens/Category/VendorCategory';
+  import AllCategoryScreen from '././app/Screens/Home/AllCategory'
 
 
 import {
@@ -76,12 +77,12 @@ function HomeStack() {
                 name="SeeMoreScreen"
                 component={SeeMoreScreen}
                 headerTitleStyle={{ alignSelf: 'center' }}
-                options={{ title: 'All Categories' }} />
+                options={{ title: 'See More' }} />
 
 
               <Stack.Screen
                 name="AllCategoryScreen"
-                component={AllCategory}
+                component={AllCategoryScreen}
                 headerTitleStyle={{ alignSelf: 'center' }}
                 options={{ title: 'All Category' , headerShown:false}} />
 
@@ -95,6 +96,23 @@ function HomeStack() {
         </Stack.Navigator>
     );
 }
+
+const venderScreens = ()=>{
+    return (
+        <Stack.Navigator
+            initialRouteName="AllCategoryScreen"
+            screenOptions={{
+                headerStyle: { backgroundColor: themeColor },
+                headerTintColor: '#fff',
+                
+                headerTitleStyle: { fontWeight: 'bold', alignSelf: 'center' }
+            }}>
+           
+
+        </Stack.Navigator>
+    );
+}
+
 
 const tabStackOrders = () => {
     return (
@@ -279,7 +297,7 @@ const tabStacks = () => {
     return (
 
         <Tab.Navigator
-            // initialRouteName="HomeScreen"
+             initialRouteName="HomeScreen"
             tabBarOptions={{
                 activeTintColor: tabColor,
             }}

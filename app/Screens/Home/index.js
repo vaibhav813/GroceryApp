@@ -9,6 +9,7 @@ import { ListItems, PromoList } from '../../Component/SkeltonRow';
 import Header from '../../Component/Header'  
 import VenderList from '../../Screens/Vender/index'
 
+
 const categoryHeight = '16%';
 
 class Home extends Component {
@@ -265,8 +266,14 @@ UNSAFE_componentWillMount(){
 
 
             <View style={styles.break} />
+            
+
+           
+                   
+
                 <ScrollView contentContainerStyle={{ flexGrow: 1 }} showsVerticalScrollIndicator={false}>
-                    {this.searchRender()}
+                   
+                {this.searchRender()}
                     <View style={styles.break} />
                     {this.textView('What do you looking for?')}
                     <View style={styles.break} />
@@ -274,13 +281,12 @@ UNSAFE_componentWillMount(){
 
 
                     <View style={[styles.break, { marginTop: 5, marginBottom: 0, borderWidth: 0 }]} />
-                    {this.offersView()}
+                    {this.offersView()} 
                     <View style={[styles.break, { marginTop: 5, marginBottom: 0, borderWidth: 0 }]} />
                     {this.textView("Pick's today")}
                     <VenderList props={this.props}/>
 
-                    {this.boxRenderView()}
-
+                    {this.boxRenderView()} 
                 </ScrollView>
             </View>
         )
