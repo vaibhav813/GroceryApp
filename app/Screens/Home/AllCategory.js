@@ -285,8 +285,9 @@
 
 
 import React, { Component } from 'react';
-import { View, Text } from 'react-native';
+import { View, Text,StyleSheet,Platform } from 'react-native';
 import { connect } from 'react-redux';
+import Header from '../../Component/Header'
 
 class AllCategory extends Component {
   constructor(props) {
@@ -298,11 +299,105 @@ class AllCategory extends Component {
   render() {
     return (
       <View>
+        <Header title="All Category" props={this.props} right={false}/>
         <Text> AllCategory </Text>
       </View>
     );
   }
 }
+
+
+const styles = StyleSheet.create({
+    container:{
+        flex:1
+    },
+    categoryTitle:{
+        width:'100%',
+        flexDirection:'row',
+        justifyContent:'space-around',
+        alignItems:'center',
+       
+    },
+    categoryView:{
+        flexDirection:'row',
+        flexWrap:'wrap',
+
+    },
+    item:{
+        height:100,
+        width:100,
+        borderRadius:20,
+        shadowColor:'#ccc',
+        shadowOpacity:0.8,
+        shadowOffset:{height:10,width:10},
+        elevation:5,
+        shadowRadius:5,
+        backgroundColor:'#fff',
+        alignItems:'center',
+        alignItems:'center',
+        margin:5,
+        padding:10
+        
+    },
+    boxView: {
+        height: 210,
+        width: '45%',
+        borderRadius: 10,
+        backgroundColor: '#fff',
+        shadowOffset: {
+            width: 5,
+            height: 5
+        },
+        shadowOpacity: 0.1,
+        elevation: 5,
+        shadowColor: '#808080',
+        padding: 10,
+        margin: 5
+    },
+    priceAndAdd:
+    {
+        flexDirection: 'row',
+        width: '100%',
+        //padding: 5,
+        justifyContent: 'space-between',
+        alignItems: 'center',
+       // borderWidth:1
+       
+    },
+    add: {
+        height: 40,
+        width: 40,
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 40,
+        elevation: 1,
+        backgroundColor: '#fff',
+        shadowOffset: {
+            width: 5,
+            height: 5
+        },
+        shadowOpacity: 0.8,
+        shadowColor: Platform.OS='ios'?'#ccc':'#000'
+
+    },
+    button: {
+        width:'40%',
+        backgroundColor:'rgba(0,0,0,0.4)',
+        borderRadius:40,
+        right: '30%', 
+        bottom: '13%', 
+        alignSelf:'center',
+        alignItems:'center',
+        justifyContent:'center',
+        elevation:5,
+        shadowOpacity:0.8,
+        shadowColor:'#ccc',
+        padding:10,
+        position: 'absolute', 
+        
+          
+    },
+})
 
 const mapStateToProps = state => (
   

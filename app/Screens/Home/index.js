@@ -9,7 +9,7 @@ import { ListItems, PromoList } from '../../Component/SkeltonRow';
 import Header from '../../Component/Header'  
 import VenderList from '../../Screens/Vender/index'
 
-const categoryHeight = '19%';
+const categoryHeight = '16%';
 
 class Home extends Component {
 
@@ -180,7 +180,7 @@ UNSAFE_componentWillMount(){
     }
 
     categoryView = () => {
-     //   console.log(' this.props.catListHome--- ', this.props.catListHome)
+        console.log(' this.props.catListHome--- ', this.props.catListHome)
         return (
           
             _get(this.props, 'catListHome', []).length == 0 ?
@@ -329,9 +329,9 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         flexWrap: 'wrap',
-        marginBottom: 10,
-        //paddingLeft: 10,
-       // overflow: 'hidden',
+       // marginBottom: 10,
+       // padding: 10,
+        overflow: 'hidden',
         // borderWidth:1
     },
 
