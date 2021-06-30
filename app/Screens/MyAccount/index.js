@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Image } from 'react-native';
+import {themeColor} from '../../Component/config';
+
 
 export default class Home extends Component {
 
@@ -31,7 +33,7 @@ export default class Home extends Component {
                 <View style={{ flex: 0.2, borderWidth: 0, height: '100%', justifyContent: 'center', alignItems: 'center' }}>
                     <View style={[styles.iconBackground,{backgroundColor:color}]}>
                         {type == "Promos" ?
-                            <Image source={require('../../assets/images/user/discount1.png')} style={{ height: 25, width: 25, backgroundColor: '#00A300' }} />
+                            <Image source={require('../../assets/images/user/discount1.png')} style={{ height: 25, width: 25, backgroundColor: themeColor }} />
                             :
                             type == "My Address" ?
                                 <Image source={require('../../assets/images/user/address.png')} style={{ height: 25, width: 25, backgroundColor: '#000' }} />
@@ -109,13 +111,13 @@ const styles = StyleSheet.create({
         width: 110,
         marginTop: 10,
         borderRadius: 5,
-        backgroundColor: '#00A300',
+        backgroundColor: themeColor,
         justifyContent: 'center',
         alignItems: 'center',
         flexDirection: 'row'
     },
     iconBackground:{ height: 40, width: 40, 
         borderRadius: 40, borderWidth: 0, 
-        borderColor: '#00A300', justifyContent: 'center',
+        borderColor: themeColor, justifyContent: 'center',
          alignItems: 'center', backgroundColor: '#fff' }
 })

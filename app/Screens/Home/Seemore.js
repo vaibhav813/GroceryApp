@@ -6,6 +6,7 @@ import { imageBaseUrl } from '../../Component/config'
 import _get from 'lodash/get';
 import { ImageWithText } from '../../Component/SkeltonRow';
 import { commonActionGet, commonActionPost, getTypeListAction } from '../../action/commonAction'
+import {themeColor} from '../../Component/config'
 
 const categoryHeight='21%';
 
@@ -127,7 +128,7 @@ const styles=StyleSheet.create({
       // justifyContent:'center',
        alignItems:'center',
        padding:10,
-       backgroundColor:'#00A300'
+       backgroundColor:themeColor
         //borderWidth:1
     },
     categoryView:{

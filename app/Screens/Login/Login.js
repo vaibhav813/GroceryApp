@@ -5,6 +5,7 @@ import {commonAction} from '../../action/commonAction'
 // import LinearGradient from 'react-native-linear-gradient';
 import axios from 'axios';
 import {reset} from '../../Component/RootNavigation'
+import SplashScreen from 'react-native-splash-screen'
 
 
 
@@ -20,6 +21,7 @@ this.state={val:'',mail:'',password:''}
 componentDidMount(){
 
     console.log("componentDidMount In login ",this.props)
+    SplashScreen.hide()
 }
 
 onChangeText=(text,type)=>{

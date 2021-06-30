@@ -12,7 +12,7 @@ super(props)
 //     return(
 // <TouchableOpacity style={styles.orderView}>
 // <View style={styles.orderView1}>
-//     <View style={{height:25,width:80,borderRadius:5,justifyContent:'center',alignItems:'center',backgroundColor:'#00A300'}}>
+//     <View style={{height:25,width:80,borderRadius:5,justifyContent:'center',alignItems:'center',backgroundColor:themeColor}}>
 // <Text style={{color:'#fff'}}>Delivered</Text>
 
 //     </View>

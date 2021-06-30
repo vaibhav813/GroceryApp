@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, TextInput, FlatList, ScrollView, Image, BackHandler } from 'react-native';
-import { CommonActions } from "@react-navigation/native";
+import { View, Text, TouchableOpacity, StyleSheet, TextInput, FlatList, ScrollView, Image, BackHandler} from 'react-native';
+
 import { commonActionGet, commonActionPost, getTypeListAction } from '../../action/commonAction'
 import { connect } from 'react-redux';
 import { imageBaseUrl } from '../../Component/config'
 import _get from 'lodash/get';
 import { ListItems, PromoList } from '../../Component/SkeltonRow';
+import Header from '../../Component/Header'  
+import VenderList from '../../Screens/Vender/index'
 
 const categoryHeight = '19%';
 
@@ -29,10 +31,14 @@ class Home extends Component {
         BackHandler.addEventListener('hardwareBackPress', this.back_Button_Press);
     }
 
-
+UNSAFE_componentWillMount(){
+  
+}
     componentDidMount() {
         this.getPromos()
-         this.getCategoryListHome();
+        this.getCategoryListHome();
+      //  console.log("**********",_get(this.props, 'catListHome', []))
+         
     }
     componentWillUnmount() {
 
@@ -74,10 +80,11 @@ class Home extends Component {
         const identifier = "GET_CAT_LIST_HOME";
         const url = "/categorylist";
         const obj = {
-            "type": 1
+            uriData: 1
         }
         const type="?type=";
         this.props.getTypeListAction(obj,url,constants,identifier,key,type)
+        
        // this.props.commonActionGet(obj, url, constants, identifier, key)
     }
 
@@ -108,19 +115,18 @@ class Home extends Component {
 
         return (
             _get(this.props, 'catListHome', []).map(item => {
-
+             console.log('get Item in Map ^^^^^^^^ ',item)
                 return (
-                    item.Id == 1 ?
+                    item.Name=="See More"?
                         <TouchableOpacity style={styles.itemView} onPress={() => { this.navigate('SeeMoreScreen') }}>
-
                             <Text>See More</Text>
                         </TouchableOpacity>
 
                         :
 
-                        <TouchableOpacity style={styles.itemView} onPress={() => { this.navigate('CategoryScreen') }}>
+                        <TouchableOpacity style={styles.itemView} onPress={() => { this.navigate('AllCategoryScreen') }}>
 
-                            <Image source={{ uri: imageBaseUrl + item.ImgLogo }} style={{ height: 40, width: 40 }} />
+                            <Image source={{ uri: imageBaseUrl + item.ImgLogo }} style={{ height: 40, width: 40,resizeMode:'contain' }} />
 
                             <Text style={{ color: '#808080', marginTop: 5 }}>{item.Name}</Text>
 
@@ -254,6 +260,11 @@ class Home extends Component {
     render() {
         return (
             <View style={styles.container}>
+            <Header title="Home" props={this.props} right={true}/>
+           
+
+
+            <View style={styles.break} />
                 <ScrollView contentContainerStyle={{ flexGrow: 1 }} showsVerticalScrollIndicator={false}>
                     {this.searchRender()}
                     <View style={styles.break} />
@@ -266,6 +277,8 @@ class Home extends Component {
                     {this.offersView()}
                     <View style={[styles.break, { marginTop: 5, marginBottom: 0, borderWidth: 0 }]} />
                     {this.textView("Pick's today")}
+                    <VenderList props={this.props}/>
+
                     {this.boxRenderView()}
 
                 </ScrollView>
@@ -277,7 +290,7 @@ class Home extends Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        padding: 5,
+       // padding: 5,
     },
 
     search: {
@@ -306,24 +319,25 @@ const styles = StyleSheet.create({
     category: {
         justifyContent: 'center',
         alignItems: 'flex-start',
+        
         // width:'100%',
 
     },
     categoryView: {
-         height:categoryHeight,
+        height:categoryHeight,
         flexDirection: 'row',
-        justifyContent: 'flex-start',
+        justifyContent: 'center',
         alignItems: 'center',
         flexWrap: 'wrap',
         marginBottom: 10,
-        paddingLeft: 10,
-        overflow: 'hidden',
+        //paddingLeft: 10,
+       // overflow: 'hidden',
         // borderWidth:1
     },
 
     itemView: {
         height: 90,
-        width: 80,
+        width: '30%',
         margin: 5,
         borderRadius: 5,
         backgroundColor: '#fff',

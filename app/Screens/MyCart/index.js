@@ -3,6 +3,7 @@ import { View, Text, TouchableOpacity, StyleSheet, Image,FlatList,Button } from 
 import _get from 'lodash/get';
 import _isEmpty from 'lodash/isEmpty';
 import Snackbar from 'react-native-snackbar';
+import {themeColor} from '../../Component/config';
 
 
 export default class Home extends Component {
@@ -16,6 +17,9 @@ this.state={
     }
 
 componentDidMount(){
+
+ //console.log('Get item here ',this.props.route.params.items)
+
     this.state.list.map(item=>{
         Object.assign(item,{itemPrice:0})
     })
@@ -23,24 +27,44 @@ componentDidMount(){
 }
 
      cartView = (item) => {
-        
-        let value=_get(item,'item',{});
-        let itemPrice = Number(_get(item,'item.count',1))*Number(_get(item,'item.now',0))
+        console.log('Item in cart View ',item)
+         let value=_get(item,'item',{});
+       // let value = _get(this.props,'route.params.items',[])
+        // let itemPrice = Number(_get(item,'item.count',1))*Number(_get(item,'item.now',0))
+        let itemPrice = Number(_get(item,'item.count',1))*Number(_get(item,'item.price',0))
         return (
             <View style={styles.cartView}>
                 <View style={styles.first}>
                     <View style={styles.percent}>
-                        <Text style={{ color: 'orangered' }}>{_get(item,'item.discount','')}</Text>
+                        <Text style={{ color: 'orangered' }}>{_get(item,'item.discount','1%')}</Text>
                     </View>
-                    <Image style={{ height: 55, width: 80, alignSelf: 'center' }} source={require('../../assets/images/cart/g1.png')} />
+                    <Image style={{ height: 55, width: 80, alignSelf: 'center' }} source={{uri:item.item.img}} />
 
                 </View>
-
-
                 <View style={styles.second}>
                     <Text style={{ fontWeight: '600', fontSize: 20, marginTop:5}}>{_get(item,'item.name','')}</Text>
-                    <Text style={{ color: '#00A300', marginTop: 10}}>${_get(item,'item.before','')}/kg  <Text style={{ color: '#808080', }}> ${_get(item,'item.now','')}/kg</Text></Text>
-                    <View style={{ backgroundColor: '#00A300', width: 50, height: 1, top: '-9%' }} />
+                    <Text style={{ color: themeColor, marginTop: 10}}>${_get(item,'item.before','100')}/kg  <Text style={{ color: '#808080', }}> ${_get(item,'item.price','')}/kg</Text></Text>
+                    <View style={{ backgroundColor: themeColor, width: 50, height: 1, top: '-9%' }} />
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: '100%', marginTop: 5 }}>
+                        <Text style={{ fontWeight: '600', alignItems: 'center', marginTop: 10 }}>${itemPrice.toFixed(2)}</Text>
+
+                        <View style={styles.buttonView}>
+                            <TouchableOpacity style={styles.button} onPress={()=>{this.increase(_get(item,'item',{}))}}><Text>+</Text></TouchableOpacity>
+                            <Text style={{ alignSelf: 'center'}}>{_get(item,'item.count',0)}</Text>
+                            <TouchableOpacity style={styles.button} onPress={()=>{this.decrease(_get(item,'item',{}))}}><Text>-</Text></TouchableOpacity>
+                        </View>
+
+                    </View>
+                </View>
+</View>
+
+                
+        )
+
+        {/* <View style={styles.second}>
+                    <Text style={{ fontWeight: '600', fontSize: 20, marginTop:5}}>{_get(item,'item.name','')}</Text>
+                    <Text style={{ color: themeColor, marginTop: 10}}>${_get(item,'item.before','')}/kg  <Text style={{ color: '#808080', }}> ${_get(item,'item.now','')}/kg</Text></Text>
+                    <View style={{ backgroundColor: themeColor, width: 50, height: 1, top: '-9%' }} />
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: '100%', marginTop: 5 }}>
                         <Text style={{ fontWeight: '600', alignItems: 'center', marginTop: 10 }}>${itemPrice.toFixed(2)}</Text>
 
@@ -53,8 +77,7 @@ componentDidMount(){
                     </View>
                 </View>
 
-            </View>
-        )
+            </View> */}
     }
 
     increase=(item)=>{
@@ -160,7 +183,8 @@ flatListView=()=>{
     return(
 <FlatList 
 style={{ width: '100%', borderWidth:0,height:10 }}
-data={this.state.list}
+data={_get(this.props,'route.params.items',[])}
+//data={this.state.list}
 renderItem={item=>this.cartView(item)}
 keyExtractor={item => item.id}
 />
@@ -215,9 +239,9 @@ const styles = StyleSheet.create({
         height: 25, width: 40, borderRadius: 5, backgroundColor: '#ffe6e6', alignItems: 'center', justifyContent: 'center'
     },
     subTotal: {
-        height: 70,
+        height: 50,
         width: '100%',
-        backgroundColor: '#00A300',
+        backgroundColor:themeColor,
         justifyContent: 'space-between',
         alignItems: 'center',
         flexDirection: 'row',

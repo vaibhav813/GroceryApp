@@ -1,16 +1,4 @@
 
-// import {AppRegistry} from 'react-native';
-// // import App from './App';
-// import App from './app/Screens/Home/index';
-// import {name as appName} from './app.json';
-
-// AppRegistry.registerComponent(appName, () => App);
-
-
-
-/**
- * @format
- */
 
 import { AppRegistry } from 'react-native';
 import React from 'react';
@@ -39,6 +27,9 @@ import CategoryScreen from './app/Screens/Home/Catagory';
 import AddressScreen from './app/Screens/MyCart/Address';
 import SeeMoreScreen from './app/Screens/Home/Seemore';
 import SplashScreen from './app/Screens/Splash/index'
+ import {themeColor} from '././app/Component/config'
+ import VenderList from '././app/Screens/Vender/index'
+ import AllCategory from '././app/Screens/Home/AllCategory'
 
 
 import {
@@ -52,7 +43,7 @@ const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 const TopTab = createMaterialTopTabNavigator();
 
-const tabColor = "#00A300";
+const tabColor = themeColor;
 function HomeStack() {
     return (
         <Stack.Navigator
@@ -71,6 +62,7 @@ function HomeStack() {
                 options={
                     {
                         title: 'Home',
+                        headerShown:false
                         
                     }} />
 
@@ -87,6 +79,19 @@ function HomeStack() {
                 options={{ title: 'All Categories' }} />
 
 
+              <Stack.Screen
+                name="AllCategoryScreen"
+                component={AllCategory}
+                headerTitleStyle={{ alignSelf: 'center' }}
+                options={{ title: 'All Category' , headerShown:false}} />
+
+                 <Stack.Screen
+                name="VenderListScreen"
+                component={VenderList}
+                headerTitleStyle={{ alignSelf: 'center' }}
+                options={{ title: 'Home',headerShown:false }} />
+
+
         </Stack.Navigator>
     );
 }
@@ -99,12 +104,12 @@ const tabStackOrders = () => {
                 tabBarPosition: 'top',
                 swipeEnabled: true,
                 animationEnabled: true,
-                activeTintColor: "#00A300",
+                activeTintColor: themeColor,
                 labelStyle: { fontSize: 15, textAlign: 'center' },
                 tabStyle: { marginTop: 0 },
                 style: { backgroundColor: '#fff' },
                 indicatorStyle: {
-                    borderBottomColor: "#00A300",
+                    borderBottomColor: themeColor,
                     borderBottomWidth: 2,
                 }
             }}
@@ -123,7 +128,7 @@ function CartStack() {
         <Stack.Navigator
             initialRouteName="MyOrderScreen"
             screenOptions={{
-                headerStyle: { backgroundColor: '#00A300' },
+                headerStyle: { backgroundColor: themeColor },
                 headerTintColor: '#fff',
                 
                 headerTitleStyle: { fontWeight: 'bold', alignSelf: 'center' }
@@ -147,7 +152,7 @@ function MyOrdersStack() {
         <Stack.Navigator
             initialRouteName="MyOrderScreen"
             screenOptions={{
-                headerStyle: { backgroundColor: '#00A300' },
+                headerStyle: { backgroundColor: themeColor },
                 headerTintColor: '#fff',
                 
                 headerTitleStyle: { fontWeight: 'bold', alignSelf: 'center' }
@@ -166,7 +171,7 @@ function MyCheckStack() {
         <Stack.Navigator
             initialRouteName="TestScreen"
             screenOptions={{
-                headerStyle: { backgroundColor: '#00A300' },
+                headerStyle: { backgroundColor: themeColor },
                 headerTintColor: '#fff',
                 
                 headerTitleStyle: { fontWeight: 'bold', alignSelf: 'center' }
@@ -185,7 +190,7 @@ function MyAccountStack() {
         <Stack.Navigator
             initialRouteName="MyAccountScreen"
             screenOptions={{
-                headerStyle: { backgroundColor: '#00A300' },
+                headerStyle: { backgroundColor: themeColor },
                 headerTintColor: '#fff',
                 
                 headerTitleStyle: { fontWeight: 'bold', alignSelf: 'center' }
@@ -214,7 +219,7 @@ function MyAccountStack() {
 const RegisterLoginStack = () => {
     return (
         <NavigationContainer ref={navigationRef}>
-            <StatusBar barStyle="light-content" backgroundColor="#00A300" />
+            <StatusBar barStyle="light-content" backgroundColor={themeColor} />
             <Stack.Navigator
             //   initialRouteName="Check"
                 initialRouteName="Register"
@@ -232,7 +237,7 @@ const RegisterLoginStack = () => {
                     name="Register"
                     component={Register}
                     headerTitleStyle={{ alignSelf: 'center' }}
-                    options={{ title: 'Registation' }} />
+                    options={{ title: 'Sign Up' }} />
 
 
                 <Stack.Screen

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Image,TextInput } from 'react-native';
+import {themeColor} from '../../Component/config';
 
 export default class Home extends Component {
 
@@ -49,7 +50,7 @@ onPress={()=>{this.props.navigation.navigate(screen)}}
 Button=()=>{
 return(
     <TouchableOpacity 
-    style={{height:50,width:'100%',justifyContent:'center',alignItems:'center',backgroundColor:'#00A300',borderRadius:5}}
+    style={{height:50,width:'100%',justifyContent:'center',alignItems:'center',backgroundColor:themeColor,borderRadius:5}}
     
     >
         
@@ -112,13 +113,13 @@ const styles = StyleSheet.create({
         width: 110,
         marginTop: 10,
         borderRadius: 5,
-        backgroundColor: '#00A300',
+        backgroundColor: themeColor,
         justifyContent: 'center',
         alignItems: 'center',
         flexDirection: 'row'
     },
     iconBackground:{ height: 40, width: 40, 
         borderRadius: 40, borderWidth: 0, 
-        borderColor: '#00A300', justifyContent: 'center',
+        borderColor: themeColor, justifyContent: 'center',
          alignItems: 'center', backgroundColor: '#fff' }
 })

@@ -1,6 +1,6 @@
 import React,{Component} from 'react';
 import {View,Text,TouchableOpacity,StyleSheet,Image} from 'react-native';
-
+import {themeColor} from '../../Component/config';
 
 export default class MyOrdersComp extends Component{
 
@@ -8,7 +8,7 @@ render(){
     return(
         <TouchableOpacity style={styles.orderView}>
 <View style={styles.orderView1}>
-    <View style={{height:25,width:80,borderRadius:5,justifyContent:'center',alignItems:'center',backgroundColor:this.props.type=="Delivered"?'#00A300':this.props.type=="Processing"?'#FFA500':"orangered"}}>
+    <View style={{height:25,width:80,borderRadius:5,justifyContent:'center',alignItems:'center',backgroundColor:this.props.type=="Delivered"?themeColor:this.props.type=="Processing"?'#FFA500':"orangered"}}>
     <Text style={{color:'#fff'}}>{this.props.type}</Text>
 
     </View>

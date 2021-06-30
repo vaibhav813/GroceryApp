@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Image,TextInput } from 'react-native';
+import {themeColor} from '../../Component/config';
 
 export default class DeactiveAccount extends Component {
 
@@ -13,7 +14,7 @@ export default class DeactiveAccount extends Component {
 
 Button=()=>{
 return(
-    <TouchableOpacity style={{height:50,width:'100%',justifyContent:'center',alignItems:'center',backgroundColor:'#00A300',borderRadius:5}}>
+    <TouchableOpacity style={{height:50,width:'100%',justifyContent:'center',alignItems:'center',backgroundColor:themeColor,borderRadius:5}}>
         
         <Text style={{color:'#fff',fontWeight:'700'}}>Confirm Deactivate</Text>
     </TouchableOpacity>

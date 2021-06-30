@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Image, FlatList, TextInput } from 'react-native';
 import DropDownPicker from 'react-native-dropdown-picker';
-
+import {themeColor} from '../../Component/config';
 
 export default class Address extends Component {
     constructor(props) {
@@ -70,7 +70,7 @@ let newArr=[];
      console.log('Item is ',item)
 
         return (
-            <TouchableOpacity style={[styles.listItems,{borderColor: item.item.isSelect == "true" ? "#00A300" : '#ccc', }]}
+            <TouchableOpacity style={[styles.listItems,{borderColor: item.item.isSelect == "true" ? themeColor : '#ccc', }]}
 
                 onPress={() => this.selectAddress(item)}>
 
@@ -83,7 +83,7 @@ let newArr=[];
                 </View>
                 {item.item.title=="Home"?
                 <View style={{height:'100%',width:60, alignItems:'center',justifyContent:'flex-start'}}>
-               <Text style={{color:'#00A300',padding:5,backgroundColor:'#e6fffa',width:"100%", borderRadius:5,borderWidth:1,borderColor:'#00A300'}}>default</Text>
+               <Text style={{color:themeColor,padding:5,backgroundColor:'#e6fffa',width:"100%", borderRadius:5,borderWidth:1,borderColor:themeColor}}>default</Text>
                 </View>
                 :
                 <View style={{height:'100%',width:60, alignItems:'center',justifyContent:'flex-start'}}/>
@@ -233,10 +233,10 @@ const styles = StyleSheet.create({
             borderRadius:5
     },
     buttonView:{
-        height:60,width:'100%',
+        height:50,width:'100%',
         justifyContent:'center',
         alignItems:'center',
-        backgroundColor:'#00A300',
+        backgroundColor:themeColor,
         borderRadius:5,marginTop:10
 
     }

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Image,TextInput } from 'react-native';
+import {themeColor} from '../../Component/config';
 
 export default class ChangePass extends Component {
 
@@ -46,7 +47,7 @@ export default class ChangePass extends Component {
 
 Button=()=>{
 return(
-    <TouchableOpacity style={{height:50,width:'100%',justifyContent:'center',alignItems:'center',backgroundColor:'#00A300',borderRadius:5}}>
+    <TouchableOpacity style={{height:50,width:'100%',justifyContent:'center',alignItems:'center',backgroundColor:themeColor,borderRadius:5}}>
         
         <Text style={{color:'#fff',fontWeight:'700'}}>Save Changes</Text>
     </TouchableOpacity>
@@ -104,14 +105,14 @@ const styles = StyleSheet.create({
         width: 110,
         marginTop: 10,
         borderRadius: 5,
-        backgroundColor: '#00A300',
+        backgroundColor: themeColor,
         justifyContent: 'center',
         alignItems: 'center',
         flexDirection: 'row'
     },
     iconBackground:{ height: 40, width: 40, 
         borderRadius: 40, borderWidth: 0, 
-        borderColor: '#00A300', justifyContent: 'center',
+        borderColor: themeColor, justifyContent: 'center',
          alignItems: 'center', backgroundColor: '#fff' },
          break:{ borderWidth:1, width:'100%',borderColor: '#ccc',marginTop:0,marginBottom:10}
 })

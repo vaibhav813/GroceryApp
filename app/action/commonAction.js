@@ -25,7 +25,7 @@ const instance = axios.create ({
     // baseURL: 'http://192.168.1.100:4000',
     //baseURL: 'http://localhost:4000',
     baseURL:"https://groceryapis.thezetacode.com/api",
-    timeout:10000,
+    timeout:20000,
     headers:{
      // 'Content-Type': 'application/json, text/plain, */*',
     // 'Content-Type': 'application/json',
@@ -187,9 +187,9 @@ export const setLoader=(isLoad)=>{
           
           dispatch(setLoader(true))
             dispatch(request(constants,identifier,key)) 
-            console.log('getCategoryListAction data--- ',url+type+data.type)
+            console.log('getCategoryListAction data--- ',url+type+data.uriData)
           
-           instance.get(url+type+data.type).then(res=>{
+           instance.get(url+type+data.uriData).then(res=>{
             console.log('Response ',res)
             if(res.status==200){
               dispatch(setLoader(false))
@@ -209,6 +209,36 @@ export const setLoader=(isLoad)=>{
      })
     
   };
+
+
+
+  export const getVenderListHomeAction = (data,url,constants,identifier,key,type) => (dispatch) =>{
+    return new Promise((resolve,reject)=>{
+        
+        dispatch(setLoader(true))
+          dispatch(request(constants,identifier,key)) 
+       //   console.log('getCategoryListAction data--- ',url+type+data.type)
+        
+         instance.get(url+type+data.catId).then(res=>{
+          console.log('Response ',res)
+          if(res.status==200){
+            dispatch(setLoader(false))
+              dispatch(receive(res.data.data,res.status,resolve,constants,identifier,key)) 
+          }
+          else{
+            
+            dispatch(setLoader(false))
+              dispatch(receiveError(res.data.data,res.status,reject,constants,identifier,key))
+          }    
+      }).catch(err=>{
+        console.log('Error--- ',err.response)   
+        dispatch(setLoader(false))
+          dispatch(receiveError(err.message,err.status,reject,constants,identifier,key))
+          console.log('Error--- ',err)          
+      })
+   })
+  
+};
 
 //   export const getVenderListAction = (data,url,constants,identifier,key) => (dispatch) =>{
 //     return new Promise((resolve,reject)=>{
