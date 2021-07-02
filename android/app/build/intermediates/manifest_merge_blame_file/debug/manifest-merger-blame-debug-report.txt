@@ -26,12 +26,12 @@
 18        android:protectionLevel="signature" />
 19
 20    <uses-permission android:name="com.groceryapp.permission.C2D_MESSAGE" />
-21    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-21-->[com.facebook.flipper:flipper:0.75.1] /Users/vaibhavgupta/.gradle/caches/transforms-2/files-2.1/e1d669587456380c8d4e62dfc92484ee/jetified-flipper-0.75.1/AndroidManifest.xml:16:5-76
-21-->[com.facebook.flipper:flipper:0.75.1] /Users/vaibhavgupta/.gradle/caches/transforms-2/files-2.1/e1d669587456380c8d4e62dfc92484ee/jetified-flipper-0.75.1/AndroidManifest.xml:16:22-73
-22    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-22-->[com.google.firebase:firebase-iid:21.1.0] /Users/vaibhavgupta/.gradle/caches/transforms-2/files-2.1/76133467d0f3fe0df776f63bbb9290c9/jetified-firebase-iid-21.1.0/AndroidManifest.xml:22:5-79
-22-->[com.google.firebase:firebase-iid:21.1.0] /Users/vaibhavgupta/.gradle/caches/transforms-2/files-2.1/76133467d0f3fe0df776f63bbb9290c9/jetified-firebase-iid-21.1.0/AndroidManifest.xml:22:22-76
+21    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+21-->/Users/vaibhavgupta/Desktop/Project/Github/GroceryApp/android/app/src/main/AndroidManifest.xml:12:1-75
+21-->/Users/vaibhavgupta/Desktop/Project/Github/GroceryApp/android/app/src/main/AndroidManifest.xml:12:18-72
+22    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+22-->[com.facebook.flipper:flipper:0.75.1] /Users/vaibhavgupta/.gradle/caches/transforms-2/files-2.1/e1d669587456380c8d4e62dfc92484ee/jetified-flipper-0.75.1/AndroidManifest.xml:16:5-76
+22-->[com.facebook.flipper:flipper:0.75.1] /Users/vaibhavgupta/.gradle/caches/transforms-2/files-2.1/e1d669587456380c8d4e62dfc92484ee/jetified-flipper-0.75.1/AndroidManifest.xml:16:22-73
 23    <uses-permission android:name="android.permission.WAKE_LOCK" /> <!-- Required by older versions of Google Play services to create IID tokens -->
 23-->[com.google.firebase:firebase-iid:21.1.0] /Users/vaibhavgupta/.gradle/caches/transforms-2/files-2.1/76133467d0f3fe0df776f63bbb9290c9/jetified-firebase-iid-21.1.0/AndroidManifest.xml:24:5-68
 23-->[com.google.firebase:firebase-iid:21.1.0] /Users/vaibhavgupta/.gradle/caches/transforms-2/files-2.1/76133467d0f3fe0df776f63bbb9290c9/jetified-firebase-iid-21.1.0/AndroidManifest.xml:24:22-65
@@ -96,123 +96,123 @@
 46-->[me.leolin:ShortcutBadger:1.1.22] /Users/vaibhavgupta/.gradle/caches/transforms-2/files-2.1/c11a7244ba86c9c1a426f4cd384f8398/jetified-ShortcutBadger-1.1.22/AndroidManifest.xml:50:22-86
 47
 48    <application
-48-->/Users/vaibhavgupta/Desktop/Project/Github/GroceryApp/android/app/src/main/AndroidManifest.xml:13:5-70:19
+48-->/Users/vaibhavgupta/Desktop/Project/Github/GroceryApp/android/app/src/main/AndroidManifest.xml:14:5-71:19
 49        android:name="com.groceryapp.MainApplication"
-49-->/Users/vaibhavgupta/Desktop/Project/Github/GroceryApp/android/app/src/main/AndroidManifest.xml:14:9-40
+49-->/Users/vaibhavgupta/Desktop/Project/Github/GroceryApp/android/app/src/main/AndroidManifest.xml:15:9-40
 50        android:allowBackup="false"
-50-->/Users/vaibhavgupta/Desktop/Project/Github/GroceryApp/android/app/src/main/AndroidManifest.xml:15:9-36
+50-->/Users/vaibhavgupta/Desktop/Project/Github/GroceryApp/android/app/src/main/AndroidManifest.xml:16:9-36
 51        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
 51-->[androidx.core:core:1.1.0] /Users/vaibhavgupta/.gradle/caches/transforms-2/files-2.1/80dc6a7f174481fe25dcedc41ed68001/core-1.1.0/AndroidManifest.xml:24:18-86
 52        android:debuggable="true"
 53        android:icon="@mipmap/ic_launcher"
-53-->/Users/vaibhavgupta/Desktop/Project/Github/GroceryApp/android/app/src/main/AndroidManifest.xml:16:9-43
+53-->/Users/vaibhavgupta/Desktop/Project/Github/GroceryApp/android/app/src/main/AndroidManifest.xml:17:9-43
 54        android:label="@string/app_name"
-54-->/Users/vaibhavgupta/Desktop/Project/Github/GroceryApp/android/app/src/main/AndroidManifest.xml:17:9-41
+54-->/Users/vaibhavgupta/Desktop/Project/Github/GroceryApp/android/app/src/main/AndroidManifest.xml:18:9-41
 55        android:roundIcon="@mipmap/ic_launcher_round"
-55-->/Users/vaibhavgupta/Desktop/Project/Github/GroceryApp/android/app/src/main/AndroidManifest.xml:18:9-54
+55-->/Users/vaibhavgupta/Desktop/Project/Github/GroceryApp/android/app/src/main/AndroidManifest.xml:19:9-54
 56        android:theme="@style/AppTheme"
-56-->/Users/vaibhavgupta/Desktop/Project/Github/GroceryApp/android/app/src/main/AndroidManifest.xml:19:9-40
+56-->/Users/vaibhavgupta/Desktop/Project/Github/GroceryApp/android/app/src/main/AndroidManifest.xml:20:9-40
 57        android:usesCleartextTraffic="true" >
-57-->/Users/vaibhavgupta/Desktop/Project/Github/GroceryApp/android/app/src/main/AndroidManifest.xml:21:9-44
+57-->/Users/vaibhavgupta/Desktop/Project/Github/GroceryApp/android/app/src/main/AndroidManifest.xml:22:9-44
 58        <activity android:name="com.facebook.react.devsupport.DevSettingsActivity" />
 58-->/Users/vaibhavgupta/Desktop/Project/Github/GroceryApp/android/app/src/debug/AndroidManifest.xml:11:9-86
 58-->/Users/vaibhavgupta/Desktop/Project/Github/GroceryApp/android/app/src/debug/AndroidManifest.xml:11:19-83
 59
 60        <meta-data
-60-->/Users/vaibhavgupta/Desktop/Project/Github/GroceryApp/android/app/src/main/AndroidManifest.xml:22:9-24:47
+60-->/Users/vaibhavgupta/Desktop/Project/Github/GroceryApp/android/app/src/main/AndroidManifest.xml:23:9-25:47
 61            android:name="com.google.android.actions"
-61-->/Users/vaibhavgupta/Desktop/Project/Github/GroceryApp/android/app/src/main/AndroidManifest.xml:23:13-54
+61-->/Users/vaibhavgupta/Desktop/Project/Github/GroceryApp/android/app/src/main/AndroidManifest.xml:24:13-54
 62            android:resource="@xml/actions" />
-62-->/Users/vaibhavgupta/Desktop/Project/Github/GroceryApp/android/app/src/main/AndroidManifest.xml:24:13-44
+62-->/Users/vaibhavgupta/Desktop/Project/Github/GroceryApp/android/app/src/main/AndroidManifest.xml:25:13-44
 63
 64        <activity
-64-->/Users/vaibhavgupta/Desktop/Project/Github/GroceryApp/android/app/src/main/AndroidManifest.xml:26:9-37:20
+64-->/Users/vaibhavgupta/Desktop/Project/Github/GroceryApp/android/app/src/main/AndroidManifest.xml:27:9-38:20
 65            android:name="com.groceryapp.MainActivity"
-65-->/Users/vaibhavgupta/Desktop/Project/Github/GroceryApp/android/app/src/main/AndroidManifest.xml:27:13-41
+65-->/Users/vaibhavgupta/Desktop/Project/Github/GroceryApp/android/app/src/main/AndroidManifest.xml:28:13-41
 66            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|uiMode"
-66-->/Users/vaibhavgupta/Desktop/Project/Github/GroceryApp/android/app/src/main/AndroidManifest.xml:28:13-90
+66-->/Users/vaibhavgupta/Desktop/Project/Github/GroceryApp/android/app/src/main/AndroidManifest.xml:29:13-90
 67            android:label="@string/app_name"
-67-->/Users/vaibhavgupta/Desktop/Project/Github/GroceryApp/android/app/src/main/AndroidManifest.xml:29:13-45
+67-->/Users/vaibhavgupta/Desktop/Project/Github/GroceryApp/android/app/src/main/AndroidManifest.xml:30:13-45
 68            android:launchMode="singleTask"
-68-->/Users/vaibhavgupta/Desktop/Project/Github/GroceryApp/android/app/src/main/AndroidManifest.xml:30:13-44
+68-->/Users/vaibhavgupta/Desktop/Project/Github/GroceryApp/android/app/src/main/AndroidManifest.xml:31:13-44
 69            android:windowSoftInputMode="adjustResize" >
-69-->/Users/vaibhavgupta/Desktop/Project/Github/GroceryApp/android/app/src/main/AndroidManifest.xml:31:13-55
+69-->/Users/vaibhavgupta/Desktop/Project/Github/GroceryApp/android/app/src/main/AndroidManifest.xml:32:13-55
 70            <intent-filter>
-70-->/Users/vaibhavgupta/Desktop/Project/Github/GroceryApp/android/app/src/main/AndroidManifest.xml:32:13-36:29
+70-->/Users/vaibhavgupta/Desktop/Project/Github/GroceryApp/android/app/src/main/AndroidManifest.xml:33:13-37:29
 71                <action android:name="android.intent.action.MAIN" />
-71-->/Users/vaibhavgupta/Desktop/Project/Github/GroceryApp/android/app/src/main/AndroidManifest.xml:33:17-69
-71-->/Users/vaibhavgupta/Desktop/Project/Github/GroceryApp/android/app/src/main/AndroidManifest.xml:33:25-66
+71-->/Users/vaibhavgupta/Desktop/Project/Github/GroceryApp/android/app/src/main/AndroidManifest.xml:34:17-69
+71-->/Users/vaibhavgupta/Desktop/Project/Github/GroceryApp/android/app/src/main/AndroidManifest.xml:34:25-66
 72
 73                <category android:name="android.intent.category.LAUNCHER" />
-73-->/Users/vaibhavgupta/Desktop/Project/Github/GroceryApp/android/app/src/main/AndroidManifest.xml:35:17-77
-73-->/Users/vaibhavgupta/Desktop/Project/Github/GroceryApp/android/app/src/main/AndroidManifest.xml:35:27-74
+73-->/Users/vaibhavgupta/Desktop/Project/Github/GroceryApp/android/app/src/main/AndroidManifest.xml:36:17-77
+73-->/Users/vaibhavgupta/Desktop/Project/Github/GroceryApp/android/app/src/main/AndroidManifest.xml:36:27-74
 74            </intent-filter>
 75        </activity>
 76
 77        <meta-data
-77-->/Users/vaibhavgupta/Desktop/Project/Github/GroceryApp/android/app/src/main/AndroidManifest.xml:39:9-41:54
+77-->/Users/vaibhavgupta/Desktop/Project/Github/GroceryApp/android/app/src/main/AndroidManifest.xml:40:9-42:54
 78            android:name="com.google.firebase.messaging.default_notification_icon"
-78-->/Users/vaibhavgupta/Desktop/Project/Github/GroceryApp/android/app/src/main/AndroidManifest.xml:40:13-83
+78-->/Users/vaibhavgupta/Desktop/Project/Github/GroceryApp/android/app/src/main/AndroidManifest.xml:41:13-83
 79            android:resource="@mipmap/ic_launcher" />
-79-->/Users/vaibhavgupta/Desktop/Project/Github/GroceryApp/android/app/src/main/AndroidManifest.xml:41:13-51
+79-->/Users/vaibhavgupta/Desktop/Project/Github/GroceryApp/android/app/src/main/AndroidManifest.xml:42:13-51
 80        <meta-data
-80-->/Users/vaibhavgupta/Desktop/Project/Github/GroceryApp/android/app/src/main/AndroidManifest.xml:42:9-44:52
+80-->/Users/vaibhavgupta/Desktop/Project/Github/GroceryApp/android/app/src/main/AndroidManifest.xml:43:9-45:52
 81            android:name="com.google.firebase.messaging.default_notification_color"
-81-->/Users/vaibhavgupta/Desktop/Project/Github/GroceryApp/android/app/src/main/AndroidManifest.xml:43:13-84
+81-->/Users/vaibhavgupta/Desktop/Project/Github/GroceryApp/android/app/src/main/AndroidManifest.xml:44:13-84
 82            android:resource="@color/status_bar" />
-82-->/Users/vaibhavgupta/Desktop/Project/Github/GroceryApp/android/app/src/main/AndroidManifest.xml:44:13-49
+82-->/Users/vaibhavgupta/Desktop/Project/Github/GroceryApp/android/app/src/main/AndroidManifest.xml:45:13-49
 83        <meta-data
-83-->/Users/vaibhavgupta/Desktop/Project/Github/GroceryApp/android/app/src/main/AndroidManifest.xml:46:8-48:41
+83-->/Users/vaibhavgupta/Desktop/Project/Github/GroceryApp/android/app/src/main/AndroidManifest.xml:47:8-49:41
 84            android:name="com.google.firebase.messaging.default_notification_channel_id"
-84-->/Users/vaibhavgupta/Desktop/Project/Github/GroceryApp/android/app/src/main/AndroidManifest.xml:47:5-81
+84-->/Users/vaibhavgupta/Desktop/Project/Github/GroceryApp/android/app/src/main/AndroidManifest.xml:48:5-81
 85            android:value="default_channel_id" />
-85-->/Users/vaibhavgupta/Desktop/Project/Github/GroceryApp/android/app/src/main/AndroidManifest.xml:48:5-39
+85-->/Users/vaibhavgupta/Desktop/Project/Github/GroceryApp/android/app/src/main/AndroidManifest.xml:49:5-39
 86
 87        <receiver android:name="com.afrihost.firebase.notifications.RNFirebaseNotificationReceiver" />
-87-->/Users/vaibhavgupta/Desktop/Project/Github/GroceryApp/android/app/src/main/AndroidManifest.xml:50:9-102
-87-->/Users/vaibhavgupta/Desktop/Project/Github/GroceryApp/android/app/src/main/AndroidManifest.xml:50:19-100
+87-->/Users/vaibhavgupta/Desktop/Project/Github/GroceryApp/android/app/src/main/AndroidManifest.xml:51:9-102
+87-->/Users/vaibhavgupta/Desktop/Project/Github/GroceryApp/android/app/src/main/AndroidManifest.xml:51:19-100
 88        <receiver
-88-->/Users/vaibhavgupta/Desktop/Project/Github/GroceryApp/android/app/src/main/AndroidManifest.xml:51:9-58:20
+88-->/Users/vaibhavgupta/Desktop/Project/Github/GroceryApp/android/app/src/main/AndroidManifest.xml:52:9-59:20
 89            android:name="com.afrihost.firebase.notifications.RNFirebaseNotificationsRebootReceiver"
-89-->/Users/vaibhavgupta/Desktop/Project/Github/GroceryApp/android/app/src/main/AndroidManifest.xml:51:67-155
+89-->/Users/vaibhavgupta/Desktop/Project/Github/GroceryApp/android/app/src/main/AndroidManifest.xml:52:67-155
 90            android:enabled="true"
-90-->/Users/vaibhavgupta/Desktop/Project/Github/GroceryApp/android/app/src/main/AndroidManifest.xml:51:19-41
+90-->/Users/vaibhavgupta/Desktop/Project/Github/GroceryApp/android/app/src/main/AndroidManifest.xml:52:19-41
 91            android:exported="true" >
-91-->/Users/vaibhavgupta/Desktop/Project/Github/GroceryApp/android/app/src/main/AndroidManifest.xml:51:42-65
+91-->/Users/vaibhavgupta/Desktop/Project/Github/GroceryApp/android/app/src/main/AndroidManifest.xml:52:42-65
 92            <intent-filter>
-92-->/Users/vaibhavgupta/Desktop/Project/Github/GroceryApp/android/app/src/main/AndroidManifest.xml:52:13-57:29
+92-->/Users/vaibhavgupta/Desktop/Project/Github/GroceryApp/android/app/src/main/AndroidManifest.xml:53:13-58:29
 93                <action android:name="android.intent.action.BOOT_COMPLETED" />
-93-->/Users/vaibhavgupta/Desktop/Project/Github/GroceryApp/android/app/src/main/AndroidManifest.xml:53:17-78
-93-->/Users/vaibhavgupta/Desktop/Project/Github/GroceryApp/android/app/src/main/AndroidManifest.xml:53:25-76
+93-->/Users/vaibhavgupta/Desktop/Project/Github/GroceryApp/android/app/src/main/AndroidManifest.xml:54:17-78
+93-->/Users/vaibhavgupta/Desktop/Project/Github/GroceryApp/android/app/src/main/AndroidManifest.xml:54:25-76
 94                <action android:name="android.intent.action.QUICKBOOT_POWERON" />
-94-->/Users/vaibhavgupta/Desktop/Project/Github/GroceryApp/android/app/src/main/AndroidManifest.xml:54:17-81
-94-->/Users/vaibhavgupta/Desktop/Project/Github/GroceryApp/android/app/src/main/AndroidManifest.xml:54:25-79
+94-->/Users/vaibhavgupta/Desktop/Project/Github/GroceryApp/android/app/src/main/AndroidManifest.xml:55:17-81
+94-->/Users/vaibhavgupta/Desktop/Project/Github/GroceryApp/android/app/src/main/AndroidManifest.xml:55:25-79
 95                <action android:name="com.htc.intent.action.QUICKBOOT_POWERON" />
-95-->/Users/vaibhavgupta/Desktop/Project/Github/GroceryApp/android/app/src/main/AndroidManifest.xml:55:17-81
-95-->/Users/vaibhavgupta/Desktop/Project/Github/GroceryApp/android/app/src/main/AndroidManifest.xml:55:25-79
+95-->/Users/vaibhavgupta/Desktop/Project/Github/GroceryApp/android/app/src/main/AndroidManifest.xml:56:17-81
+95-->/Users/vaibhavgupta/Desktop/Project/Github/GroceryApp/android/app/src/main/AndroidManifest.xml:56:25-79
 96
 97                <category android:name="android.intent.category.DEFAULT" />
-97-->/Users/vaibhavgupta/Desktop/Project/Github/GroceryApp/android/app/src/main/AndroidManifest.xml:56:17-76
-97-->/Users/vaibhavgupta/Desktop/Project/Github/GroceryApp/android/app/src/main/AndroidManifest.xml:56:27-73
+97-->/Users/vaibhavgupta/Desktop/Project/Github/GroceryApp/android/app/src/main/AndroidManifest.xml:57:17-76
+97-->/Users/vaibhavgupta/Desktop/Project/Github/GroceryApp/android/app/src/main/AndroidManifest.xml:57:27-73
 98            </intent-filter>
 99        </receiver>
 100
 101        <service
-101-->/Users/vaibhavgupta/Desktop/Project/Github/GroceryApp/android/app/src/main/AndroidManifest.xml:60:11-66:15
+101-->/Users/vaibhavgupta/Desktop/Project/Github/GroceryApp/android/app/src/main/AndroidManifest.xml:61:11-67:15
 102            android:name="com.afrihost.firebase.notifications.RNFirebaseMessagingService"
-102-->/Users/vaibhavgupta/Desktop/Project/Github/GroceryApp/android/app/src/main/AndroidManifest.xml:61:9-86
+102-->/Users/vaibhavgupta/Desktop/Project/Github/GroceryApp/android/app/src/main/AndroidManifest.xml:62:9-86
 103            android:exported="false" >
-103-->/Users/vaibhavgupta/Desktop/Project/Github/GroceryApp/android/app/src/main/AndroidManifest.xml:62:9-33
+103-->/Users/vaibhavgupta/Desktop/Project/Github/GroceryApp/android/app/src/main/AndroidManifest.xml:63:9-33
 104            <intent-filter>
-104-->/Users/vaibhavgupta/Desktop/Project/Github/GroceryApp/android/app/src/main/AndroidManifest.xml:63:9-65:25
+104-->/Users/vaibhavgupta/Desktop/Project/Github/GroceryApp/android/app/src/main/AndroidManifest.xml:64:9-66:25
 105                <action android:name="com.google.firebase.MESSAGING_EVENT" />
-105-->/Users/vaibhavgupta/Desktop/Project/Github/GroceryApp/android/app/src/main/AndroidManifest.xml:64:13-74
-105-->/Users/vaibhavgupta/Desktop/Project/Github/GroceryApp/android/app/src/main/AndroidManifest.xml:64:21-71
+105-->/Users/vaibhavgupta/Desktop/Project/Github/GroceryApp/android/app/src/main/AndroidManifest.xml:65:13-74
+105-->/Users/vaibhavgupta/Desktop/Project/Github/GroceryApp/android/app/src/main/AndroidManifest.xml:65:21-71
 106            </intent-filter>
 107        </service>
 108        <service android:name="com.afrihost.firebase.notifications.RNFirebaseBackgroundMessagingService" />
-108-->/Users/vaibhavgupta/Desktop/Project/Github/GroceryApp/android/app/src/main/AndroidManifest.xml:68:5-104
-108-->/Users/vaibhavgupta/Desktop/Project/Github/GroceryApp/android/app/src/main/AndroidManifest.xml:68:14-101
+108-->/Users/vaibhavgupta/Desktop/Project/Github/GroceryApp/android/app/src/main/AndroidManifest.xml:69:5-104
+108-->/Users/vaibhavgupta/Desktop/Project/Github/GroceryApp/android/app/src/main/AndroidManifest.xml:69:14-101
 109
 110        <activity
 110-->[:react-native-razorpay] /Users/vaibhavgupta/Desktop/Project/Github/GroceryApp/node_modules/react-native-razorpay/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:12:9-14:86
@@ -225,8 +225,8 @@
 114            <intent-filter>
 114-->[com.razorpay:checkout:1.6.9] /Users/vaibhavgupta/.gradle/caches/transforms-2/files-2.1/1bfccb22e322dd206d191be15d0f9a0d/jetified-checkout-1.6.9/AndroidManifest.xml:22:13-28:29
 115                <action android:name="android.intent.action.MAIN" />
-115-->/Users/vaibhavgupta/Desktop/Project/Github/GroceryApp/android/app/src/main/AndroidManifest.xml:33:17-69
-115-->/Users/vaibhavgupta/Desktop/Project/Github/GroceryApp/android/app/src/main/AndroidManifest.xml:33:25-66
+115-->/Users/vaibhavgupta/Desktop/Project/Github/GroceryApp/android/app/src/main/AndroidManifest.xml:34:17-69
+115-->/Users/vaibhavgupta/Desktop/Project/Github/GroceryApp/android/app/src/main/AndroidManifest.xml:34:25-66
 116
 117                <data
 117-->[com.razorpay:checkout:1.6.9] /Users/vaibhavgupta/.gradle/caches/transforms-2/files-2.1/1bfccb22e322dd206d191be15d0f9a0d/jetified-checkout-1.6.9/AndroidManifest.xml:25:17-27:47
@@ -323,10 +323,10 @@
 169            android:exported="false" >
 169-->[com.google.firebase:firebase-messaging:22.0.0] /Users/vaibhavgupta/.gradle/caches/transforms-2/files-2.1/607124079ab9844ddb8838657292535d/jetified-firebase-messaging-22.0.0/AndroidManifest.xml:44:13-37
 170            <intent-filter android:priority="-500" >
-170-->/Users/vaibhavgupta/Desktop/Project/Github/GroceryApp/android/app/src/main/AndroidManifest.xml:63:9-65:25
+170-->/Users/vaibhavgupta/Desktop/Project/Github/GroceryApp/android/app/src/main/AndroidManifest.xml:64:9-66:25
 171                <action android:name="com.google.firebase.MESSAGING_EVENT" />
-171-->/Users/vaibhavgupta/Desktop/Project/Github/GroceryApp/android/app/src/main/AndroidManifest.xml:64:13-74
-171-->/Users/vaibhavgupta/Desktop/Project/Github/GroceryApp/android/app/src/main/AndroidManifest.xml:64:21-71
+171-->/Users/vaibhavgupta/Desktop/Project/Github/GroceryApp/android/app/src/main/AndroidManifest.xml:65:13-74
+171-->/Users/vaibhavgupta/Desktop/Project/Github/GroceryApp/android/app/src/main/AndroidManifest.xml:65:21-71
 172            </intent-filter>
 173        </service>
 174        <service
@@ -491,8 +491,8 @@
 256            <intent-filter>
 256-->[androidx.work:work-runtime:2.0.0] /Users/vaibhavgupta/.gradle/caches/transforms-2/files-2.1/6f364123bf53969a83b0fe5b738a16e5/work-runtime-2.0.0/AndroidManifest.xml:105:13-109:29
 257                <action android:name="android.intent.action.BOOT_COMPLETED" />
-257-->/Users/vaibhavgupta/Desktop/Project/Github/GroceryApp/android/app/src/main/AndroidManifest.xml:53:17-78
-257-->/Users/vaibhavgupta/Desktop/Project/Github/GroceryApp/android/app/src/main/AndroidManifest.xml:53:25-76
+257-->/Users/vaibhavgupta/Desktop/Project/Github/GroceryApp/android/app/src/main/AndroidManifest.xml:54:17-78
+257-->/Users/vaibhavgupta/Desktop/Project/Github/GroceryApp/android/app/src/main/AndroidManifest.xml:54:25-76
 258                <action android:name="android.intent.action.TIME_SET" />
 258-->[androidx.work:work-runtime:2.0.0] /Users/vaibhavgupta/.gradle/caches/transforms-2/files-2.1/6f364123bf53969a83b0fe5b738a16e5/work-runtime-2.0.0/AndroidManifest.xml:107:17-73
 258-->[androidx.work:work-runtime:2.0.0] /Users/vaibhavgupta/.gradle/caches/transforms-2/files-2.1/6f364123bf53969a83b0fe5b738a16e5/work-runtime-2.0.0/AndroidManifest.xml:107:25-70

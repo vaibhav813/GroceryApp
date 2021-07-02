@@ -1,0 +1,29 @@
+{
+  "name": "RNNetworkState",
+  "version": "1.1.4",
+  "summary": "RNNetworkState",
+  "description": "Network Reachability instantly module for React Native",
+  "homepage": "https://github.com/react-native-vietnam/react-native-network-state#readme",
+  "license": {
+    "type": "MIT",
+    "file": "LICENSE"
+  },
+  "authors": {
+    "author": "anhtuank7c@hotmail.com"
+  },
+  "platforms": {
+    "ios": "9.0"
+  },
+  "source": {
+    "git": "https://github.com/react-native-vietnam/react-native-network-state.git",
+    "tag": "1.1.4"
+  },
+  "source_files": "ios/**/*.{h,m}",
+  "frameworks": "SystemConfiguration",
+  "requires_arc": true,
+  "dependencies": {
+    "React": [
+
+    ]
+  }
+}

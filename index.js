@@ -28,9 +28,10 @@ import AddressScreen from './app/Screens/MyCart/Address';
 import SeeMoreScreen from './app/Screens/Home/Seemore';
 import SplashScreen from './app/Screens/Splash/index'
  import {themeColor} from '././app/Component/config'
- import VenderList from '././app/Screens/Vender/index'
+ import VenderListScreen from '././app/Screens/Vender/VenderList'
+ import VenderListComp from '././app/Screens/Vender/index'
  //import VendorCategory from '././app/Screens/Category/VendorCategory';
-  import AllCategoryScreen from '././app/Screens/Home/AllCategory'
+import AllCategoryScreen from '././app/Screens/Home/AllCategory'
 
 
 import {
@@ -87,10 +88,16 @@ function HomeStack() {
                 options={{ title: 'All Category' , headerShown:false}} />
 
                  <Stack.Screen
-                name="VenderListScreen"
-                component={VenderList}
+                name="VenderListDetails"
+                component={VenderListScreen}
                 headerTitleStyle={{ alignSelf: 'center' }}
                 options={{ title: 'Home',headerShown:false }} />
+
+             {/* <Stack.Screen
+                name="VenderListScreen"
+                component={VenderListComp}
+                headerTitleStyle={{ alignSelf: 'center' }}
+                options={{ title: 'Home',headerShown:false }} /> */}
 
 
         </Stack.Navigator>
@@ -359,7 +366,7 @@ const tabStacks = () => {
 
 
 
-            <Tab.Screen
+            {/* <Tab.Screen
                 name="MyCheckStack"
                 component={MyCheckStack}
                 options={{
@@ -370,7 +377,7 @@ const tabStacks = () => {
                             :
                             <Image style={{ height: 20, width: 20, resizeMode: 'contain' }} source={require('./app/assets/images/icons/account.png')} />
                     ),
-                }} />
+                }} /> */}
         </Tab.Navigator>
 
 

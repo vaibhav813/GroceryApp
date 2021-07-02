@@ -394,6 +394,8 @@ PODS:
     - React
   - RNGestureHandler (1.10.3):
     - React-Core
+  - RNNetworkState (1.1.4):
+    - React
   - RNReanimated (2.2.0):
     - DoubleConversion
     - FBLazyVector
@@ -493,6 +495,7 @@ DEPENDENCIES:
   - "RNCAsyncStorage (from `../node_modules/@react-native-community/async-storage`)"
   - "RNCMaskedView (from `../node_modules/@react-native-community/masked-view`)"
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
+  - RNNetworkState (from `../node_modules/react-native-network-state`)
   - RNReanimated (from `../node_modules/react-native-reanimated`)
   - RNScreens (from `../node_modules/react-native-screens`)
   - RNSnackbar (from `../node_modules/react-native-snackbar`)
@@ -597,6 +600,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@react-native-community/masked-view"
   RNGestureHandler:
     :path: "../node_modules/react-native-gesture-handler"
+  RNNetworkState:
+    :path: "../node_modules/react-native-network-state"
   RNReanimated:
     :path: "../node_modules/react-native-reanimated"
   RNScreens:
@@ -668,6 +673,7 @@ SPEC CHECKSUMS:
   RNCAsyncStorage: cb9a623793918c6699586281f0b51cbc38f046f9
   RNCMaskedView: f127cd9652acfa31b91dcff613e07ba18b774db6
   RNGestureHandler: a479ebd5ed4221a810967000735517df0d2db211
+  RNNetworkState: 1b267a4c8a96af0ce926860bf0e182e826a76573
   RNReanimated: 9c13c86454bfd54dab7505c1a054470bfecd2563
   RNScreens: bf59f17fbf001f1025243eeed5f19419d3c11ef2
   RNSnackbar: b6cbf294923b8d6c6056592bca87527c81a0130b
@@ -676,6 +682,6 @@ SPEC CHECKSUMS:
   Yoga: 575c581c63e0d35c9a83f4b46d01d63abc1100ac
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 
-PODFILE CHECKSUM: 53f7c4af8e07d90363495c26c51619aa40145181
+PODFILE CHECKSUM: cf56c23bdb8494cac9c2cd029e503dd65ec70610
 
 COCOAPODS: 1.10.1

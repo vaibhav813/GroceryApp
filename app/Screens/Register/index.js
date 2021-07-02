@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import SplashScreen from 'react-native-splash-screen'
 import {commonAction} from '../../action/commonAction'
 import { notifications, NotificationMessage, Android } from 'react-native-firebase-push-notifications'
+import {themeColor} from '../../Component/config'
 
 
 // import RNSmtpMailer from "react-native-smtp-mailer";
@@ -284,7 +285,7 @@ loader=()=>{
 
     return(
         this.state.isLoad?
-<ActivityIndicator size='large' color='tomato'/>
+<ActivityIndicator size='large' color={themeColor}/>
 : null
 
     )
@@ -309,8 +310,8 @@ return(
 {this.textInputRender("Full Address")}
 {/* {this.textInputRender("Enter Password")} */}
 {this.buttonRenderView()}
-<Text style={{fontSize:10,fontWeight:'700',color:'#000',marginTop:20}}>
-        If you have an account then <Text style={{color:'tomato',fontStyle:'italic',fontSize:12}} onPress={()=>{this.goToLoginPage()}}>login here {" "}</Text>
+<Text style={{fontSize:12,fontWeight:'700',color:'#000',marginTop:20}}>
+        If you have an account then <Text style={{color:themeColor,fontWeight:'800',fontSize:15,textDecorationLine:'underline'}} onPress={()=>{this.goToLoginPage()}}>login here {" "}</Text>
     </Text>
 {this.loader()}
 
@@ -348,7 +349,7 @@ const styles= StyleSheet.create({
     title:{
             fontWeight:'900',
             fontSize:20,
-            color:'tomato',
+            color:themeColor,
             marginTop:20
          },
         parentView_one:
@@ -371,7 +372,7 @@ const styles= StyleSheet.create({
     button:{
         height:50,
         width:'70%',
-        backgroundColor:'tomato',
+        backgroundColor:themeColor,
         justifyContent:'center',
         alignItems:'center',
         borderRadius:20

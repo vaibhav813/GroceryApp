@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { View, Text,StyleSheet,Image,TouchableOpacity,Platform,StatusBar } from 'react-native';
 import {themeColor} from '../../Component/config';
-
+import NetworkInfo from '../../Component/NetInfo/index'
 export default class Header extends Component {
   constructor(props) {
     super(props);
@@ -32,6 +32,7 @@ renderCartView=()=>{
      
     <View>
     <StatusBar barStyle="light-content" backgroundColor={themeColor} />
+    <NetworkInfo/>
       <View style={styles.headerView}>
       <View style={styles.view1}>
       <TouchableOpacity style={{height:35,width:50}} onPress={()=>{this.props.props.navigation.pop()}}>

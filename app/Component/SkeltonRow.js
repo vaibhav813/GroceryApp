@@ -1,11 +1,11 @@
 import React from "react";
-import { View,StyleSheet } from "react-native";
+import { View,StyleSheet,Text } from "react-native";
 import SkeletonPlaceholder from "react-native-skeleton-placeholder";
 
 export const ImageInfo = () => {
   return (
     <SkeletonPlaceholder>
-      <SkeletonPlaceholder.Item flexDirection="row" alignItems="center" justifyContent='center'>
+      <SkeletonPlaceholder.Item  flexDirection="row" alignItems="center" justifyContent='center' >
         <SkeletonPlaceholder.Item width={60} height={60} borderRadius={50} />
         <SkeletonPlaceholder.Item marginLeft={20}>
           <SkeletonPlaceholder.Item width={300} height={20} borderRadius={4} />
@@ -18,6 +18,28 @@ export const ImageInfo = () => {
         </SkeletonPlaceholder.Item>
       </SkeletonPlaceholder.Item>
     </SkeletonPlaceholder>
+  );
+};
+
+
+
+export const VenderImageInfo = () => {
+  return (
+    <SkeletonPlaceholder>
+    <SkeletonPlaceholder.Item flexDirection="row" alignItems="center" justifyContent='center' >
+      <SkeletonPlaceholder.Item width={70} height={70} borderRadius={50} />
+      <SkeletonPlaceholder.Item marginLeft={10}>
+        <SkeletonPlaceholder.Item width={260} height={20} borderRadius={4} />
+        <SkeletonPlaceholder.Item width={260} height={20} borderRadius={4}  marginTop={6}/>
+        <SkeletonPlaceholder.Item
+          marginTop={6}
+          width={80}
+          height={20}
+          borderRadius={4}
+        />
+      </SkeletonPlaceholder.Item>
+    </SkeletonPlaceholder.Item>
+  </SkeletonPlaceholder>
   );
 };
 
@@ -58,14 +80,18 @@ export const PromoList = () => {
     );
   };
 
-export const ListItems = () => {
+export const ListItems = (props) => {
+  
     return (
       <SkeletonPlaceholder>
- <SkeletonPlaceholder.Item flexDirection="row" alignItems="center" justifyContent='space-between' top='0%'>
-        <View style={styles.listRow} />
-        <View style={styles.listRow} />
-        <View style={styles.listRow} />
-        <View style={styles.listRow} />
+      <SkeletonPlaceholder.Item flexDirection="row" alignItems="center" justifyContent='space-between' padding={5} flexWrap='wrap'>
+        {props.length.map(item=>{
+          return(
+            <View style={props.style} />
+          )
+          
+        })}
+
        
         </SkeletonPlaceholder.Item>
         

@@ -6,6 +6,7 @@ import {commonAction} from '../../action/commonAction'
 import axios from 'axios';
 import {reset} from '../../Component/RootNavigation'
 import SplashScreen from 'react-native-splash-screen'
+import {themeColor} from '../../Component/config'
 
 
 
@@ -184,7 +185,7 @@ const styles= StyleSheet.create({
     button:{
         height:50,
         width:'70%',
-        backgroundColor:'tomato',
+        backgroundColor:themeColor,
         justifyContent:'center',
         alignItems:'center',
         borderRadius:20

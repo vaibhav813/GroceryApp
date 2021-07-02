@@ -19,6 +19,8 @@ import org.reactnative.maskedview.RNCMaskedViewPackage;
 import com.afrihost.firebase.notifications.FirebasePushNotificationsPackage;
 // react-native-gesture-handler
 import com.swmansion.gesturehandler.react.RNGestureHandlerPackage;
+// react-native-network-state
+import com.reactnativevietnam.RNNetworkStatePackage;
 // react-native-razorpay
 import com.razorpay.rn.RazorpayPackage;
 // react-native-reanimated
@@ -86,6 +88,7 @@ public class PackageList {
       new RNCMaskedViewPackage(),
       new FirebasePushNotificationsPackage(),
       new RNGestureHandlerPackage(),
+      new RNNetworkStatePackage(),
       new RazorpayPackage(),
       new ReanimatedPackage(),
       new SafeAreaContextPackage(),

@@ -1,16 +1,21 @@
 import React, { Component } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, TextInput, FlatList, ScrollView, Image, BackHandler} from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, TextInput, FlatList, ScrollView, Image, BackHandler,Dimensions,RefreshControl} from 'react-native';
 
 import { commonActionGet, commonActionPost, getTypeListAction } from '../../action/commonAction'
 import { connect } from 'react-redux';
-import { imageBaseUrl } from '../../Component/config'
+import { imageBaseUrl, themeColor } from '../../Component/config'
 import _get from 'lodash/get';
 import { ListItems, PromoList } from '../../Component/SkeltonRow';
 import Header from '../../Component/Header'  
 import VenderList from '../../Screens/Vender/index'
 
 
-const categoryHeight = '16%';
+
+const height = Dimensions.get('window').height;
+const width = Dimensions.get('window').width;
+
+
+const categoryHeight = '19%';
 
 class Home extends Component {
 
@@ -32,15 +37,35 @@ class Home extends Component {
         BackHandler.addEventListener('hardwareBackPress', this.back_Button_Press);
     }
 
-UNSAFE_componentWillMount(){
-  
-}
+
+ handleFirstConnectivityChange=(connectionInfo)=> {
+    console.warn('First change, type: ' + connectionInfo.type + ', effectiveType: ' + connectionInfo.effectiveType);
+    NetInfo.removeEventListener(
+      'connectionChange',
+      handleFirstConnectivityChange
+    );
+  }
+
     componentDidMount() {
-        this.getPromos()
+
+       
+
+          const unsubscribed = this.props.navigation.addListener('focus', () => {
+            // this.getPromos()
+            // this.getCategoryListHome();
+         
+          });
+
+        // console.warn('Object of netInfo ',NetInfo.addEventListener)
+        this.getPromos();
         this.getCategoryListHome();
-      //  console.log("**********",_get(this.props, 'catListHome', []))
+       
+      
          
     }
+
+   
+
     componentWillUnmount() {
 
         BackHandler.removeEventListener('hardwareBackPress', this.back_Button_Press);
@@ -51,6 +76,11 @@ UNSAFE_componentWillMount(){
         return true;
     }
 
+
+    onRefresh=()=>{
+        this.getPromos();
+        this.getCategoryListHome();
+    }
 
     getPromos = () => {
 
@@ -112,15 +142,27 @@ UNSAFE_componentWillMount(){
 
 
     categoryItems = () => {
-
+    let arr = [];
+    console.log("catListHome-----",_get(this.props, 'catListHome', []))
+    this.props.catListHome && _get(this.props, 'catListHome', []).map((item,index)=>{
+        if(index==5){
+            arr.push({"Name":"See More"})
+            return;
+        }
+        else{
+            arr.push(item)
+        }
+        console.log('Index------- ',index)
+    })
 
         return (
-            _get(this.props, 'catListHome', []).map(item => {
-             console.log('get Item in Map ^^^^^^^^ ',item)
+            // _get(this.props, 'catListHome', []).map(item => {
+               arr.map(item => {
+            
                 return (
                     item.Name=="See More"?
                         <TouchableOpacity style={styles.itemView} onPress={() => { this.navigate('SeeMoreScreen') }}>
-                            <Text>See More</Text>
+                            <Text>{item.Name}</Text>
                         </TouchableOpacity>
 
                         :
@@ -140,7 +182,7 @@ UNSAFE_componentWillMount(){
     renderItems = (item) => {
         console.log('get render items----', item.item)
         return (
-            <TouchableOpacity style={{ height: "90%", width: 300, margin: 10 }}>
+            <TouchableOpacity style={styles.offerListItems}>
                 <Image style={{ width: '100%', height: '100%', borderRadius: 10, resizeMode: 'stretch' }} source={{ uri: imageBaseUrl + item.item.ImageName }} />
             </TouchableOpacity>
         )
@@ -171,7 +213,7 @@ UNSAFE_componentWillMount(){
     textView = (text) => {
         return (
             <View style={styles.category}>
-                <Text style={{ fontSize: 18, fontWeight: '600', marginLeft: 10 }}>{text}</Text>
+                <Text style={{ fontSize: 18, fontWeight: 'bold', marginLeft: 10 }}>{text}</Text>
             </View>
         )
     }
@@ -182,27 +224,38 @@ UNSAFE_componentWillMount(){
 
     categoryView = () => {
         console.log(' this.props.catListHome--- ', this.props.catListHome)
-        return (
-          
-            _get(this.props, 'catListHome', []).length == 0 ?
-            <ListItems />
-            :
-            <View style={styles.categoryView}>
-               {this.categoryItems()}
-              </View>
-        
-        )
+      
+              
+            return (
+         
+                this.props.catListHome && _get(this.props, 'catListHome', []).length == 0 ?
+                <ListItems style={styles.listRow} length={[1,2,3,4,5,6]}/>
+                :
+                <View style={styles.categoryView}>
+                   {this.categoryItems()}
+                  
+                 
+                  </View>
+            
+            )
+
+
+       
+       
     }
 
     offersView = () => {
+
+
         return (
             <View style={{ width: '100%', height: 250, backgroundColor: '#fff' }}>
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', borderWidth: 0, padding: 5, paddingBottom: 0 }}>
                     {/* <Text style={{fontWeight:'500',fontSize:20}}>Promos for you</Text> */}
                     {this.textView('Promos for you')}
-                    <Text style={{ color: '#0000FB' }}>see more...</Text>
+                    {/* <Text style={{ color: '#0000FB' }}>see more...</Text> */}
                 </View>
-                {_get(this.props, 'promoList', []).length == 0 ?
+
+                {this.props.promoList && _get(this.props, 'promoList', []).length == 0 ?
                     <PromoList />
                     :
                     this.flatlistView()
@@ -262,18 +315,22 @@ UNSAFE_componentWillMount(){
         return (
             <View style={styles.container}>
             <Header title="Home" props={this.props} right={true}/>
+            {/* <NetInfoComp/> */}
            
-
-
-            <View style={styles.break} />
-            
-
-           
+                <ScrollView contentContainerStyle={{ flexGrow: 1 }} showsVerticalScrollIndicator={false}
+                
+                refreshControl={
+          <RefreshControl
+            refreshing={this.props.isLoad}
+           colors={[themeColor,'#8685ff','#f36c1f','#fc0040']}
+           tintColor={themeColor}
+           title={'Loading...'}
+            onRefresh={()=>this.onRefresh()}
+          />
+        }
+                >
                    
-
-                <ScrollView contentContainerStyle={{ flexGrow: 1 }} showsVerticalScrollIndicator={false}>
-                   
-                {this.searchRender()}
+                    {this.searchRender()}
                     <View style={styles.break} />
                     {this.textView('What do you looking for?')}
                     <View style={styles.break} />
@@ -283,10 +340,11 @@ UNSAFE_componentWillMount(){
                     <View style={[styles.break, { marginTop: 5, marginBottom: 0, borderWidth: 0 }]} />
                     {this.offersView()} 
                     <View style={[styles.break, { marginTop: 5, marginBottom: 0, borderWidth: 0 }]} />
-                    {this.textView("Pick's today")}
-                    <VenderList props={this.props}/>
-
+                    {this.textView("Recommended Venders")}
+                    <VenderList props={this.props} id={0} length={[1,2]}/>
+                    {this.textView("Best selling products")}
                     {this.boxRenderView()} 
+                   
                 </ScrollView>
             </View>
         )
@@ -296,7 +354,7 @@ UNSAFE_componentWillMount(){
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-       // padding: 5,
+       // marginBottom: 40,
     },
 
     search: {
@@ -337,7 +395,7 @@ const styles = StyleSheet.create({
         flexWrap: 'wrap',
        // marginBottom: 10,
        // padding: 10,
-        overflow: 'hidden',
+       // overflow: 'hidden',
         // borderWidth:1
     },
 
@@ -360,9 +418,11 @@ const styles = StyleSheet.create({
     },
 
     flatList: {
-        height: 60,
+        //height: 70,
+        padding:10,
         width: '100%',
         flexDirection: 'row',
+
     },
     boxParentView: {
         flexDirection: 'row',
@@ -370,7 +430,8 @@ const styles = StyleSheet.create({
         width: '100%',
         marginTop: 10,
         flexWrap: 'wrap',
-        justifyContent: 'space-around'
+        justifyContent: 'space-around',
+        marginBottom:57
     },
 
     boxView: {
@@ -411,7 +472,23 @@ const styles = StyleSheet.create({
         },
         shadowOpacity: 0.8,
         shadowColor: '#ccc'
-
+         
+    },
+    listRow:{
+        // height:90,
+        // width:110,
+        height:height/9.5,
+        width:width/3.4,
+        margin:5,
+        borderRadius:10,
+    },
+    offerListItems:{ 
+        height: "90%", width: 300, 
+        margin: 10,
+        elevation:5,
+        shadowOpacity:0.8,
+        shadowColor:'#ccc',
+        shadowRadius:10 
     }
 
 })
@@ -423,6 +500,7 @@ const mapStateToProps = state => (
 
         promoList: state.commonReducer.promoList,
         catListHome: state.commonReducer.catListHome,
+        isLoad:state.commonReducer.isLoad,
     }
 
 );
@@ -434,3 +512,4 @@ const mapDispatchToProps = dispatch => ({
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Home)
+
