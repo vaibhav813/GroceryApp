@@ -156,7 +156,7 @@
 
 
 
-import React, { Component } from 'react';
+import React, { Component,PureComponent } from 'react';
 import { View, Text,StyleSheet,Image,TouchableOpacity,FlatList,StatusBar } from 'react-native';
 import { connect } from 'react-redux';
 import {getTypeListAction} from '../../action/commonAction'
@@ -172,7 +172,7 @@ const data =[{"name":"Laxmi Mishthan Bhandar","img":'https://i.ibb.co/LQmZb1D/mu
 "address":"Malviya Nagar","rate":4.2,"time":"33 min","item":'₹300 for two'}
 ]
 
- class VenderList extends Component {
+ class VenderList extends PureComponent {                                             
   constructor(props) {
     super(props);
     this.state = {

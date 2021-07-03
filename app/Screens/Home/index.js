@@ -130,6 +130,8 @@ class Home extends Component {
                     style={{ flex: 0.9, height: '100%', color: '#000' }}
                     placeholder="Search category"
                     placeholderTextColor={"#808080"}
+                    onKeyPress={keyPress => console.warn(keyPress)}
+                    onFocus={() => this.props.navigation.navigate('SearchScreen')}
                 />
             </View>
         )
@@ -167,7 +169,7 @@ class Home extends Component {
 
                         :
 
-                        <TouchableOpacity style={styles.itemView} onPress={() => { this.navigate('AllCategoryScreen') }}>
+                        <TouchableOpacity style={styles.itemView} onPress={() => { this.navigate("VenderListDetails", { item: item }) }}>
 
                             <Image source={{ uri: imageBaseUrl + item.ImgLogo }} style={{ height: 40, width: 40,resizeMode:'contain' }} />
 

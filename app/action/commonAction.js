@@ -187,7 +187,7 @@ export const setLoader=(isLoad)=>{
           
           dispatch(setLoader(true))
             dispatch(request(constants,identifier,key)) 
-            console.log('getCategoryListAction data--- ',url+type+data.uriData)
+            console.log('Url data--- ',url+type+data.uriData)
           
            instance.get(url+type+data.uriData).then(res=>{
             console.log('Response ',res)
@@ -212,14 +212,14 @@ export const setLoader=(isLoad)=>{
 
 
 
-  export const getVenderListHomeAction = (data,url,constants,identifier,key,type) => (dispatch) =>{
+  export const getCommonDataAction = (url,constants,identifier,key,type) => (dispatch) =>{
     return new Promise((resolve,reject)=>{
         
         dispatch(setLoader(true))
           dispatch(request(constants,identifier,key)) 
        //   console.log('getCategoryListAction data--- ',url+type+data.type)
         
-         instance.get(url+type+data.catId).then(res=>{
+         instance.get(url+type).then(res=>{
           console.log('Response ',res)
           if(res.status==200){
             dispatch(setLoader(false))
@@ -240,64 +240,7 @@ export const setLoader=(isLoad)=>{
   
 };
 
-//   export const getVenderListAction = (data,url,constants,identifier,key) => (dispatch) =>{
-//     return new Promise((resolve,reject)=>{
-        
-//         dispatch(setLoader(true))
-//           dispatch(request(constants,identifier,key)) 
-//           console.log('getCategoryListAction data--- ',data)
-        
-//          instance.get(url+'?type='+data.type).then(res=>{
-//           console.log('Response ',res)
-//           if(res.status==200){
-//             dispatch(setLoader(false))
-//               dispatch(receive(res.data.data,res.status,resolve,constants,identifier,key)) 
-//           }
-//           else{
-            
-//             dispatch(setLoader(false))
-//               dispatch(receiveError(res.data.data,res.status,reject,constants,identifier,key))
-//           }    
-//       }).catch(err=>{
-//         console.log('Error--- ',err.response)   
-//         dispatch(setLoader(false))
-//           dispatch(receiveError(err.message,err.status,reject,constants,identifier,key))
-//           console.log('Error--- ',err)          
-//       })
-//    })
-  
-// };
 
 
 
-
-
-//     Slider API
-// https://groceryapis.thezetacode.com/api/sliderlist
-
-// Category List
-// https://groceryapis.thezetacode.com/api/categorylist?type=1 (Front Page)
-// https://groceryapis.thezetacode.com/api/categorylist?type=2 (All List)
-
-// Vendor List
-// https://groceryapis.thezetacode.com/api/vendorlist?CatId=0 (Front Page)
-// https://groceryapis.thezetacode.com/api/vendorlist?CatId=1 (Vendore List Category wise)
-
-
-
-{/* <key>NSExceptionDomains</key>
-<dict>
-    <key>localhost</key>
-    <dict>
-        <key>NSExceptionAllowsInsecureHTTPLoads</key>
-        <true/>
-    </dict>
-    <key>subdomain.example.com</key>
-    <dict>
-        <key>NSIncludesSubdomains</key>
-        <true/>
-        <key>NSExceptionAllowsInsecureHTTPLoads</key>
-        <true/>
-    </dict>
-</dict> */}
 

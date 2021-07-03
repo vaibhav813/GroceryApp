@@ -20,6 +20,7 @@ import {
   getTypeListAction,
 } from "../../action/commonAction";
 import { themeColor } from "../../Component/config";
+import Header from '../../Component/Header/index'
 
 const categoryHeight = "21%";
 
@@ -55,6 +56,7 @@ class Seemore extends Component {
   categoryView = () => {
     return (
       <View style={styles.categoryView}>
+      
         {this.props.catListAll && _get(this.props, "catListAll", []).length == 0 ? (
           <ImageWithText />
         ) : (
@@ -105,13 +107,16 @@ class Seemore extends Component {
   };
 
   render() {
-    return <View style={styles.container}>{this.categoryView()}</View>;
+    return <View style={styles.container}>
+    <Header props={this.props} title="See More" right={false}/>
+    {this.categoryView()}
+    </View>;
   }
 }
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 5,
+   // padding: 5,
   },
   itemView: {
     // height:90,

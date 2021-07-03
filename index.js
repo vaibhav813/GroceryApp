@@ -32,6 +32,7 @@ import SplashScreen from './app/Screens/Splash/index'
  import VenderListComp from '././app/Screens/Vender/index'
  //import VendorCategory from '././app/Screens/Category/VendorCategory';
 import AllCategoryScreen from '././app/Screens/Home/AllCategory'
+import Search from '././app/Screens/Home/Search'
 
 
 import {
@@ -53,7 +54,7 @@ function HomeStack() {
             screenOptions={{
                 headerStyle: { backgroundColor: tabColor },
                 headerTintColor: '#fff',
-                
+                headerShown:false,
                 headerTitleStyle: { fontWeight: 'bold', alignSelf: 'center' }
             }}>
 
@@ -93,11 +94,11 @@ function HomeStack() {
                 headerTitleStyle={{ alignSelf: 'center' }}
                 options={{ title: 'Home',headerShown:false }} />
 
-             {/* <Stack.Screen
-                name="VenderListScreen"
-                component={VenderListComp}
+             <Stack.Screen
+                name="SearchScreen"
+                component={Search}
                 headerTitleStyle={{ alignSelf: 'center' }}
-                options={{ title: 'Home',headerShown:false }} /> */}
+                options={{ title: 'Search' }} />
 
 
         </Stack.Navigator>
