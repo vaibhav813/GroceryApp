@@ -15,8 +15,7 @@ import { imageBaseUrl } from "../../Component/config";
 import _get from "lodash/get";
 import { ImageWithText } from "../../Component/SkeltonRow";
 import {
-  commonActionGet,
-  commonActionPost,
+
   getTypeListAction,
 } from "../../action/commonAction";
 import { themeColor } from "../../Component/config";
@@ -54,25 +53,39 @@ class Seemore extends Component {
   };
 
   categoryView = () => {
+
+
+
     return (
       <View style={styles.categoryView}>
       
         {this.props.catListAll && _get(this.props, "catListAll", []).length == 0 ? (
-          <ImageWithText />
-        ) : (
+          
+          <ImageWithText length={[1,2,3,4,5,6,7]} style={styles.itemView}/>          
+          
+        ) 
+        : 
+        (
           <FlatList
             style={{ height: "100%", width: "100%" }}
-            showsHorizontalScrollIndicator={false}
+           // showsHorizontalScrollIndicator={false}
+            showsVerticalScrollIndicator={false}
             contentContainerStyle={{ alignItems: "center" }}
             data={_get(this.props, "catListAll", [])}
             renderItem={(item) => this.categoryItems(item)}
             keyExtractor={(item) => item.id}
-          />
+          /> 
+            
+       
+          
         )}
       </View>
     );
   };
 
+
+
+  
   navigate = (screen, params) => {
     this.props.navigation.navigate(screen, params);
   };
@@ -109,7 +122,9 @@ class Seemore extends Component {
   render() {
     return <View style={styles.container}>
     <Header props={this.props} title="See More" right={false}/>
+    <View style={{flex:1,padding:10}}>
     {this.categoryView()}
+    </View>
     </View>;
   }
 }
@@ -143,6 +158,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     marginTop: 0,
+   
   },
 });
 

@@ -5,10 +5,10 @@ import SkeletonPlaceholder from "react-native-skeleton-placeholder";
 export const ImageInfo = () => {
   return (
     <SkeletonPlaceholder>
-      <SkeletonPlaceholder.Item  flexDirection="row" alignItems="center" justifyContent='center' >
+      <SkeletonPlaceholder.Item  flexDirection="row" alignItems="center" justifyContent='flex-start' >
         <SkeletonPlaceholder.Item width={60} height={60} borderRadius={50} />
         <SkeletonPlaceholder.Item marginLeft={20}>
-          <SkeletonPlaceholder.Item width={300} height={20} borderRadius={4} />
+          <SkeletonPlaceholder.Item width={250} height={20} borderRadius={4} />
           <SkeletonPlaceholder.Item
             marginTop={6}
             width={80}
@@ -27,16 +27,20 @@ export const VenderImageInfo = () => {
   return (
     <SkeletonPlaceholder>
     <SkeletonPlaceholder.Item flexDirection="row" alignItems="center" justifyContent='center' >
-      <SkeletonPlaceholder.Item width={70} height={70} borderRadius={50} />
+      <SkeletonPlaceholder.Item width={100} height={70} borderRadius={10} />
       <SkeletonPlaceholder.Item marginLeft={10}>
-        <SkeletonPlaceholder.Item width={260} height={20} borderRadius={4} />
-        <SkeletonPlaceholder.Item width={260} height={20} borderRadius={4}  marginTop={6}/>
-        <SkeletonPlaceholder.Item
-          marginTop={6}
-          width={80}
-          height={20}
-          borderRadius={4}
-        />
+        <SkeletonPlaceholder.Item width={120} height={20} borderRadius={4} />
+        <SkeletonPlaceholder.Item width={120} height={20} borderRadius={4}  marginTop={6}/>
+        <SkeletonPlaceholder.Item flexDirection="row" alignItems="center" justifyContent='center'   marginTop={6}>
+
+        <SkeletonPlaceholder.Item  width={50}  height={20} borderRadius={4} />
+        <SkeletonPlaceholder.Item  width={35} />
+        <SkeletonPlaceholder.Item  width={50}  height={20} borderRadius={4} />
+        <SkeletonPlaceholder.Item  width={35} />
+        <SkeletonPlaceholder.Item  width={50}  height={20} borderRadius={4} />
+
+        </SkeletonPlaceholder.Item>
+       
       </SkeletonPlaceholder.Item>
     </SkeletonPlaceholder.Item>
   </SkeletonPlaceholder>
@@ -44,28 +48,21 @@ export const VenderImageInfo = () => {
 };
 
 
-export const ImageWithText=()=>{
+export const ImageWithText=(props)=>{
+  // console.log('Skelton props ',props)
   return(
-    <View style={{width:'100%'}}>
-    <ImageInfo/>
-    <View style={{height:10}}/>
-    <ImageInfo/>
-    <View style={{height:10}}/>
-    <ImageInfo/>
-    <View style={{height:10}}/>
-    <ImageInfo/>
-    <View style={{height:10}}/>
-    <ImageInfo/>
-    <View style={{height:10}}/>
-    <ImageInfo/>
-    <View style={{height:10}}/>
-    <ImageInfo/>
-    <View style={{height:10}}/>
-    <ImageInfo/>
-    <View style={{height:10}}/>
-    <ImageInfo/>
-    </View>
+    
+  props.length.map(item=>{
+    console.log('Skelton props ',item)
+    return(
+      <View style={[props.style,{width:'95%'}]}>
+      <ImageInfo/>
+      </View>
+    )
+  })
   )
+  
+
 }
 
 

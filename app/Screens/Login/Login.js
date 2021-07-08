@@ -1,7 +1,7 @@
 import React,{Component} from 'react';
-import {View,StyleSheet,TextInput,Text,ImageBackground, TouchableOpacity} from 'react-native';
+import {View,StyleSheet,TextInput,Text,ImageBackground, TouchableOpacity,ActivityIndicator} from 'react-native';
 import { connect } from 'react-redux';
-import {commonAction} from '../../action/commonAction'
+import {commonActionPostLogin} from '../../action/commonAction'
 // import LinearGradient from 'react-native-linear-gradient';
 import axios from 'axios';
 import {reset} from '../../Component/RootNavigation'
@@ -32,6 +32,9 @@ this.setState({val:text})
  if(type=="Enter e-mail"){
     this.setState({mail:text})
 }
+else if(type=="Enter Mobile Number"){
+    this.setState({mail:text})
+}
 else {
     this.setState({password:text})
 }
@@ -51,27 +54,34 @@ return(
 
 }
 gotoHome=()=>{
-// const obj = {
-// "email":this.state.mail,
-// "pass":this.state.password
-// }
-// // console.log('Action ',this.props.login(obj))
+if(this.state.mail=="" || this.state.password==""){
+    alert("All fields are required!")
+}
+else{
+const obj = {
+"MobileNo":this.state.mail,
+"Password":this.state.password
+}
+// console.log('Action ',this.props.login(obj))
 
-// const url="/login";
-// const constant = 
-// {init:"USER_LOGIN_INIT",
-//   success:"USER_LOGIN_SUCCESS",
-// error:"USER_LOGIN_ERROR"
-// }
-// const identifier = "USER_LOGIN";
-// const key="loginData";
+const url="/GenerateJWTToken";
+const constant = 
+{init:"USER_LOGIN_INIT",
+  success:"USER_LOGIN_SUCCESS",
+error:"USER_LOGIN_ERROR"
+}
+const identifier = "USER_LOGIN";
+const key="loginData";
 
-// this.props.commonAction(obj,url,constant,identifier,key)
+const data=this.props.commonActionPostLogin(obj,url,constant,identifier,key)
 //reset(this.props,'Login');
+console.log('Login Data Response---',data)
+console.log('Login Data Props---',this.props.loginData)
 
-this.props.navigation.navigate("tabHome");
 
+//this.props.navigation.navigate("tabHome");
 
+}
 
     
 }
@@ -92,9 +102,11 @@ return(
 <TextInput
         style={styles.input}
         onChangeText={text=>this.onChangeText(text,type)}
-        value={type=="Enter e-mail"?this.state.mail:this.state.password}
+        //value={type=="Enter e-mail"?this.state.mail:this.state.password}
+        value={type=="Enter Mobile Number"?this.state.mail:this.state.password}
+        
         placeholder={type}
-      //  keyboardType="numeric"
+        keyboardType={type=="Enter Mobile Number"?"phone-pad":"default"}
       />
 
 
@@ -103,6 +115,19 @@ return(
 )
 
 }
+
+
+loader=()=>{
+
+    return(
+        this.props.isLoad?
+<ActivityIndicator size='large' color={themeColor}/>
+: null
+
+    )
+}
+
+
 
 render(){
 
@@ -117,9 +142,12 @@ return(
 <View style={styles.parentView_one}> */}
 <Text style={styles.title}>Please login here</Text>
 
-{this.textInputRender("Enter e-mail")}
+{/* {this.textInputRender("Enter e-mail")} */}
+{this.textInputRender("Enter Mobile Number")}
 {this.textInputRender("Password")}
 {this.buttonRenderView()}
+<View style={{height:50}}/>
+{this.loader()}
 {/* <Text style={{fontSize:10,fontWeight:'700',color:'#fff',marginTop:20}}>
         If you have an account the <Text style={{color:'tomato',fontStyle:'italic',}} onPress={()=>{this.goToLoginPage()}}>login here</Text>
     </Text> */}
@@ -162,7 +190,7 @@ const styles= StyleSheet.create({
     title:{
             fontWeight:'800',
             fontSize:20,
-            color:'#fff',
+            color:themeColor,
             marginTop:20
          },
         parentView_one:
@@ -208,7 +236,8 @@ const styles= StyleSheet.create({
 const mapStateToProps = state => (
   
     {
-        loginData:state.loginData
+        loginData:state.commonReducer.loginData,
+        isLoad:state.commonReducer.isLoad,
       
   }
   
@@ -216,7 +245,7 @@ const mapStateToProps = state => (
   
  
   const mapDispatchToProps = dispatch => ({
-    commonAction:(obj,url,constant,identifier,key)=>{dispatch(commonAction(obj,url,constant,identifier,key))}
+    commonActionPostLogin:(obj,url,constant,identifier,key)=>{dispatch(commonActionPostLogin(obj,url,constant,identifier,key))}
     
   });
   

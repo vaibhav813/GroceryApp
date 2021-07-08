@@ -21,14 +21,15 @@ export const VenderListSkelton = (props) => {
 
 const styles=StyleSheet.create({
     skeltonView:{
-    height:150,width:'100%',
+   width:'100%',
     backgroundColor:'#fff',justifyContent:'center',
     borderRadius:10,
     shadowOpacity:0.8,
     shadowRadius:10,
     shadowColor:'#ccc',
     elevation:10,
-    marginTop:15
+    marginTop:15,
+    padding:15
 
 }
 })

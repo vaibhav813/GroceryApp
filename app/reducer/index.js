@@ -42,6 +42,18 @@ const initialState = {
       ...state,
       isLoad:action.data
       }; 
+
+      case 'SAVE_CART_ITEMS':
+        return {
+        ...state,
+        [`${action.key}`]:action.data
+        }; 
+
+        case 'SAVE_ADDRESS_LIST':
+          return {
+          ...state,
+          [`${action.key}`]:action.data
+          }; 
   
       default:
       return state;

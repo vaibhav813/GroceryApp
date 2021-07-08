@@ -2,8 +2,11 @@
 import axios from 'axios';
 import * as RootNavigation from '../Component/RootNavigation'
 import store from '../store/index';
-import {getData} from '../Component/Storage/index';
-import { imageBaseUrl } from '../Component/config';
+import {getData,saveData} from '../Component/Storage/index';
+import jwt_decode from "jwt-decode";
+import SnackBar from 'react-native-snackbar';
+import {themeColor,dangerRed} from '../Component/config'
+
 
 //import AsyncStorage from "@react-native-community/async-storage"
 
@@ -96,15 +99,39 @@ export const setLoader=(isLoad)=>{
     )
 }
 
+
+export const saveDataLocally=(data,identifier,key)=>{
+  return(
+    {
+      type:identifier,
+      data:data,
+      key:key
+    }
+  )
+}
+
+const showSnackBar=(text,color)=>{
+  
+
+   SnackBar.show({
+    text: text,
+
+    // backgroundColor:'#00A300',
+    backgroundColor:color,
+    duration: SnackBar.LENGTH_SHORT,
+  });
+
+}
+
     
-      export const commonActionPost =  (data,url,constants,identifier,key) => (dispatch) =>{
+      export const commonActionPostLogin =  (data,url,constants,identifier,key) => (dispatch) =>{
         console.log('Post Data -- ',data)
           return new Promise((resolve,reject)=>{
-            console.log('Post Data -- 2')
+            
            
                  dispatch(setLoader(true))
                 dispatch(request(constants,identifier,key)) 
-                console.log('Post Data -- 3')
+                
                 
                instance.post(`${url}`,data).then(res=>{
                 console.log('Response ',res)
@@ -112,12 +139,58 @@ export const setLoader=(isLoad)=>{
               
                     dispatch(setLoader(false))
                     dispatch(receive(res.data.data,res.status,resolve,constants,identifier,key)) 
+                    saveData('token',res.data)
+                    var decoded = jwt_decode(res.data);
+                    console.log('Login Data ',decoded)
+                    RootNavigation.navigate("tabHome",{})
+                    showSnackBar("Logged In Successfully!",themeColor)
+                   
                   
                 }
                 else{
                   
                     dispatch(setLoader(false))
                     dispatch(receiveError(res.data.data,res.status,reject,constants,identifier,key))
+                    showSnackBar("Something wrong!",dangerRed)        
+                 
+                }   
+                                         
+            }).catch(err=>{
+              console.log('Login Error--- ',err.response)
+              showSnackBar("UserId or password invalid!",dangerRed)  
+                dispatch(setLoader(false))
+                dispatch(receiveError(err.message,"404",reject,constants,identifier,key))
+              
+                
+            })
+          })
+      };
+
+
+
+      export const commonActionPost =  (data,url,constants,identifier,key) => (dispatch) =>{
+        console.log('Post Data -- ',data)
+          return new Promise((resolve,reject)=>{
+            
+           
+                 dispatch(setLoader(true))
+                dispatch(request(constants,identifier,key)) 
+                
+                
+               instance.post(`${url}`,data).then(res=>{
+                console.log('Response ',res)
+                if(res.status==200){
+              
+                    dispatch(setLoader(false))
+                    dispatch(receive(res.data.data,res.status,resolve,constants,identifier,key)) 
+                   // alert("Registered Successfully!")
+                  
+                }
+                else{
+                  
+                    dispatch(setLoader(false))
+                    dispatch(receiveError(res.data.data,res.status,reject,constants,identifier,key))
+                    //alert("Something Wrong.Please Try Again!")
                  
                 }
               
@@ -156,7 +229,7 @@ export const setLoader=(isLoad)=>{
              instance.get(url,data).then(res=>{
               console.log('Response ',res)
               if(res.status==200){
-                dispatch(setLoader(false))
+                  dispatch(setLoader(false))
                   dispatch(receive(res.data.data,res.status,resolve,constants,identifier,key)) 
                   
               }
@@ -240,6 +313,22 @@ export const setLoader=(isLoad)=>{
   
 };
 
+
+export const getDataSaveList=(data,identifier,key) => (dispatch) =>{
+  return new Promise((resolve,reject)=>{
+      
+   //   dispatch(setLoader(true))
+        dispatch(saveDataLocally(data,identifier,key)) 
+     //   console.log('getCategoryListAction data--- ',url+type+data.type)
+      
+    
+    }).catch(err=>{
+      console.log('Error--- ',err)   
+              
+    })
+
+
+};
 
 
 

@@ -316,7 +316,7 @@ class Home extends Component {
     render() {
         return (
             <View style={styles.container}>
-            <Header title="Home" props={this.props} right={true}/>
+            <Header title="Home" props={this.props} right={true} count={_get(this.props.cartItems,'length',0)}/>
             {/* <NetInfoComp/> */}
            
                 <ScrollView contentContainerStyle={{ flexGrow: 1 }} showsVerticalScrollIndicator={false}
@@ -503,6 +503,7 @@ const mapStateToProps = state => (
         promoList: state.commonReducer.promoList,
         catListHome: state.commonReducer.catListHome,
         isLoad:state.commonReducer.isLoad,
+        cartItems:state.commonReducer.cartItems,
     }
 
 );

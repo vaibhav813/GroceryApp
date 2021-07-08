@@ -21,6 +21,9 @@ target 'groceryApp' do
 
   pod 'RNNetworkState', :path => '../node_modules/react-native-network-state'
 
+
+  pod 'react-native-geolocation', :path => '../node_modules/@react-native-community/geolocation'
+
   target 'groceryAppTests' do
     inherit! :complete
     # Pods for testing

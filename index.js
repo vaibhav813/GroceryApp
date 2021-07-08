@@ -33,6 +33,8 @@ import SplashScreen from './app/Screens/Splash/index'
  //import VendorCategory from '././app/Screens/Category/VendorCategory';
 import AllCategoryScreen from '././app/Screens/Home/AllCategory'
 import Search from '././app/Screens/Home/Search'
+import Details from '././app/Screens/Home/Details'
+import ConfirmCart from '././app/Screens/MyCart/ConfirmCart'
 
 
 import {
@@ -100,6 +102,28 @@ function HomeStack() {
                 headerTitleStyle={{ alignSelf: 'center' }}
                 options={{ title: 'Search' }} />
 
+             <Stack.Screen
+                name="DetailScreen"
+                component={Details}
+                headerTitleStyle={{ alignSelf: 'center' }}
+                options={{ title: 'Detail' }} />
+
+
+<Stack.Screen
+                name="CartScreen"
+                component={MyCart}
+                options={{ title: 'Cart' }} />
+
+<Stack.Screen
+                name="AddressScreen"
+                component={AddressScreen}
+                options={{ title: 'Address' }} />
+
+<Stack.Screen
+                name="ConfirmCartScreen"
+                component={ConfirmCart}
+                options={{ title: 'Confirm Cart' }} />
+
 
         </Stack.Navigator>
     );
@@ -156,7 +180,7 @@ function CartStack() {
             screenOptions={{
                 headerStyle: { backgroundColor: themeColor },
                 headerTintColor: '#fff',
-                
+                headerShown:false,
                 headerTitleStyle: { fontWeight: 'bold', alignSelf: 'center' }
             }}>
             <Stack.Screen
@@ -168,6 +192,12 @@ function CartStack() {
                 name="AddressScreen"
                 component={AddressScreen}
                 options={{ title: 'Address' }} />
+
+
+              <Stack.Screen
+                name="ConfirmCartScreen"
+                component={ConfirmCart}
+                options={{ title: 'Confirm Cart' }} />
 
         </Stack.Navigator>
     );
@@ -247,7 +277,7 @@ const RegisterLoginStack = () => {
         <NavigationContainer ref={navigationRef}>
             <StatusBar barStyle="light-content" backgroundColor={themeColor} />
             <Stack.Navigator
-            //   initialRouteName="Check"
+              // initialRouteName="AddressScreen"
                 initialRouteName="Register"
                 screenOptions={{
                     headerStyle: { backgroundColor: tabColor },
@@ -280,8 +310,8 @@ const RegisterLoginStack = () => {
                 
                               
                <Stack.Screen
-                name="Check"
-                component={Check}
+                name="AddressScreen"
+                component={AddressScreen}
                 headerTitleStyle={{alignSelf: 'center'}}
                 options={{headerShown: false}}
                // options={{ title: 'Home' }}

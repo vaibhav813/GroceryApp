@@ -2,9 +2,15 @@ import React,{Component} from 'react';
 import {View,StyleSheet,TextInput,Text,ImageBackground, TouchableOpacity,ToastAndroid,ActivityIndicator} from 'react-native';
 import { connect } from 'react-redux';
 import SplashScreen from 'react-native-splash-screen'
-import {commonAction} from '../../action/commonAction'
+import {commonActionPost} from '../../action/commonAction'
 import { notifications, NotificationMessage, Android } from 'react-native-firebase-push-notifications'
 import {themeColor} from '../../Component/config'
+import Geolocation from '@react-native-community/geolocation'
+import {
+  GoogleSignin,
+  GoogleSigninButton,
+  statusCodes,
+} from '@react-native-google-signin/google-signin';
 
 
 // import RNSmtpMailer from "react-native-smtp-mailer";
@@ -13,17 +19,18 @@ class Register extends Component{
 constructor(props)
 {
 super(props)
-this.state={val:'',name:'',phone:'',mail:'',address:'',type:'',password:'pass',isLoad:false}
+this.state={val:'',name:'',phone:'',mail:'',address:'',type:'',password:'',
+userInfo:{},
+isLoad:false,confirmPass:""}
 }
 componentDidMount(){
-    // setTimeout(()=>{
-    //     SplashScreen.hide();
-    // },3000)
-    // const token = notifications.getToken()
-    // console.log('Token ---- ',token)
+
     this.getToken()
-   // this.localNotification()
+     this.getCurrentLocation()
+   this.googleSignIn()
+  // this.getCurrentUserInfo()
     SplashScreen.hide();
+    //this.signIn()
 }
 
 
@@ -41,6 +48,104 @@ componentWillUnmount() {
       this.removeonTokenRefresh()
     }
   }
+
+
+  googleSignIn=()=>{
+
+    GoogleSignin.configure({
+      scopes: ['https://www.googleapis.com/auth/drive.readonly'], // what API you want to access on behalf of the user, default is email and profile
+     // scopes: ['profile', 'email'],
+      webClientId: '775534471814-22nmggu85ibo2q0u5q8raglhdms2cpqp.apps.googleusercontent.com', // client ID of type WEB for your server (needed to verify user ID and offline access)
+     // androidClientId: '775534471814-22nmggu85ibo2q0u5q8raglhdms2cpqp.apps.googleusercontent.com',
+      offlineAccess: true, // if you want to access Google API on behalf of the user FROM YOUR SERVER
+      hostedDomain: '', // specifies a hosted domain restriction
+      loginHint: '', // [iOS] The user's ID, or email address, to be prefilled in the authentication UI if possible. [See docs here](https://developers.google.com/identity/sign-in/ios/api/interface_g_i_d_sign_in.html#a0a68c7504c31ab0b728432565f6e33fd)
+      forceCodeForRefreshToken: true, // [Android] related to `serverAuthCode`, read the docs link below *.
+      accountName: '', // [Android] specifies an account name on the device that should be used
+      iosClientId: '775534471814-30d7fmbehvo05590a8eknhrmou6nqet3.apps.googleusercontent.com', // [iOS] optional, if you want to specify the client ID of type iOS (otherwise, it is taken from GoogleService-Info.plist)
+      googleServicePlistPath: '', // [iOS] optional, if you renamed your GoogleService-Info file, new name here, e.g. GoogleService-Info-Staging
+    });     
+
+  }
+
+  signIn = async () => {
+    try {
+      await GoogleSignin.hasPlayServices();
+      console.log("Google Sign In ")
+      const userInfo = await GoogleSignin.signIn();
+      console.log("Google Sign In ",userInfo)
+      this.setState({ userInfo });
+    } catch (error) {
+      console.log('Error ',error)
+      if (error.code === statusCodes.SIGN_IN_CANCELLED) {
+        // user cancelled the login flow
+      } else if (error.code === statusCodes.IN_PROGRESS) {
+        // operation (e.g. sign in) is in progress already
+      } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
+        // play services not available or outdated
+      } else {
+        // some other error happened
+      }
+    }
+  };
+
+  getCurrentUserInfo = async () => {
+    try {
+      const userInfo = await GoogleSignin.signInSilently();
+      console.log('User Info--- ',userInfo)
+      this.setState({ userInfo });
+    } catch (error) {
+      if (error.code === statusCodes.SIGN_IN_REQUIRED) {
+        // user has not signed in yet
+      } else {
+        // some other error
+      }
+    }
+  };
+
+
+  getCurrentUser = async () => {
+    const currentUser = await GoogleSignin.getCurrentUser();
+    console.log('Get Current user ',currentUser)
+    this.setState({ currentUser });
+  };
+
+  getCurrentUserInfo = async () => {
+    try {
+      const userInfo = await GoogleSignin.signInSilently();
+      this.setState({ userInfo });
+    } catch (error) {
+      if (error.code === statusCodes.SIGN_IN_REQUIRED) {
+        // user has not signed in yet
+      } else {
+        // some other error
+      }
+    }
+  };
+
+
+
+
+getCurrentLocation=()=>{
+
+  Geolocation.getCurrentPosition(
+    //Will give you the current location
+    (position) => {
+      //getting the Longitude from the location json
+      console.log('Position ',position)
+      const currentLongitude =
+        JSON.stringify(position.coords.longitude);
+  
+      //getting the Latitude from the location json
+      const currentLatitude =
+        JSON.stringify(position.coords.latitude);
+        
+     }, (error) => alert(error.message), { 
+       enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 
+     }
+  );
+
+}
 
 
 getToken = async () => {
@@ -148,11 +253,11 @@ onChangeText=(text,type)=>{
     else if(type=="Enter e-mail"){
         this.setState({mail:text})
     }
-    else if(type=="Full Address") {
-        this.setState({address:text})
+    else if(type=="Enter Password") {
+        this.setState({password:text})
     }
     else{
-        this.setState({password:text})
+        this.setState({confirmPass:text})
     }
 
     
@@ -171,26 +276,32 @@ return(
 
 }
 
-registeredUserValues=()=>{
+registeredUserValues=async()=>{
+// this.setState({isLoad:true})
 
 
-
-   if(this.state.name=='' || this.state.phone==""||this.state.mail==""||this.state.address==""){
+   if(this.state.name=='' || this.state.phone==""||this.state.mail==""||this.state.password==""|| this.state.confirmPass==""){
        console.log('All Fields Name ',this.state.name +" Phone "+this.state.phone+" Mail "+this.state.mail+" addr "+this.state.address)
     alert("All fields require!")
    }
 else{
-    let pass = this.randomPasswordGenerate();
-   // this.sendMail(pass)
+if(this.state.password!=this.state.confirmPass){
+  alert('Password and confirm password is not same.')
+}
+else{
     const userInfo={
-        "name":this.state.name,
-        "phone":this.state.phone,
-        "email":this.state.mail,
-        "address":this.state.address,
-        "pass":pass,
-        "position":"22.3345555,11.2234666"
+        "Name":this.state.name,
+        "MobileNo":this.state.phone,
+        "EmailId":this.state.mail,
+        "Password":this.state.password,
+        "ConfirmPassword":this.state.confirmPass,
+        //"position":"22.3345555,11.2234666"
        }
-   const url="/register";
+
+    
+
+
+   const url="/usersignup";
    const constants={
        init:"USER_REGISTER_INIT",
        success:'USER_REGISTER_SUCCESS',
@@ -198,9 +309,13 @@ else{
    }
 const identifier = "USER_REGISTER";
 const key = "registerUser";
+
+const data = await this.props.commonActionPost(userInfo,url,constants,identifier,key)
+console.log('response Register ',data)
+
   
-    this.props.commonAction(userInfo,url,constants,identifier,key)
-    // this.props.navigation.navigate("Login");
+}
+// this.props.navigation.navigate('Login')
 }
  
   
@@ -210,12 +325,14 @@ goToLoginPage=()=>{
 }
 buttonRenderView=()=>{
     return(
-        <TouchableOpacity style={styles.button} onPress={()=>
+        <TouchableOpacity style={[styles.button,{ backgroundColor:this.props.isLoad?'#808080':themeColor,}]} 
+        disabled={this.props.isLoad}
+        onPress={()=>
        
         this.registeredUserValues()
         
         }>
-<Text style={{color:'#fff',fontWeight:'600'}}>Register{" "}</Text>
+    <Text style={{color:'#fff',fontWeight:'600'}}>Register{" "}</Text>
 
         </TouchableOpacity>
     )
@@ -252,11 +369,11 @@ val = this.state.phone;
     else if(type=="Enter e-mail"){
 val=this.state.mail;
     }
-    else if(type=="Full Address"){
-val=this.state.address;
+    else if(type=="Enter Password"){
+val=this.state.password;
     }
     else{
-val=this.state.password;
+val=this.state.confirmPass;
     }
     return val;
 
@@ -284,11 +401,22 @@ randomPasswordGenerate=()=>{
 loader=()=>{
 
     return(
-        this.state.isLoad?
+        this.props.isLoad?
 <ActivityIndicator size='large' color={themeColor}/>
 : null
 
     )
+}
+
+GSignInButton=()=>{
+  return(
+    <GoogleSigninButton
+    style={{ width: 192, height: 48 }}
+    size={GoogleSigninButton.Size.Wide}
+    color={GoogleSigninButton.Color.Dark}
+    onPress={()=>this.signIn()}
+    disabled={this.state.isSigninInProgress} />
+  )
 }
 
 
@@ -307,9 +435,12 @@ return(
 {this.textInputRender("Enter name")}
 {this.textInputRender("Enter Phone Number")}
 {this.textInputRender("Enter e-mail")}
-{this.textInputRender("Full Address")}
+{/* {this.textInputRender("Full Address")} */}
+{this.textInputRender("Enter Password")}
+{this.textInputRender("Enter Confirm Password")}
 {/* {this.textInputRender("Enter Password")} */}
 {this.buttonRenderView()}
+{this.GSignInButton()}
 <Text style={{fontSize:12,fontWeight:'700',color:'#000',marginTop:20}}>
         If you have an account then <Text style={{color:themeColor,fontWeight:'800',fontSize:15,textDecorationLine:'underline'}} onPress={()=>{this.goToLoginPage()}}>login here {" "}</Text>
     </Text>
@@ -395,7 +526,7 @@ const styles= StyleSheet.create({
 const mapStateToProps = state => (
   
     {
-    
+    isLoad:state.commonReducer.isLoad,
       
   }
   
@@ -404,7 +535,7 @@ const mapStateToProps = state => (
  
   const mapDispatchToProps = dispatch => ({
       //register:(obj)=>{dispatch(registerAction(obj))},
-      commonAction:(data,url,constants,identifier,key)=>{dispatch(commonAction(data,url,constants,identifier,key))}
+      commonActionPost:(data,url,constants,identifier,key)=>{dispatch(commonActionPost(data,url,constants,identifier,key))}
     
   });
   

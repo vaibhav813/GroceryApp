@@ -11,9 +11,10 @@ import {
   FlatList, TouchableOpacity
 } from 'react-native';
 
-
+ import {getDataSaveList} from '../../action/commonAction'
 import {themeColor} from '../../Component/config';
-
+import { connect } from "react-redux";
+import Header from '../../Component/Header/index'
 const images = [
   {img: 'https://i.ibb.co/LQmZb1D/muton.jpg'},
   {img: 'https://i.ibb.co/nCc4bTD/watch2.jpg'},
@@ -74,14 +75,19 @@ const otherData = [
   },
 ];
 
-export default class Details extends Component {
+class Details extends Component {
   constructor(props) {
     super(props);
-    this.state = {selectedItem: 0};
+    this.state = {
+      selectedItem: 0,
+      item:{}
+    };
     this.flatListRef = null;
+    
   }
   componentDidMount() {
-    console.log('Get Item ', this.props.route.params.item);
+    console.log('Get Item In Component Did Mount----- ', this.props.route.params.item);
+    this.setState({item:this.props.route.params.item})
   }
 
   imageBackgroundScrolls = item => {
@@ -411,13 +417,75 @@ export default class Details extends Component {
     )
   }
   goToCartPage=()=>{
-    // this.props.navigation.navigate('CartScreen',{items:''})
-    this.props.navigation.navigate('CartStack',{items:''})
+   this.saveDataToCart()
+    
+    this.props.navigation.navigate('CartScreen',{items:this.state.item})
+  }
+
+
+  checkObjExists=(obj,arr)=>{
+    let flag = false;
+arr.some(item=>{
+  console.log(item.Id,'==',obj.Id)
+  if(item.Id==obj.Id){
+    console.log('In If--- ',item.Id,'==',obj.Id)
+    flag=true;
+  //return
+
+  }
+ 
+})
+console.log('We have flag value here ',flag)
+return flag;
+  }
+
+  saveDataToCart=()=>{
+    let data= {};
+    let arr=[];
+    if(this.props.cartItems && this.props.cartItems.length>0){
+     
+      
+      //arr=this.props.cartItems;
+      // this.props.cartItems.some(item=>{
+      //   console.log('Check Array befor save ********* ',item," And ",this.props.route.params.item)
+      //   if(item.Id!=this.props.route.params.item.Id){
+         
+      //     arr.push(this.props.route.params.item)
+      //   }
+      // })
+      let check = this.checkObjExists(this.props.route.params.item,this.props.cartItems)
+      if(!check){
+        arr=this.props.cartItems;
+        arr.push(this.props.route.params.item)
+      }
+      else{
+        arr=this.props.cartItems;
+      }
+     
+     // data = arr;
+    }
+    else{
+      data= this.props.route.params.item
+      arr.push(data)
+    }
+
+    const key = "cartItems";
+     const identifier = "SAVE_CART_ITEMS";
+  
+    this.props.getCartSaveList(
+      arr,
+      identifier,
+      key,
+    );
+
+
   }
 
   render() {
     return (
       <View style={styles.container}>
+      <Header title="Details" props={this.props} right={false} />
+      <View style={{flex:1,padding:5}}>
         <ScrollView contentContainerStyle={{flexGrow: 1}} showsVerticalScrollIndicator={false}>
           <View style={styles.container}>
             {this.imageFlatlist()}
@@ -435,7 +503,9 @@ export default class Details extends Component {
            
           </View>
         </ScrollView>
+        
         {this.goToCartAction()}
+        </View>
       </View>
     );
   }
@@ -445,8 +515,8 @@ const styles = StyleSheet.create({
     flex: 2,
 
     // alignItems: 'center',
-    paddingTop: Platform.OS == 'ios' ? 20 : null,
-    padding: 2,
+   // paddingTop: Platform.OS == 'ios' ? 20 : null,
+    //padding: 2,
     backgroundColor: '#fff',
     paddingBottom: 10,
 
@@ -547,3 +617,16 @@ borderRadius:10
   
   }
 });
+
+
+const mapStateToProps = (state) => ({
+  //promoList: state.commonReducer.promoList,
+  cartItems: state.commonReducer.cartItems,
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  getCartSaveList: (data,  identifier, key) =>
+  dispatch(getDataSaveList(data,  identifier, key)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Details);
