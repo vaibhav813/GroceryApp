@@ -70,7 +70,9 @@ upperView=()=>{
         data={category}
         horizontal={true}
         renderItem={item=>this.renderItem(item)}
-        keyExtractor={item=>item.index}
+        keyExtractor={(item, index) => {
+         return  index.toString();
+        }}
     />
     )
 

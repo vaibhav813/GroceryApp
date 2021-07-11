@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text,StyleSheet,ScrollView,Image,TouchableOpacity } from 'react-native';
+import { View, Text,StyleSheet,ScrollView,Image,TouchableOpacity,FlatList } from 'react-native';
 import Header from '../../Component/Header/index'
 import { connect } from "react-redux";
 import {themeColor,dangerRed} from '../../Component/config'
@@ -21,7 +21,7 @@ import {getDataSaveList} from '../../action/commonAction'
     //console.log('We Have Address Component did mount')
   }
   venderInfoCartItem=(item)=>{
-      console.log('Get Item ion cart----',item)
+      console.log('Get Item in cart----',item)
       return(
           <View style={styles.venderInfoView}>
         <View style={styles.venderImageItem}>
@@ -159,7 +159,7 @@ bottomView=()=>{
 
     
     return(
-        <View style={{width:'100%',backgroundColor:'#fff',padding:10}}>
+        <View style={{width:'100%',backgroundColor:'#fff',padding:10,borderWidth:0}}>
         <View style={{flexDirection:'row',}}>
         <View style={{flex:0.22,justifyContent:'center',alignItems:'center'}}>
         <Text style={styles.bigText}>Deliver To:</Text>
@@ -210,25 +210,30 @@ emptyView=()=>{
 
 renderView=()=>{
     return(
-        <ScrollView contentContainerStyle={{flex:1,padding:10,paddingBottom:100}}>
-      
-      <View style={[styles.container,{paddingBottom:250}]}>
-       <View style={{width:'100%',padding:0,borderWidth:0}}>
-        {this.props.cartItems.map(item=>{
+        
+      <View style={[styles.container,{padding:5,borderWidth:0,paddingBottom:0}]}>
+       <View style={{width:'100%',borderWidth:0}}>
+
+       <FlatList
+       style={{borderWidth:0,height:'100%'}}
+       showsVerticalScrollIndicator={false}
+      data={this.props.cartItems}
+      renderItem={item=>this.venderInfoCartItem(item.item) }
+      keyExtractor={(item, index) => {
+         return  index.toString();
+        }}
+       />
+        {/* {this.props.cartItems.map(item=>{
             return(
                 this.venderInfoCartItem(item) 
             )
             })
-            }
+            } */}
             </View>
-           
-            
-            <View style={{width:'100%',marginBottom:50}}/>
-            
-             
+                         
          </View>    
         
-        </ScrollView>
+    
        
     )
   
@@ -270,7 +275,7 @@ renderView=()=>{
 const styles = StyleSheet.create({
     container:{
         flex:1,
-        
+      
         
     },
     venderInfoView:{
@@ -283,7 +288,9 @@ const styles = StyleSheet.create({
       shadowOffset:{width:10,height:10},
       shadowRadius:10,
       elevation:5,
-      borderRadius:10
+      borderRadius:10,
+      //borderWidth:1,
+      paddingTop:0
 
         
     },

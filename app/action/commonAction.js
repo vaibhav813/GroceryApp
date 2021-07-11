@@ -115,7 +115,6 @@ const showSnackBar=(text,color)=>{
 
    SnackBar.show({
     text: text,
-
     // backgroundColor:'#00A300',
     backgroundColor:color,
     duration: SnackBar.LENGTH_SHORT,
@@ -139,8 +138,8 @@ const showSnackBar=(text,color)=>{
               
                     dispatch(setLoader(false))
                     dispatch(receive(res.data.data,res.status,resolve,constants,identifier,key)) 
-                    saveData('token',res.data)
-                    var decoded = jwt_decode(res.data);
+                    saveData('token',res.data.data)
+                    var decoded = jwt_decode(res.data.data);
                     console.log('Login Data ',decoded)
                     RootNavigation.navigate("tabHome",{})
                     showSnackBar("Logged In Successfully!",themeColor)
@@ -157,7 +156,7 @@ const showSnackBar=(text,color)=>{
                                          
             }).catch(err=>{
               console.log('Login Error--- ',err.response)
-              showSnackBar("UserId or password invalid!",dangerRed)  
+              showSnackBar(err.message,dangerRed)  
                 dispatch(setLoader(false))
                 dispatch(receiveError(err.message,"404",reject,constants,identifier,key))
               

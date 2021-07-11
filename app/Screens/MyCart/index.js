@@ -319,7 +319,9 @@ console.log('In Flat List Array------------ ',this.state.cartItems)
         data={this.state.cartItems}
         //data={this.state.list}
         renderItem={(item) => this.cartView(item)}
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item, index) => {
+         return  index.toString();
+        }}
       />
     );
   };

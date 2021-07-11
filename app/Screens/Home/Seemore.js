@@ -73,7 +73,9 @@ class Seemore extends Component {
             contentContainerStyle={{ alignItems: "center" }}
             data={_get(this.props, "catListAll", [])}
             renderItem={(item) => this.categoryItems(item)}
-            keyExtractor={(item) => item.id}
+            keyExtractor={(item, index) => {
+         return  index.toString();
+        }}
           /> 
             
        

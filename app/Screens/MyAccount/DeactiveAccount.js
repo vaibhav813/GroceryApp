@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Image,TextInput } from 'react-native';
 import {themeColor} from '../../Component/config';
+import Header from '../../Component/Header'
 
 export default class DeactiveAccount extends Component {
 
@@ -64,8 +65,10 @@ listItems = (type) => {
     render() {
         return (
             <View style={styles.container}>
-               
+               <Header props={this.props} title="Deactivate" right={false}/>
+               <View style={{padding:10}}>
                 {this.profileDetailsView()}
+                </View>
                 {/* <View style={styles.view2}/> */}
             </View>
         )
@@ -75,9 +78,9 @@ listItems = (type) => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        justifyContent: 'flex-start',
-        alignItems: 'center',
-        padding: 10
+      //  justifyContent: 'flex-start',
+       // alignItems: 'center',
+      //  padding: 10
     },
     view1: {
         height: '40%',

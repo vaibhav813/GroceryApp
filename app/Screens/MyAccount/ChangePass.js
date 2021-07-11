@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Image,TextInput } from 'react-native';
 import {themeColor} from '../../Component/config';
+import Header from '../../Component/Header'
 
 export default class ChangePass extends Component {
 
@@ -25,6 +26,7 @@ export default class ChangePass extends Component {
     listItems = (type) => {
         return (
             <View style={{ height: 70, width: '100%', justifyContent:'center', alignItems: 'flex-start' }}>
+
                <Text style={{marginLeft:10}}>{type}</Text>
                <TextInput style={{height:40,width:'90%',borderWidth:0,marginLeft:10,paddingLeft:10,color:'#000'}}
                placeholder={"Enter "+type}
@@ -74,8 +76,10 @@ return(
     render() {
         return (
             <View style={styles.container}>
-               
+                <Header props={this.props} title="Change Password" right={false}/>
+                <View style={{padding:10}}>
                 {this.profileDetailsView()}
+                </View>
             </View>
         )
     }
@@ -84,9 +88,8 @@ return(
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        justifyContent: 'flex-start',
-        alignItems: 'center',
-        padding: 10
+       
+        //padding: 10
     },
     view1: {
         height: '40%',

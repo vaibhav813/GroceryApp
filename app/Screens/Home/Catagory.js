@@ -244,7 +244,9 @@ modalView=()=>{
                <FlatList
                data={_get(this.state,'sections',[])}
                renderItem={item=>this.renderSectionInModal(item)}
-               keyExtractor={(item, index) => index}
+               keyExtractor={(item, index) => {
+         return  index.toString();
+        }}
                />
 
            </View>

@@ -14,7 +14,7 @@ export default class Search extends Component {
         <View style={styles.search}>
         
             <View style={{ flex: 0.1, alignItems: 'center', justifyContent: 'center' }} >
-                <Image style={{ height: 15, width: 15 }} source={require('../../assets/images/search.png')} />
+                <Image style={{ height: 15, width: 15 }} source={require('../../assets/images/search.jpg')} />
             </View>
             <TextInput
                 style={{ flex: 0.9, height: '100%', color: '#000' }}

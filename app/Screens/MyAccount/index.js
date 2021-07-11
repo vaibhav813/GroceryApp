@@ -1,6 +1,10 @@
 import React, { Component } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Image } from 'react-native';
 import {themeColor} from '../../Component/config';
+import {clearStorage} from '../../Component/Storage/index'
+import Header from '../../Component/Header'
+import {reset} from '../../Component/RootNavigation'
+
 
 
 export default class Home extends Component {
@@ -27,9 +31,27 @@ export default class Home extends Component {
 
         )
     }
+
+    multiFunc=async(type)=>{
+        console.log('Clicked function----',type)
+        if(type=="Logout"){
+
+            clearStorage()
+           // reset(this.props,"Login")
+            this.props.navigation.navigate('Login')
+        }
+        else if(type=="My Address")
+        {
+            this.props.navigation.navigate('AddressScreen')
+        }
+        else{
+            console.log('Clicked function Else----',type)
+        }
+    }
+
     listItems = (type,color) => {
         return (
-            <View style={{ height: 60, width: '100%', flexDirection: 'row', alignItems: 'center', borderWidth: 1, borderColor: '#ccc' }}>
+            <TouchableOpacity style={{ height: 60, width: '100%', flexDirection: 'row', alignItems: 'center', borderWidth: 1, borderColor: '#ccc' }} onPress={()=>{this.multiFunc(type)}}>
                 <View style={{ flex: 0.2, borderWidth: 0, height: '100%', justifyContent: 'center', alignItems: 'center' }}>
                     <View style={[styles.iconBackground,{backgroundColor:color}]}>
                         {type == "Promos" ?
@@ -58,7 +80,7 @@ export default class Home extends Component {
                 <View style={{ flex: 0.1, height: '100%', justifyContent: 'center', alignItems: 'center' }}>
                 <Image style={{height:15,width:15}} source={require('../../assets/images/user/next.png')}/>
                 </View>
-            </View>
+            </TouchableOpacity>
         )
 
     }
@@ -80,6 +102,7 @@ export default class Home extends Component {
     render() {
         return (
             <View style={styles.container}>
+            <Header props={this.props} title="My Account" right={false}/>
                 {this.profileImageView()}
                 {this.profileDetailsView()}
             </View>
@@ -90,9 +113,8 @@ export default class Home extends Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        padding: 5
+       
+      
     },
     view1: {
         height: '40%',

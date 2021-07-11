@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Image,TextInput } from 'react-native';
 import {themeColor} from '../../Component/config';
+import Header from '../../Component/Header'
 
 export default class Home extends Component {
 
@@ -16,8 +17,6 @@ export default class Home extends Component {
                     <Image style={{ height: '100%', width: '100%', borderRadius: 80 }} source={require('../../assets/images/user.jpg')} />
                 </TouchableOpacity>
                 <Text style={{ fontWeight: '600', marginTop: 10 }}>User Name</Text>
-               
-
             </View>
 
         )
@@ -39,7 +38,7 @@ export default class Home extends Component {
         return(
             <TouchableOpacity 
             style={{width:'100%',height:50,borderWidth:1,borderColor:'#ccc',justifyContent:'space-between',alignItems:'center',flexDirection:'row',padding:10}}
-onPress={()=>{this.props.navigation.navigate(screen)}}            
+            onPress={()=>{this.props.navigation.navigate(screen)}}            
             >
                 <Text>{type}</Text>
                <Image style={{height:15,width:15}} source={require('../../assets/images/user/next.png')}/>
@@ -51,10 +50,8 @@ Button=()=>{
 return(
     <TouchableOpacity 
     style={{height:50,width:'100%',justifyContent:'center',alignItems:'center',backgroundColor:themeColor,borderRadius:5}}
-    
-    >
-        
-        <Text style={{color:'#fff',fontWeight:'700'}}>Save Changes</Text>
+    >   
+    <Text style={{color:'#fff',fontWeight:'700'}}>Save Changes</Text>
     </TouchableOpacity>
 )
 
@@ -82,8 +79,11 @@ return(
     render() {
         return (
             <View style={styles.container}>
+            <Header props={this.props} title="Edit Account" right={false}/>
+             <View style={{padding:10}}>
                 {this.profileImageView()}
                 {this.profileDetailsView()}
+                </View>
             </View>
         )
     }
@@ -92,9 +92,7 @@ return(
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        padding: 5
+      
     },
     view1: {
         height: '40%',

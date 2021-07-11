@@ -130,7 +130,9 @@ class Address extends Component {
         data={this.props.savedAddress}
         // data={this.state.listObj}
         renderItem={(item) => this.renderItem(item)}
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item, index) => {
+         return  index.toString();
+        }}
       />
     );
   };
@@ -149,8 +151,8 @@ class Address extends Component {
     this.setState({ address: true });
   };
   continue = () => {
-    console.log("We have updated list ", this.state.listObj);
-    this.setAddressLocally(this.state.listObj);
+   //  console.log("We have updated list ", this.props.savedAddress);
+    // this.setAddressLocally(this.state.listObj);
     this.props.navigation.navigate("ConfirmCartScreen");
   };
 
@@ -180,7 +182,9 @@ class Address extends Component {
         _get(this.props, "savedAddress.length", []) > 0
           ? this.props.savedAddress[this.props.savedAddress.length - 1].id + 1
           : 1;
-      console.log("Id address--- ", id);
+    //  console.log("Id address--- ", id);
+
+
 
       let obj = {
         id: id,
@@ -189,35 +193,47 @@ class Address extends Component {
           this.state.addrType == "" ? this.state.name : this.state.addrType,
         name: this.state.name,
         details: this.state.addr,
-        isSelect: "false",
+        isSelect: "true",
       };
 
-      // this.state.listObj.push(obj)
-      this.setState({ listObj: this.state.listObj });
+
+        
+     
+
+        
 
       this.setState({ address: false });
       this.manageAddressList(obj);
     }
   };
 
+ 
+
 manageAddressList=(addressObj)=>{
     if (addressObj != undefined) {
         let data = {};
         let arr = [];
-        if (this.state.listObj && this.state.listObj.length > 0) {
-          //   arr=this.props.savedAddress;
-          arr = this.state.listObj;
+        if (this.props.savedAddress && this.props.savedAddress.length > 0) {
+            this.props.savedAddress.map(item=>{
+                if(addressObj.id!=item.id){
+                    Object.assign(item,{isSelect:"false"})
+                    arr.push(item)
+                }
+            })
+             //arr=this.props.savedAddress;
+          //arr = this.state.listObj;
           arr.push(addressObj);
           // data = arr;
         } else {
           arr.push(addressObj);
         }
+      
   this.setAddressLocally(arr)
 }
 }
 
   setAddressLocally = (arr) => {
-    
+    console.log('setAddressLocally Array ******* ', arr,' props ',this.props.savedAddress)
       const key = "savedAddress";
       const identifier = "SAVE_ADDRESS_LIST";
 
@@ -278,7 +294,7 @@ manageAddressList=(addressObj)=>{
   };
 
   render() {
-    console.log("List Object ", this.props);
+   
     return (
       <View style={styles.container}>
         <Header title="My Address" props={this.props} right={false} />

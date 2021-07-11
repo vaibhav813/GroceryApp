@@ -35,6 +35,9 @@ import AllCategoryScreen from '././app/Screens/Home/AllCategory'
 import Search from '././app/Screens/Home/Search'
 import Details from '././app/Screens/Home/Details'
 import ConfirmCart from '././app/Screens/MyCart/ConfirmCart'
+import Auth from './app/Screens/index'
+
+
 
 
 import {
@@ -109,22 +112,20 @@ function HomeStack() {
                 options={{ title: 'Detail' }} />
 
 
-<Stack.Screen
+            <Stack.Screen
                 name="CartScreen"
                 component={MyCart}
                 options={{ title: 'Cart' }} />
 
-<Stack.Screen
+            <Stack.Screen
                 name="AddressScreen"
                 component={AddressScreen}
                 options={{ title: 'Address' }} />
 
-<Stack.Screen
+            <Stack.Screen
                 name="ConfirmCartScreen"
                 component={ConfirmCart}
                 options={{ title: 'Confirm Cart' }} />
-
-
         </Stack.Navigator>
     );
 }
@@ -179,6 +180,7 @@ function CartStack() {
             initialRouteName="MyOrderScreen"
             screenOptions={{
                 headerStyle: { backgroundColor: themeColor },
+                
                 headerTintColor: '#fff',
                 headerShown:false,
                 headerTitleStyle: { fontWeight: 'bold', alignSelf: 'center' }
@@ -248,7 +250,7 @@ function MyAccountStack() {
             screenOptions={{
                 headerStyle: { backgroundColor: themeColor },
                 headerTintColor: '#fff',
-                
+                headerShown:false,
                 headerTitleStyle: { fontWeight: 'bold', alignSelf: 'center' }
             }}>
             <Stack.Screen
@@ -272,13 +274,27 @@ function MyAccountStack() {
     );
 }
 
+
+// const getToken=async()=>{
+// const token = await getData('token');
+// console.log('**********Token In Rooot********* ',token)
+// return token;
+// }
+
+
+
+
 const RegisterLoginStack = () => {
-    return (
+  
+     return (
+
+        
         <NavigationContainer ref={navigationRef}>
             <StatusBar barStyle="light-content" backgroundColor={themeColor} />
-            <Stack.Navigator
-              // initialRouteName="AddressScreen"
-                initialRouteName="Register"
+           <Stack.Navigator
+               initialRouteName="Auth"
+                // initialRouteName= {token!=null?"tabHome":"Login"}
+              //  initialRouteName= "CheckScreen"
                 screenOptions={{
                     headerStyle: { backgroundColor: tabColor },
                     headerTintColor: '#fff',
@@ -287,9 +303,9 @@ const RegisterLoginStack = () => {
                     headerTitleStyle: { fontWeight: 'bold', alignSelf: 'center' }
                 
                 }}
-
             >
-                <Stack.Screen
+
+           <Stack.Screen
                     name="Register"
                     component={Register}
                     headerTitleStyle={{ alignSelf: 'center' }}
@@ -308,14 +324,7 @@ const RegisterLoginStack = () => {
                     headerTitleStyle={{ alignSelf: 'center' }}
                     options={{title:'Splash'}} />
                 
-                              
-               <Stack.Screen
-                name="AddressScreen"
-                component={AddressScreen}
-                headerTitleStyle={{alignSelf: 'center'}}
-                options={{headerShown: false}}
-               // options={{ title: 'Home' }}
-               />
+             
 
                 <Stack.Screen
                     name="tabHome"
@@ -324,9 +333,36 @@ const RegisterLoginStack = () => {
                     options={{ headerShown: false }}
                 // options={{ title: 'Home' }}
                 />
-            </Stack.Navigator>
+
+              <Stack.Screen
+                    name="Auth"
+                    component={Auth}
+                    headerTitleStyle={{ alignSelf: 'center' }}
+                    options={{ headerShown: false }}
+                // options={{ title: 'Home' }}
+                />
+                <Stack.Screen
+                    name="CheckScreen"
+                    component={Check}
+                    headerTitleStyle={{ alignSelf: 'center' }}
+                    options={{ headerShown: false }}
+                 options={{ title: 'Check' }}
+                />
+                   </Stack.Navigator>
+            
+             
+
+
+
+         
         </NavigationContainer>
+
+
+
     )
+
+    
+    
 
 }
 
@@ -417,10 +453,16 @@ const tabStacks = () => {
 }
 
 const RNRedux = () => {
+  
     return (
         <Provider store={store}>
-
-            {RegisterLoginStack()}
+{/* {AuthLogin()} */}
+            { 
+               
+                    RegisterLoginStack()
+              
+                
+                }
             {/* {tabStacks()} */}
 
         </Provider>
@@ -442,4 +484,4 @@ const RNRedux = () => {
 //   </Provider>
 // )
 
-AppRegistry.registerComponent(appName, () => RNRedux);
+AppRegistry.registerComponent(appName, () =>  RNRedux);

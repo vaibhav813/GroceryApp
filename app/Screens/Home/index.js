@@ -8,6 +8,7 @@ import _get from 'lodash/get';
 import { ListItems, PromoList } from '../../Component/SkeltonRow';
 import Header from '../../Component/Header'  
 import VenderList from '../../Screens/Vender/index'
+import SplashScreen from 'react-native-splash-screen'
 
 
 
@@ -48,7 +49,7 @@ class Home extends Component {
 
     componentDidMount() {
 
-       
+        SplashScreen.hide();
 
           const unsubscribed = this.props.navigation.addListener('focus', () => {
             // this.getPromos()
@@ -124,7 +125,7 @@ class Home extends Component {
         return (
             <View style={styles.search}>
                 <View style={{ flex: 0.1, alignItems: 'center', justifyContent: 'center' }} >
-                    <Image style={{ height: 15, width: 15 }} source={require('../../assets/images/search.png')} />
+                    <Image style={{ height: 15, width: 15 }} source={require('../../assets/images/search.jpg')} />
                 </View>
                 <TextInput
                     style={{ flex: 0.9, height: '100%', color: '#000' }}
@@ -135,7 +136,6 @@ class Home extends Component {
                 />
             </View>
         )
-
     }
 
     navigate = (screen, params) => {
@@ -201,7 +201,9 @@ class Home extends Component {
                 // data={this.state.offerList}
                 data={this.props.promoList}
                 renderItem={(item, index) => this.renderItems(item)}
-                keyExtractor={item => item.id}
+                keyExtractor={(item, index) => {
+         return  index.toString();
+        }}
             />
 
         )

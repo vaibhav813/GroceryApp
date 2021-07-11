@@ -11,11 +11,17 @@ import {
   FlatList, TouchableOpacity
 } from 'react-native';
 
- import {getDataSaveList} from '../../action/commonAction'
+ import {getDataSaveList,commonActionPost,getCommonDataAction} from '../../action/commonAction'
 import {themeColor} from '../../Component/config';
 import { connect } from "react-redux";
 import Header from '../../Component/Header/index'
-const images = [
+import {imageBaseUrl} from '../../Component/config'
+import _get from 'lodash/get';
+import HTML from "react-native-render-html";
+
+
+
+let images = [
   {img: 'https://i.ibb.co/LQmZb1D/muton.jpg'},
   {img: 'https://i.ibb.co/nCc4bTD/watch2.jpg'},
   {img: 'https://i.ibb.co/nCc4bTD/watch2.jpg'},
@@ -43,14 +49,7 @@ const specifications = [
       'Let’s have a look at nine simple ways to persuade visitors to your online store.',
   },
 ];
-const otherInfo = [
-  {key: 'Modal Number', value: 'ZX4493'},
-  {key: 'Color', value: 'Black'},
-  {key: 'Size', value: 'Regular'},
-  {key: 'Brand', value: 'Yasolf'},
-  {key: 'Water Resistance', value: '30 M'},
-  {key: 'Display Type', value: 'Analog'},
-];
+
 
 const otherData = [
   {
@@ -80,23 +79,104 @@ class Details extends Component {
     super(props);
     this.state = {
       selectedItem: 0,
-      item:{}
+      item:{},
+      productId:0,
+      Images:[]
     };
     this.flatListRef = null;
     
   }
   componentDidMount() {
-    console.log('Get Item In Component Did Mount----- ', this.props.route.params.item);
-    this.setState({item:this.props.route.params.item})
+    //console.log('Get Item In Component Did Mount----- ', this.props.route.params.item);
+    this.setState({productId:this.props.route.params.item.Id})
+    this.getItemDetail(this.props.route.params.item.Id,0 )
+    this.getVarientList(this.props.route.params.item.Id)
+
+    this.pushImages()
+    
+  }
+
+  getVarientList=(PID)=>{
+
+
+const url="/ProductVariantList"
+
+    
+  const constant = 
+  {init:"VARIENT_LIST_INIT",
+    success:"VARIENT_LIST_SUCCESS",
+  error:"VARIENT_LIST_ERROR"
+  }
+  const identifier = "VARIENT_LIST";
+  const key="varientList";
+  const type =
+  "?ProductId=" +PID;
+  
+
+  const data=this.props.getCommonDataAction(url,constant,identifier,key,type)
+  //console.log('****************Varient List Data*************** ',this.props.varientList)
+  }
+
+
+getItemDetail=(PId,VID)=>{
+ 
+      const url="/productdetails"
+    const constant = 
+    {init:"PRODUCT_DETAILS_INIT",
+      success:"PRODUCT_DETAILS_SUCCESS",
+    error:"PRODUCT_DETAILS_ERROR"
+    }
+    const identifier = "PRODUCT_DETAILS";
+    const key="productDetails";
+    const type =
+    "?ProductId=" +PId+"&VariantId=" +VID;
+    
+
+    const data=this.props.getCommonDataAction(url,constant,identifier,key,type)
+    
+    // //console.log('getItemDetails----------------------->',this.props.productDetails)
+
+  
+}
+
+pushImages=()=>{
+  let arr=[];
+  arr.push(_get(this.props,'productDetails.Image1',''),
+  _get(this.props,'productDetails.Image2',''),
+  _get(this.props,'productDetails.Image3',''),
+  _get(this.props,'productDetails.Image4','')
+  )
+  this.setState({Images:arr})
+}
+
+  addToCart=()=>{
+  const obj={
+    UserId:2,
+    	ProductId:this.props.route.params.item.Id,
+    	VariantId:'',
+    	CartType:1,
+    	Qty:1,
+  }
+      const url="/addtocart"
+    const constant = 
+    {init:"ADD_TO_CART_INIT",
+      success:"ADD_TO_CART_SUCCESS",
+    error:"ADD_TO_CART_ERROR"
+    }
+    const identifier = "ADD_TO_CART";
+    const key="addtocart";
+
+    const data=this.props.commonActionPost(obj,url,constant,identifier,key)
+
   }
 
   imageBackgroundScrolls = item => {
-    console.log('imageBackgroundScrolls-- ', item);
+    console.log('imageBackgroundScrolls-- ',imageBaseUrl+ item.item);
     return (
       <View style={styles.imageView}>
         <Image
-          style={styles.bigImage}
-          source={{uri: item.item.img}}
+          style={[styles.bigImage,{resizeMode:"contain"}]} 
+          source={{uri: imageBaseUrl+item.item}}
           
         />
       </View>
@@ -104,15 +184,20 @@ class Details extends Component {
   };
 
   imageFlatlist = () => {
+ console.log('Background Images to be place ',this.state.Images)
+
     return (
       <View style={{ height: '20%', width: '100%'}}>
         <FlatList
           style={{height: '100%', width: '100%',borderRadius:10}}
           horizontal={true}
-          data={images}
+          // data={images}
+          data={this.state.Images}
           ref={s => (this.flatListRef = s)}
           renderItem={item => this.imageBackgroundScrolls(item)}
-          keyExtractor={item => item.id}
+          keyExtractor={(item, index) => {
+         return  index.toString();
+        }}
         />
       </View>
     );
@@ -136,7 +221,8 @@ class Details extends Component {
           <Image
             style={{height: 50, width: 50, resizeMode: 'cover'}}
            // blurRadius={this.state.selectedItem == item.index ? 0 : 3}
-            source={{uri: item.item.img}}
+           source={{uri: imageBaseUrl+item.item}}
+            // source={{uri: item.item.img}}
           />
         </TouchableOpacity>
       </View>
@@ -158,9 +244,12 @@ class Details extends Component {
         <FlatList
           style={{height: '100%', width: '100%', marginLeft: 20}}
           horizontal={true}
-          data={images}
+         // data={images}
+         data={this.state.Images}
           renderItem={item => this.smallFlatListView(item)}
-          keyExtractor={item => item.id}
+          keyExtractor={(item, index) => {
+         return  index.toString();
+        }}
         />
       </View>
     );
@@ -182,8 +271,7 @@ class Details extends Component {
           borderWidth: 0,
         }}>
         <Text style={{fontWeight: '700', fontSize: 18}}>
-          {' '}
-          Just another product name {''}
+         {_get(this.props,'productDetails.ProcuctCombinationName','--')}
         </Text>
         <View
           style={{
@@ -192,11 +280,9 @@ class Details extends Component {
             justifyContent: 'space-between',
           }}>
           <Text>
-            {' '}
-            By{' '}
+           In{" "}
             <Text style={{fontWeight: '600', fontSize: 15}}>
-              {' '}
-              Vender name {''}
+            {_get(this.props,'productDetails.CategoryName','--')}
             </Text>
           </Text>
           <Text style={{color: '#FFA500'}}>★★★★★</Text>
@@ -210,9 +296,9 @@ class Details extends Component {
           }}>
           <Text style={{fontWeight: '700', fontSize: 20}}>
             {' '}
-            ₹135{''}{' '}
-            <Text style={{fontWeight: '300', color: '#808080', fontSize: 12}}>
-              150
+            {_get(this.props,'productDetails.Rate','--')}{''}{' '}
+            <Text style={{fontWeight: '300', color: '#808080', fontSize: 12,textDecorationLine:'line-through'}}>
+             {_get(this.props,'productDetails.MRP','--')}
             </Text>
             <Text
               style={{
@@ -226,7 +312,7 @@ class Details extends Component {
           </Text>
           <Text>(15 Reviews)</Text>
         </View>
-        <View
+        {/* <View
           style={{
             borderWidth: 0.8,
             borderColor: '#808080',
@@ -235,7 +321,7 @@ class Details extends Component {
             left: '16%',
             position: 'absolute',
           }}
-        />
+        /> */}
       </View>
     );
   };
@@ -290,19 +376,15 @@ class Details extends Component {
 
   description = () => {
     return (
-      <View style={styles.descriptionView}>
+      <View style={[styles.descriptionView,{marginTop:10}]}>
         <Text style={styles.bigText}> Description</Text>
         <View style={styles.descriptionDetails}>
+
+       
+
           <Text>
-            {' '}
-            A product description is the marketing copy that explains what a
-            product is and why it’s worth purchasing. The purpose of a product
-            description is to supply customers with important information about
-            the features and benefits of the product so they’re compelled to
-            buy.However, entrepreneurs and marketers alike are susceptible to a
-            common mistake that comes up when writing product descriptions. Even
-            professional copywriters make it sometimes: writing product
-            descriptions that simply describe your products.
+         
+            {_get(this.props,'productDetails.Description','--')}
           </Text>
         </View>
       </View>
@@ -318,38 +400,51 @@ class Details extends Component {
   };
 
   specification = item => {
-    return specifications.map(item => {
-      console.log('specifications ', item);
+    // return specifications.map(item => {
+    //   //console.log('specifications ', item);
       return (
         <View style={styles.descriptionView}>
           <Text style={{fontSize: 10}}>
-            ● <Text style={{fontSize: 15}}>{item.specification}</Text>
+          <HTML source={{ html: _get(this.props,'productDetails.BulletPoint','<h5>No Data</h5') }} contentWidth='100%' />
+            {/* ● <Text style={{fontSize: 15}}>{item.specification}</Text> */}
           </Text>
         </View>
       );
-    });
+    // });
   };
 
+renderVarientItems=(item)=>{
+  //console.log('renderVarientItems******* ',item,'Image- ',imageBaseUrl+item.Image1)
+  return(
+    <TouchableOpacity
+          style={styles.varientItems} onPress={()=>{this.getItemDetail(this.state.productId,item.Id)}}>
+          <View style={styles.otherInfo}>
+            <Image source={{uri:imageBaseUrl+item.Image1}} style={{height:60,width:50,resizeMode:'contain'}}/>
+          </View>
+          <View style={styles.otherInfo}>
+            <Text>{item.Name}</Text>
+          </View>
+        </TouchableOpacity>
+  )
+}
+
   otherInfo = () => {
-    return otherInfo.map(item => {
-      return (
-        <View
-          style={{
-            width: '100%',
-            flexDirection: 'row',
-            justifyContent: 'flex-start',
-            alignItems: 'center',
-            padding: 5,
-          }}>
-          <View style={styles.otherInfo}>
-            <Text style={{fontWeight: '600'}}>{item.key}</Text>
-          </View>
-          <View style={styles.otherInfo}>
-            <Text>{item.value}</Text>
-          </View>
-        </View>
-      );
-    });
+    return(
+    <View style={{width:'100%'}}>
+{_get(this.props,'varientList.length',[])>0?
+    <FlatList
+      horizontal={true}
+     style={{padding:5,width:'100%',borderRadius:10,backgroundColor:'#ccc'}}
+     data={_get(this.props,'varientList',[])}
+     renderItem={item=>this.renderVarientItems(item.item)}
+     keyExtractor={item=> item.index}
+    />
+    :
+    <Text style={{marginLeft:5}} >No varient available </Text>
+}
+    
+    </View>
+    )
   };
 
   relatedProductView = () => {
@@ -362,7 +457,9 @@ class Details extends Component {
         showsVerticalScrollIndicator
         data={otherData}
         renderItem={item => this.otherProductItems(item)}
-        keyExtractor={item => item.index}
+        keyExtractor={(item, index) => {
+         return  index.toString();
+        }}
       />
     );
   };
@@ -426,16 +523,16 @@ class Details extends Component {
   checkObjExists=(obj,arr)=>{
     let flag = false;
 arr.some(item=>{
-  console.log(item.Id,'==',obj.Id)
+  //console.log(item.Id,'==',obj.Id)
   if(item.Id==obj.Id){
-    console.log('In If--- ',item.Id,'==',obj.Id)
+    //console.log('In If--- ',item.Id,'==',obj.Id)
     flag=true;
   //return
 
   }
  
 })
-console.log('We have flag value here ',flag)
+//console.log('We have flag value here ',flag)
 return flag;
   }
 
@@ -447,7 +544,7 @@ return flag;
       
       //arr=this.props.cartItems;
       // this.props.cartItems.some(item=>{
-      //   console.log('Check Array befor save ********* ',item," And ",this.props.route.params.item)
+      //   //console.log('Check Array befor save ********* ',item," And ",this.props.route.params.item)
       //   if(item.Id!=this.props.route.params.item.Id){
          
       //     arr.push(this.props.route.params.item)
@@ -482,6 +579,7 @@ return flag;
   }
 
   render() {
+    
     return (
       <View style={styles.container}>
       <Header title="Details" props={this.props} right={false} />
@@ -496,7 +594,7 @@ return flag;
 
             {this.specificationView('Specifications')}
             {this.specification()}
-            {this.specificationView('Other Information')}
+            {this.specificationView('All Variant')}
             {this.otherInfo()}
             {this.specificationView('Related Products')}
             {this.relatedProductView()}
@@ -527,14 +625,15 @@ const styles = StyleSheet.create({
     /// height: 300,
     // padding:10,
     borderRadius: 10,
-   // borderWidth: 1,
+   
     borderColor: '#fff',
     
     // borderWidth: 1,
   },
   bigImage: {
     flex: 1,
-borderRadius:10
+borderRadius:10,
+//borderWidth: 1,
     // borderWidth:1
   },
   wishList: {
@@ -577,6 +676,7 @@ borderRadius:10
     justifyContent: 'center',
     alignItems: 'flex-start',
     width: '100%',
+   // borderWidth:1
   },
   descriptionDetails: {
     padding: 5,
@@ -615,6 +715,19 @@ borderRadius:10
     flexDirection:'row',
    // position: 'absolute', 
   
+  },
+  varientItems:{
+   // height:"100%",
+    width:120,
+   // flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 5,
+    borderWidth:0,
+    borderRadius:10,
+backgroundColor:'#fff',
+marginLeft:5   
+    
   }
 });
 
@@ -622,11 +735,18 @@ borderRadius:10
 const mapStateToProps = (state) => ({
   //promoList: state.commonReducer.promoList,
   cartItems: state.commonReducer.cartItems,
+  productDetails:state.commonReducer.productDetails,
+  varientList:state.commonReducer.varientList,
+
 });
 
 const mapDispatchToProps = (dispatch) => ({
   getCartSaveList: (data,  identifier, key) =>
   dispatch(getDataSaveList(data,  identifier, key)),
+  commonActionPost:(obj,url,constant,identifier,key)=>{dispatch(commonActionPost(obj,url,constant,identifier,key))},
+  getCommonDataAction: (url, constants, identifier, key, type) =>
+  {dispatch(getCommonDataAction(url, constants, identifier, key, type))}
+
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Details);

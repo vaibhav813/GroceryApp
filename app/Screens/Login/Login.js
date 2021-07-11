@@ -59,12 +59,14 @@ if(this.state.mail=="" || this.state.password==""){
 }
 else{
 const obj = {
-"MobileNo":this.state.mail,
+ "MobileNo":this.state.mail,
+//"name":this.state.mail,
 "Password":this.state.password
 }
 // console.log('Action ',this.props.login(obj))
 
-const url="/GenerateJWTToken";
+// const url="/GenerateJWTToken";
+const url="/AppData"
 const constant = 
 {init:"USER_LOGIN_INIT",
   success:"USER_LOGIN_SUCCESS",

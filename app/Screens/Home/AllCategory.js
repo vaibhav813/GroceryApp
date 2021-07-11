@@ -28,62 +28,7 @@ const height = Dimensions.get("window").height;
 const width = Dimensions.get("window").width;
 let checkProductText= false;
 
-const category = [
-  {
-    name: "milk and dairy",
-    type: 0,
-    products: [
-      { name: "Milk" },
-      { name: "Curd" },
-      { name: "Bread" },
-      { name: "Milk" },
-    ],
-  },
 
-  {
-    name: "Medicines",
-    type: 0,
-    products: [
-      { name: "Paracetamol" },
-      { name: "Citrazene" },
-      { name: "Dolo 650mg" },
-      { name: "Citrazene" },
-    ],
-  },
-
-  {
-    name: "Fruits N Vagitables",
-    type: 0,
-    products: [
-      { name: "Tomato" },
-      { name: "Onion" },
-      { name: "Banana" },
-      { name: "carrot" },
-    ],
-  },
-
-  {
-    name: "Fashion",
-    type: 0,
-    products: [
-      { name: "Jeans" },
-      { name: "Shirts" },
-      { name: "T-shirts" },
-      { name: "Shirts" },
-    ],
-  },
-
-  {
-    name: "Grocery",
-    type: 0,
-    products: [
-      { name: "Sugar" },
-      { name: "Noodles" },
-      { name: "Rice" },
-      { name: "Noodles" },
-    ],
-  },
-];
 
 class AllCategory extends Component {
   constructor(props) {
@@ -94,7 +39,8 @@ class AllCategory extends Component {
       selectId: 0,
       isModalVisible: false,
       subCategoryList: [],
-      textShow:false
+      textShow:false,
+      catId:0
     };
   }
   componentDidMount() {
@@ -130,7 +76,6 @@ class AllCategory extends Component {
 
     const obj = {
       uriData: item.item.Id,
-      // uriData: 6
     };
     const type = "?CategoryId=";
     this.props.getTypeListAction(obj, url, constants, identifier, key, type);
@@ -183,7 +128,7 @@ class AllCategory extends Component {
   };
 
   getProductDetailAccordingSubCategory = async (item) => {
-    //  console.log('Vender details *********** ',this.state.catId)
+      console.log('Vender details CatId *********** ',this.state.catId,' VenderId-- ',_get(this.props, "route.params.item.Id", 0),' SubCatId----- ',_get(item, "Id", 0))
 
     let venderId = _get(this.props, "route.params.item.Id", 0);
     let catId = _get(this.state,'catId',0);
@@ -221,10 +166,15 @@ class AllCategory extends Component {
     this.setState({ isModalVisible: false });
   };
 
-  filterObjects = (id) => {
-    this.setState({ selectId: id });
-    this.callAllCategoryProduct()
-    this.setState({ isVisible: false }, () => {});
+  filterObjects = (item) => {
+    console.log('When Clicked on All ',item)
+    let selectId = item.index
+    this.setState({ selectId: selectId });
+     this.setState({catId:0},()=>{
+      this.callAllCategoryProduct()
+      this.setState({ isVisible: false }, () => {});
+     })
+   
    
 
   };
@@ -327,7 +277,9 @@ class AllCategory extends Component {
         data={_get(this.props, "vendorCategoryList", [])}
         horizontal={true}
         renderItem={(item) => this.renderItem(item)}
-        keyExtractor={(item) => item.index}
+        keyExtractor={(item, index) => {
+         return  index.toString();
+        }}
       />
     ) : (
       <View
@@ -365,7 +317,7 @@ class AllCategory extends Component {
             borderColor: this.state.selectId == item.index ? "#00A300" : "#fff",
           },
         ]}
-        onPress={() => this.filterObjects(item.index)}
+        onPress={() => this.filterObjects(item)}
       >
         <Text style={{ fontWeight: "600", fontSize: 20 }}>
           {item.item.Name}
@@ -394,10 +346,11 @@ class AllCategory extends Component {
   selectItemCategory = (item) => {
 //console.log('*************Should Text Show************',this.state.textShow)
 
-    this.setState({ subCategoryList: [] });
+    //this.setState({ subCategoryList: [] });
+    this.setState({isLoad:true})
     console.log("selectItemCategory ", item);
     this.setState({ isVisible: true });
-    this.setState({ catId: item.item.Id });
+    this.setState({catId: item.item.Id });
 
     // this.setState({arr:[]})
     this.setState({ selectId: item.index });
@@ -409,7 +362,8 @@ class AllCategory extends Component {
 
   categorySelectedView = () => {
     // vendorSubCategoryList
-    
+    console.log('this.state.subCategoryList****',this.state.subCategoryList)
+    console.log('this.props.subCategoryProductsList****',this.props.subCategoryProductsList)
     return this.state.subCategoryList.length > 0 ? (
     
         this.props.subCategoryProductsList &&
@@ -418,30 +372,28 @@ class AllCategory extends Component {
            
             Object.assign(item, { itemPrice: item.MinRate, Qty: 1 });
             Object.assign(item, { count: 1 });
-            console.log('Item get subCategoryProductsList ---- ',item)
+          //  console.log('Item get subCategoryProductsList ---- ',item)
           return(
                this.listItemView(item)
                );
         })
     )
     
-    : 
+     : 
+   
     
     (
       <View
         style={styles.loadView}
       >
-        {this.props.isLoad ? (
-          this.loading()
-        ) 
-        :
+       
         <Text style={{ color: "red", fontSize: 20, fontWeight: "bold" }}>
-            Please Select any Sub Category
+            Empty List
           </Text>
        
-        }
+        
       </View>
-    );
+   );
   };
 
 
@@ -491,7 +443,7 @@ class AllCategory extends Component {
             >
               {/* {this.categorySelectedView()} */}
 
-              {this.categorySelectedView()}
+              { this.props.isLoad?this.loading():this.categorySelectedView()}
             </View>
           {/* ) : (
             this.loading()
@@ -547,7 +499,9 @@ class AllCategory extends Component {
               <FlatList
                 data={_get(this.props, "vendorSubCategoryList", [])}
                 renderItem={(item) => this.renderSectionInModal(item)}
-                keyExtractor={(item, index) => index}
+                keyExtractor={(item, index) => {
+         return  index.toString();
+        }}
               />
             </View>
           </View>
@@ -563,16 +517,22 @@ class AllCategory extends Component {
     // mHieght=180;
     return (
       <View
-        style={{
-          justifyContent: "center",
-          alignItems: "center",
-          borderWidth: 0,
-          marginTop: "30%",
-        }}
-      >
-        <ActivityIndicator size="large" color={themeColor} />
-        <Text style={{ color: themeColor, fontWeight: "900" }}>Loading...</Text>
-      </View>
+      style={{
+        flex:1,
+        justifyContent: "center",
+        alignItems: "center",
+        borderWidth: 0,
+        marginTop:'30%'
+    
+      }}
+    >
+       <ActivityIndicator size="large" color={themeColor} />
+             <Text style={{ color: themeColor, fontWeight: "900" }}>Loading...</Text>
+            
+     
+     
+       </View>
+      
     );
   };
 
@@ -664,14 +624,21 @@ listItemView=(item)=>{
   render() {
     console.log("Get array after filtered ", this.state.arr);
     return (
+  
       <View style={styles.container}>
+       
         {this.main()}
+        {/* {this.props.isLoad?this.loading():this.main()} */}
         {this.state.isVisible ? this.buttonView() : null}
-
-        {this.state.isModalVisible ? this.modalView() : null}
-
+       
+        {this.state.isModalVisible ? this.modalView() :null}
+      
+        
       
       </View>
+     
+
+   
     );
   }
 }
