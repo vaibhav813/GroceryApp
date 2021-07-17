@@ -56,23 +56,31 @@ function HomeStack() {
     return (
         <Stack.Navigator
             initialRouteName="Home"
+            
             screenOptions={{
                 headerStyle: { backgroundColor: tabColor },
                 headerTintColor: '#fff',
                 headerShown:false,
                 headerTitleStyle: { fontWeight: 'bold', alignSelf: 'center' }
-            }}>
+            }}
+
+            
+            >
 
             <Stack.Screen
+            
                 name="HomeScreen"
                 component={HomeScreen}
                 headerTitleStyle={{ alignSelf: 'center' }}
                 options={
                     {
                         title: 'Home',
-                        headerShown:false
+                        headerShown:false,
                         
-                    }} />
+                        
+                    }} 
+                    
+                    />
 
             <Stack.Screen
                 name="CategoryScreen"
@@ -374,7 +382,11 @@ const tabStacks = () => {
              initialRouteName="HomeScreen"
             tabBarOptions={{
                 activeTintColor: tabColor,
+                inactiveTintColor: 'gray',
             }}
+            
+            backBehavior={"history"}
+          
         >
             <Tab.Screen
                 name="HomeStack"
@@ -389,7 +401,10 @@ const tabStacks = () => {
                             :
                             <Image style={{ height: 25, width: 25, resizeMode: 'contain' }} source={require('./app/assets/images/icons/shop.jpeg')} />
                     ),
-                }} />
+                }}
+                
+                
+                 />
             <Tab.Screen
                 name="CartStack"
                 component={CartStack}

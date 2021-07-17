@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
-import { View, Text,StyleSheet,Image,TouchableOpacity,Platform,StatusBar } from 'react-native';
+import { View, Text,StyleSheet,Image,TouchableOpacity,Platform,StatusBar,BackHandler,Alert } from 'react-native';
 import {themeColor} from '../../Component/config';
 import NetworkInfo from '../../Component/NetInfo/index'
 import _get from 'lodash/get';
 import * as RootNavigation from '../../Component/RootNavigation'
+import { getFocusedRouteNameFromRoute } from '@react-navigation/native';
 
+const count=1;
 export default class Header extends Component {
   constructor(props) {
     super(props);
@@ -13,8 +15,42 @@ export default class Header extends Component {
   }
 
 componentDidMount(){
-    console.log('Header Props--- ',_get(this.props,'count',0))
+    console.log('Header Props--- ')
+    // RootNavigation.reset(this.props.props,this.props.props.route.name)
+  //  BackHandler.addEventListener('hardwareBackPress', ()=>this.handleBackButton());
 }
+
+
+// UNSAFE_componentWillMount() {
+//   BackHandler.addEventListener('hardwareBackPress', ()=>this.handleBackButton());
+// }
+
+// componentWillUnmount() {
+//   BackHandler.removeEventListener('hardwareBackPress', ()=>this.handleBackButton());
+// }
+
+// handleBackButton=()=>{
+// this.handleBackButton()
+// }
+
+
+handleBackButton = () => {               
+  Alert.alert(
+      'Grocery App',
+      'Are you want to close this app?', [{
+          text: 'Cancel',
+          onPress: () => console.log('Cancel Pressed'),
+          style: 'cancel'
+      }, {
+          text: 'OK',
+          onPress: () => BackHandler.exitApp()
+      }, ], {
+          cancelable: false
+      }
+   )
+   return true;
+ }
+
 
 renderCartView=()=>{
     return(

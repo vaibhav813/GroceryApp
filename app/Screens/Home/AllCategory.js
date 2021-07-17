@@ -21,8 +21,9 @@ import {
 } from "../../action/commonAction";
 import { imageBaseUrl } from "../../Component/config";
 import { ListItems } from "../../Component/SkeltonRow";
-import AnimatedScreen from "react-native-animated-screen";
+import {VenderProductList} from '../../Component/SkeltonRow'
 import { themeColor } from "../../Component/config";
+
 
 const height = Dimensions.get("window").height;
 const width = Dimensions.get("window").width;
@@ -364,39 +365,50 @@ class AllCategory extends Component {
     // vendorSubCategoryList
     console.log('this.state.subCategoryList****',this.state.subCategoryList)
     console.log('this.props.subCategoryProductsList****',this.props.subCategoryProductsList)
-    return this.state.subCategoryList.length > 0 ? (
+   // return this.state.subCategoryList.length > 0 ? (
+    return(
+      // this.state.subCategoryList.length > 0?
+
     
-        this.props.subCategoryProductsList &&
-        this.state.subCategoryList.map((item) => 
-        {
+        // this.state.subCategoryList &&
+        // this.props.subCategoryProductsList.map((item) => 
+        // {
            
-            Object.assign(item, { itemPrice: item.MinRate, Qty: 1 });
-            Object.assign(item, { count: 1 });
-          //  console.log('Item get subCategoryProductsList ---- ',item)
-          return(
-               this.listItemView(item)
-               );
-        })
-    )
+        //     Object.assign(item, { itemPrice: item.MinRate, Qty: 1 });
+        //     Object.assign(item, { count: 1 });
+        //   //  console.log('Item get subCategoryProductsList ---- ',item)
+        //   return(
+        //        this.listItemView(item)
+        //        );
+        // })
+<FlatList   
+style={{borderWidth:0}}
+ data={this.props.subCategoryProductsList}
+//data={this.state.subCategoryList}
+renderItem={item=> this.listItemView(item.item)}
+keyExtractor={(item,index)=>index.toString()}
+ListEmptyComponent={()=>this.emptyList()}
+/>
+);
     
-     : 
    
-    
-    (
-      <View
+  };
+
+emptyList=()=>{
+  return(
+   <View
         style={styles.loadView}
       >
        
         <Text style={{ color: "red", fontSize: 20, fontWeight: "bold" }}>
-            Empty List
+           List is Empty List
           </Text>
        
         
       </View>
-   );
-  };
 
-
+  )
+}
 
 
 
@@ -421,6 +433,7 @@ class AllCategory extends Component {
   };
 
   main = () => {
+    console.log('All List ************* ', _get(this.props, "vendorSubCategoryList", []))
     return (
       <View style={{ marginBottom: 10 }}>
         <Header title="All Category" props={this.props} right={false} />
@@ -429,8 +442,8 @@ class AllCategory extends Component {
           {this.venderInfoView()}
           {this.upperView()}
          
-          {/* {this.props.vendorSubCategoryList &&
-          _get(this.props, "vendorSubCategoryList", []).length > 0 ? ( */}
+          {
+          _get(this.props, "subCategoryProductsList.length", []) > 0 ? 
             <View
               style={{
                 width: "100%",
@@ -441,19 +454,30 @@ class AllCategory extends Component {
                 marginLeft: 10,
               }}
             >
-              {/* {this.categorySelectedView()} */}
+           
+            { this.props.isLoad?this.loading():this.categorySelectedView()}
 
-              { this.props.isLoad?this.loading():this.categorySelectedView()}
+              {/* { this.props.isLoad?this.loading():this.categorySelectedView()} */}
             </View>
-          {/* ) : (
-            this.loading()
-          )} */}
-        </ScrollView>
-        {/* <View style={{height:mHieght}}/> */}
 
-        {/* <View style={styles.categoryTitle}> */}
+          :
+          this.props.isLoad?this.loading():
+           <View
+        style={styles.loadView}
+      >
+       
+        <Text style={{ color: "red", fontSize: 20, fontWeight: "bold" }}>
+            Empty List
+          </Text>
+       
+        
       </View>
-    );
+
+          }
+        </ScrollView>
+   
+      </View>
+    )
   };
 
   renderSectionInModal = (item) => {
@@ -515,25 +539,38 @@ class AllCategory extends Component {
   loading = () => {
     // this.setState({isVisible:false})
     // mHieght=180;
-    return (
-      <View
-      style={{
-        flex:1,
-        justifyContent: "center",
-        alignItems: "center",
-        borderWidth: 0,
-        marginTop:'30%'
+    // return (
+    //   <View
+    //   style={{
+    //     flex:1,
+    //     justifyContent: "center",
+    //     alignItems: "center",
+    //     borderWidth: 0,
+    //     marginTop:'30%'
     
-      }}
-    >
-       <ActivityIndicator size="large" color={themeColor} />
-             <Text style={{ color: themeColor, fontWeight: "900" }}>Loading...</Text>
+    //   }}
+    // >
+    //    <ActivityIndicator size="large" color={themeColor} />
+    //          <Text style={{ color: themeColor, fontWeight: "900" }}>Loading...</Text>
             
      
      
-       </View>
+    //    </View>
       
-    );
+    // );
+
+return(
+  [1,2,3,4].map(item=>{
+    return(
+<View style={styles.skeltonView}>
+  <VenderProductList />
+</View>
+    )
+  })
+
+)
+
+
   };
 
 
@@ -605,14 +642,7 @@ listItemView=(item)=>{
 <Text style={{color:'#808080',marginTop:15}}>In {_get(item, "CategoryName", "00")}</Text>
 </View>
 <TouchableOpacity style={{height:'100%',width:'25%',justifyContent:'center',alignItems:'center',borderWidth:0}}  >
-    {/* <Image source={{uri:imageBaseUrl+item.Image}} style={{height:'80%',width:'100%',borderWidth:1,borderRadius:10}}/> */}
-    <Image  source={require('../../assets/images/cart/g2.png')} style={{height:'90%',width:'100%',borderWidth:0,borderRadius:10}}/>
-
-    {/* <TouchableOpacity style={styles.addButton}
-    onPress={()=>{}}
-    >
-        <Text style={{fontWeight:'400',color:'#fff'}}>Add +</Text>
-    </TouchableOpacity> */}
+    <Image source={{uri:imageBaseUrl+item.Image}} style={{height:'80%',width:'100%',borderWidth:0,borderRadius:10}}/>  
 </TouchableOpacity>
 </TouchableOpacity>
 
@@ -768,10 +798,13 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   listItem:{
-     height:110,width:'95%',
-      flexDirection:'row',borderColor:'#ccc',
-      backgroundColor:'#fff',borderRadius:10,
-      alignSelf:'center',
+     height:110,
+     width:'95%',
+      flexDirection:'row',
+      borderColor:'#ccc',
+      backgroundColor:'#fff',
+      borderRadius:10,
+     // alignSelf:'center',
       shadowOffset: {
         width: 5,
         height: 5,
@@ -780,9 +813,21 @@ const styles = StyleSheet.create({
       elevation: 5,
       shadowColor: "#808080",
       marginTop:10,
-      padding:10
-     
+      padding:10,
+     // borderWidth:1
     },
+    skeltonView:{
+      width:'100%',
+       backgroundColor:'#fff',justifyContent:'center',
+       borderRadius:10,
+       shadowOpacity:0.8,
+       shadowRadius:10,
+       shadowColor:'#ccc',
+       elevation:10,
+       marginTop:15,
+       padding:10
+   
+   }
 });
 const mapStateToProps = (state) => ({
   vendorCategoryList: state.commonReducer.vendorCategoryList,

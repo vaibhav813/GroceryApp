@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {PureComponent} from 'react';
 import {
   View,
   Text,
@@ -18,37 +18,17 @@ import Header from '../../Component/Header/index'
 import {imageBaseUrl} from '../../Component/config'
 import _get from 'lodash/get';
 import HTML from "react-native-render-html";
+import {DetailTextSkelton,ListItems} from '../../Component/SkeltonRow'
 
 
 
-let images = [
-  {img: 'https://i.ibb.co/LQmZb1D/muton.jpg'},
-  {img: 'https://i.ibb.co/nCc4bTD/watch2.jpg'},
-  {img: 'https://i.ibb.co/nCc4bTD/watch2.jpg'},
-];
+// let images = [
+//   {img: 'https://i.ibb.co/LQmZb1D/muton.jpg'},
+//   {img: 'https://i.ibb.co/nCc4bTD/watch2.jpg'},
+//   {img: 'https://i.ibb.co/nCc4bTD/watch2.jpg'},
+// ];
 
-const specifications = [
-  {
-    specification:
-      'Let’s have a look at nine simple ways to persuade visitors to your online store.',
-  },
-  {
-    specification:
-      'Let’s have a look at nine simple ways to persuade visitors to your online store.',
-  },
-  {
-    specification:
-      'Let’s have a look at nine simple ways to persuade visitors to your online store.',
-  },
-  {
-    specification:
-      'Let’s have a look at nine simple ways to persuade visitors to your online store.',
-  },
-  {
-    specification:
-      'Let’s have a look at nine simple ways to persuade visitors to your online store.',
-  },
-];
+
 
 
 const otherData = [
@@ -74,25 +54,29 @@ const otherData = [
   },
 ];
 
-class Details extends Component {
+class Details extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
       selectedItem: 0,
       item:{},
       productId:0,
+      variantId:0,
       Images:[]
     };
     this.flatListRef = null;
     
   }
   componentDidMount() {
-    //console.log('Get Item In Component Did Mount----- ', this.props.route.params.item);
-    this.setState({productId:this.props.route.params.item.Id})
-    this.getItemDetail(this.props.route.params.item.Id,0 )
-    this.getVarientList(this.props.route.params.item.Id)
+    console.log('cartItems data Component Did Mount----- ', this.props.loginData);
+    this.setState({productId:this.props.route.params.item.Id},()=>{
+      this.getItemDetail(this.state.productId,0 )
+      this.getVarientList(this.state.productId)
+      //this.pushImages()
+      this.setState({item:this.props.route.params.item})
+    })
 
-    this.pushImages()
+  
     
   }
 
@@ -133,6 +117,7 @@ getItemDetail=(PId,VID)=>{
     
 
     const data=this.props.getCommonDataAction(url,constant,identifier,key,type)
+    this.pushImages()
     
     // //console.log('getItemDetails----------------------->',this.props.productDetails)
 
@@ -140,21 +125,26 @@ getItemDetail=(PId,VID)=>{
 }
 
 pushImages=()=>{
-  let arr=[];
-  arr.push(_get(this.props,'productDetails.Image1',''),
+// console.log('imageBackgroundScrolls Items ',_get(this.props,'productDetails',{}))
+  // let arr=[];
+  this.state.Images.push(_get(this.props,'productDetails.Image1',''),
   _get(this.props,'productDetails.Image2',''),
   _get(this.props,'productDetails.Image3',''),
   _get(this.props,'productDetails.Image4','')
   )
-  this.setState({Images:arr})
+  this.setState({Images:this.state.Images})
+  // console.log('Images in Array########### 1 ',arr)
+ // console.log('BackgroundImages imageBackgroundScrolls in Array########### 2 ',this.state.Images)
 }
 
-  addToCart=()=>{
+
+  addToCart=(cart)=>{
+    console.log('User id--',this.props.loginData.Id,' Product Id ',this.state.productId,' Variant Id ',this.state.variantId)
   const obj={
-    UserId:2,
-    	ProductId:this.props.route.params.item.Id,
-    	VariantId:'',
-    	CartType:1,
+      UserId:this.props.loginData.Id||2,
+    	ProductId:this.state.productId,
+    	VariantId:this.state.variantId,
+    	CartType:cart,
     	Qty:1,
   }
       const url="/addtocart"
@@ -171,7 +161,7 @@ pushImages=()=>{
   }
 
   imageBackgroundScrolls = item => {
-    console.log('imageBackgroundScrolls-- ',imageBaseUrl+ item.item);
+    console.log('imageBackgroundScrolls Method------- ',imageBaseUrl+item.item);
     return (
       <View style={styles.imageView}>
         <Image
@@ -185,6 +175,8 @@ pushImages=()=>{
 
   imageFlatlist = () => {
  console.log('Background Images to be place ',this.state.Images)
+
+ 
 
     return (
       <View style={{ height: '20%', width: '100%'}}>
@@ -271,7 +263,7 @@ pushImages=()=>{
           borderWidth: 0,
         }}>
         <Text style={{fontWeight: '700', fontSize: 18}}>
-         {_get(this.props,'productDetails.ProcuctCombinationName','--')}
+         {_get(this.props,'productDetails.ProcuctCombinationName','No name')}
         </Text>
         <View
           style={{
@@ -282,10 +274,10 @@ pushImages=()=>{
           <Text>
            In{" "}
             <Text style={{fontWeight: '600', fontSize: 15}}>
-            {_get(this.props,'productDetails.CategoryName','--')}
+            {_get(this.props,'productDetails.CategoryName','No name')}
             </Text>
           </Text>
-          <Text style={{color: '#FFA500'}}>★★★★★</Text>
+          {/* <Text style={{color: '#FFA500'}}>★★★★★</Text> */}
         </View>
         <View
           style={{
@@ -296,11 +288,11 @@ pushImages=()=>{
           }}>
           <Text style={{fontWeight: '700', fontSize: 20}}>
             {' '}
-            {_get(this.props,'productDetails.Rate','--')}{''}{' '}
-            <Text style={{fontWeight: '300', color: '#808080', fontSize: 12,textDecorationLine:'line-through'}}>
-             {_get(this.props,'productDetails.MRP','--')}
+            ₹ {_get(this.props,'productDetails.Rate','0.0')}{''}{' '}
+            <Text style={{fontWeight: '300', color: '#808080', fontSize: 15,textDecorationLine:'line-through'}}>
+             {" "}₹ {_get(this.props,'productDetails.MRP','0.0')}{" "}
             </Text>
-            <Text
+            {/* <Text
               style={{
                 color: themeColor,
                 fontWeight: '300',
@@ -308,9 +300,9 @@ pushImages=()=>{
                 marginLeft: 5,
               }}>
               {'  '}10% OFF
-            </Text>
+            </Text> */}
           </Text>
-          <Text>(15 Reviews)</Text>
+          {/* <Text>(15 Reviews)</Text> */}
         </View>
         {/* <View
           style={{
@@ -343,13 +335,13 @@ pushImages=()=>{
             alignItems: 'center',
             marginLeft: 5,
           }}>
-          <TouchableOpacity style={styles.wishList}>
+          <TouchableOpacity style={styles.wishList} onPress={()=>{this.addToCart(2)}}>
             <Text style={styles.wishlistText}>♡</Text>
             <View style={{width: 5}} />
             <Text style={styles.wishlistText}>Wishlist</Text>
           </TouchableOpacity>
-          <View style={{width: 5}} />
-          <TouchableOpacity style={styles.wishList}>
+          <View style={{width: 35}} />
+          <TouchableOpacity style={styles.wishList} onPress={()=>{this.addToCart(1)}}>
             <Image
               style={{height: 20, width: 20}}
               source={require('../../assets/images/icons/cart.jpeg')}
@@ -376,18 +368,25 @@ pushImages=()=>{
 
   description = () => {
     return (
+     
       <View style={[styles.descriptionView,{marginTop:10}]}>
         <Text style={styles.bigText}> Description</Text>
         <View style={styles.descriptionDetails}>
 
-       
-
+        {_get(this.props,'productDetails.Description','')!=''?
+     
           <Text>
          
             {_get(this.props,'productDetails.Description','--')}
+          
           </Text>
+
+          :
+          this.skeltonTextView()}
         </View>
       </View>
+
+
     );
   };
 
@@ -405,7 +404,11 @@ pushImages=()=>{
       return (
         <View style={styles.descriptionView}>
           <Text style={{fontSize: 10}}>
+          {_get(this.props,'productDetails.Description','')!=''?
           <HTML source={{ html: _get(this.props,'productDetails.BulletPoint','<h5>No Data</h5') }} contentWidth='100%' />
+          :
+          this.skeltonTextView()
+          }
             {/* ● <Text style={{fontSize: 15}}>{item.specification}</Text> */}
           </Text>
         </View>
@@ -413,11 +416,19 @@ pushImages=()=>{
     // });
   };
 
+varientOnPress=(item)=>{
+  this.setState({variantId:item.Id},()=>{
+    this.getItemDetail(this.state.productId,item.Id)
+  })
+  
+}
+
+
 renderVarientItems=(item)=>{
   //console.log('renderVarientItems******* ',item,'Image- ',imageBaseUrl+item.Image1)
   return(
     <TouchableOpacity
-          style={styles.varientItems} onPress={()=>{this.getItemDetail(this.state.productId,item.Id)}}>
+          style={styles.varientItems} onPress={()=>{this.varientOnPress(item)}} >
           <View style={styles.otherInfo}>
             <Image source={{uri:imageBaseUrl+item.Image1}} style={{height:60,width:50,resizeMode:'contain'}}/>
           </View>
@@ -440,7 +451,7 @@ renderVarientItems=(item)=>{
      keyExtractor={item=> item.index}
     />
     :
-    <Text style={{marginLeft:5}} >No varient available </Text>
+    <ListItems length={[1,2,3,4]} style={styles.varientListSkelton}/>
 }
     
     </View>
@@ -578,6 +589,17 @@ return flag;
 
   }
 
+
+skeltonTextView=()=>{
+  return(
+
+<DetailTextSkelton/>
+
+
+  )
+}
+
+
   render() {
     
     return (
@@ -637,9 +659,9 @@ borderRadius:10,
     // borderWidth:1
   },
   wishList: {
-    height: '100%',
-    flex: 0.5,
-    padding: 15,
+    height: '80%',
+    flex: 0.43,
+    padding: 10,
     backgroundColor: '#fff',
     shadowOpacity: 0.8,
     shadowColor: '#ccc',
@@ -647,9 +669,9 @@ borderRadius:10,
      height:5,width:5
     },
     elevation: 20,
-    shadowRadius:5,
+    shadowRadius:15,
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'flex-start',
     alignItems: 'center',
     borderRadius: 5,
   },
@@ -728,15 +750,19 @@ borderRadius:10,
 backgroundColor:'#fff',
 marginLeft:5   
     
+  },
+  varientListSkelton:{
+    height:80,width:80,borderRadius:10
   }
 });
 
 
 const mapStateToProps = (state) => ({
   //promoList: state.commonReducer.promoList,
-  cartItems: state.commonReducer.cartItems,
+  cartItems: state.commonReducer.cartItems||[],
   productDetails:state.commonReducer.productDetails,
   varientList:state.commonReducer.varientList,
+  loginData:state.commonReducer.loginData,
 
 });
 

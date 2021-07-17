@@ -8,7 +8,7 @@ import SnackBar from 'react-native-snackbar';
 import {themeColor,dangerRed} from '../Component/config'
 
 
-//import AsyncStorage from "@react-native-community/async-storage"
+import AsyncStorage from "@react-native-community/async-storage"
 
 
 
@@ -37,18 +37,18 @@ const instance = axios.create ({
     }
 });
 
-// instance.interceptors.request.use(
-//   async config => {
-//     const token = await AsyncStorage.getItem('token')
-//     if (token) {
-//       config.headers.Authorization = "Bearer "+token
-//     }
-//     return config
-//   },
-//   error => {
-//     return Promise.reject(error)
-//   }
-// );
+instance.interceptors.request.use(
+  async config => {
+    const token = await AsyncStorage.getItem('token')
+    if (token) {
+      config.headers.Authorization = "Bearer "+token
+    }
+    return config
+  },
+  error => {
+    return Promise.reject(error)
+  }
+);
 
 
 const API_URL = "http://192.168.1.100:4000";
@@ -137,9 +137,10 @@ const showSnackBar=(text,color)=>{
                 if(res.status==200){
               
                     dispatch(setLoader(false))
-                    dispatch(receive(res.data.data,res.status,resolve,constants,identifier,key)) 
+                   
                     saveData('token',res.data.data)
                     var decoded = jwt_decode(res.data.data);
+                    dispatch(receive(decoded,res.status,resolve,constants,identifier,key)) 
                     console.log('Login Data ',decoded)
                     RootNavigation.navigate("tabHome",{})
                     showSnackBar("Logged In Successfully!",themeColor)

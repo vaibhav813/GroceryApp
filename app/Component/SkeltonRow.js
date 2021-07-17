@@ -48,6 +48,58 @@ export const VenderImageInfo = () => {
 };
 
 
+export const VenderProductList = () => {
+  return (
+    <SkeletonPlaceholder>
+    <SkeletonPlaceholder.Item flexDirection="row" alignItems="center" justifyContent='center' >
+     <SkeletonPlaceholder.Item width={250} height={80}   alignItems="flex-start" justifyContent="center">
+     <SkeletonPlaceholder.Item width={100} height={10}/> 
+     <SkeletonPlaceholder.Item width={100} height={10} marginTop={10}/>
+     <SkeletonPlaceholder.Item width={100} height={10} marginTop={10}/>
+     </SkeletonPlaceholder.Item>
+     <SkeletonPlaceholder.Item width={100} height={80} borderRadius={10}/>
+     
+    </SkeletonPlaceholder.Item>
+  </SkeletonPlaceholder>
+  );
+};
+
+export const DetailTextSkelton = () => {
+  return (
+    <SkeletonPlaceholder>
+    <SkeletonPlaceholder.Item alignItems="flex-start" justifyContent='center' padding={10}>
+    {/* <SkeletonPlaceholder.Item width={100} height={10}/>  */}
+
+    <SkeletonPlaceholder.Item width={330} height={10} marginTop={15}/> 
+    <SkeletonPlaceholder.Item width={350} height={10} marginTop={5}/>
+    <SkeletonPlaceholder.Item width={340} height={10} marginTop={5}/>
+    <SkeletonPlaceholder.Item width={330} height={10} marginTop={5}/>
+    <SkeletonPlaceholder.Item width={330} height={10} marginTop={5}/>
+    <SkeletonPlaceholder.Item width={350} height={10} marginTop={5}/> 
+     
+    </SkeletonPlaceholder.Item>
+  </SkeletonPlaceholder>
+  );
+};
+
+export const SingleText=()=>{
+  return (
+    <SkeletonPlaceholder>
+    <SkeletonPlaceholder.Item alignItems="flex-start" justifyContent='center' padding={10}>
+  
+  
+
+    <SkeletonPlaceholder.Item width={40} height={20}/> 
+
+     
+    </SkeletonPlaceholder.Item>
+  </SkeletonPlaceholder>
+  );
+
+}
+
+
+
 export const ImageWithText=(props)=>{
   // console.log('Skelton props ',props)
   return(

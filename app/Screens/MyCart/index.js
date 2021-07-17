@@ -15,7 +15,7 @@ import { themeColor } from "../../Component/config";
 import Header from "../../Component/Header/index";
 import { connect } from "react-redux";
 import {removeItemFromArr,addItemFromArr} from '../../Component/utils'
-import {getDataSaveList} from '../../action/commonAction'
+import {getDataSaveList,getCommonDataAction,commonActionGet} from '../../action/commonAction'
 
 class MyCart extends Component {
   constructor(props) {
@@ -63,6 +63,30 @@ class MyCart extends Component {
     //     Object.assign(item, { itemPrice: item.MinRate, Qty: 1 });
     //   });
      this.setState({cartItems:this.props.cartItems})
+     this.getCartList(1);
+  }
+
+
+  getCartList=(cart)=>{
+console.log('login Props are ',this.props.loginData)
+  //   const obj={
+  //     UserId:this.props.loginData.Id,
+  //   	CartType:cart,
+  // }
+  let Id = this.props.loginData.Id||2;
+
+      const url="/getcartlist"
+    const constant = 
+    {init:"CART_LIST_INIT",
+      success:"CART_LIST_SUCCESS",
+    error:"CART_LIST_ERROR"
+    }
+    const identifier = "CART_LIST";
+    const key="getcartlist";
+    const type="?UserId="+Id+"&CartType="+cart
+
+    const data=this.props.getCommonDataAction(url, constant, identifier, key, type)
+
   }
 
   cartView = (item) => {
@@ -340,7 +364,7 @@ console.log('In Flat List Array------------ ',this.state.cartItems)
           <View
             style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
           >
-            <Text style={{ color: "orangered", fontWeight: "bold" }}>
+            <Text style={{ color: "orangered", fontWeight: "bold" }} onPress={()=>{this.getCartList(1)}}>
               No Item in cart
             </Text>
           </View>
@@ -423,11 +447,15 @@ const mapStateToProps = (state) => ({
   //promoList: state.commonReducer.promoList,
   cartItems: state.commonReducer.cartItems,
   savedAddress: state.commonReducer.savedAddress || [],
+  loginData:state.commonReducer.loginData,
 });
 
 const mapDispatchToProps = (dispatch) => ({
   getCartSaveList: (data,  identifier, key) =>
   dispatch(getDataSaveList(data,  identifier, key)),
+  commonActionGet:(obj,url,constant,identifier,key)=>{dispatch(commonActionGet(obj,url,constant,identifier,key))},
+  getCommonDataAction:(url, constants, identifier, key, type)=>{dispatch(getCommonDataAction(url, constants, identifier, key, type))}
+
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(MyCart);
