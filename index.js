@@ -2,7 +2,7 @@
 
 import { AppRegistry } from 'react-native';
 import React from 'react';
-import { Image, StatusBar } from 'react-native';
+import { Image, StatusBar,BackHandler } from 'react-native';
 
 import { name as appName } from './app.json';
 import { NavigationContainer } from '@react-navigation/native';
@@ -36,6 +36,8 @@ import Search from '././app/Screens/Home/Search'
 import Details from '././app/Screens/Home/Details'
 import ConfirmCart from '././app/Screens/MyCart/ConfirmCart'
 import Auth from './app/Screens/index'
+import { connect } from 'react-redux';
+import WishListScreen from './app/Screens/MyCart/WishListScreen'
 
 
 
@@ -55,8 +57,8 @@ const tabColor = themeColor;
 function HomeStack() {
     return (
         <Stack.Navigator
-            initialRouteName="Home"
-            
+           // initialRouteName="Home"
+            initialRouteName="AddressScreen"
             screenOptions={{
                 headerStyle: { backgroundColor: tabColor },
                 headerTintColor: '#fff',
@@ -76,10 +78,7 @@ function HomeStack() {
                     {
                         title: 'Home',
                         headerShown:false,
-                        
-                        
                     }} 
-                    
                     />
 
             <Stack.Screen
@@ -134,6 +133,11 @@ function HomeStack() {
                 name="ConfirmCartScreen"
                 component={ConfirmCart}
                 options={{ title: 'Confirm Cart' }} />
+
+           <Stack.Screen
+                name="WishListScreen"
+                component={WishListScreen}
+                options={{ title: 'Wish List' }} />
         </Stack.Navigator>
     );
 }
@@ -185,7 +189,7 @@ const tabStackOrders = () => {
 function CartStack() {
     return (
         <Stack.Navigator
-            initialRouteName="MyOrderScreen"
+            initialRouteName="CartScreen"
             screenOptions={{
                 headerStyle: { backgroundColor: themeColor },
                 
@@ -197,6 +201,12 @@ function CartStack() {
                 name="CartScreen"
                 component={MyCart}
                 options={{ title: 'Cart' }} />
+
+         <Stack.Screen
+                name="WishListScreen"
+                component={WishListScreen}
+                options={{ title: 'Wish List' }} />
+
 
             <Stack.Screen
                 name="AddressScreen"
@@ -293,6 +303,7 @@ function MyAccountStack() {
 
 
 const RegisterLoginStack = () => {
+    
   
      return (
 
@@ -375,6 +386,13 @@ const RegisterLoginStack = () => {
 }
 
 
+const handleBackButton=()=>{
+    console.log('*****************In handle back button*****************')
+    props.navigation.goBack();
+    return true;
+}
+
+
 const tabStacks = () => {
     return (
 
@@ -384,8 +402,9 @@ const tabStacks = () => {
                 activeTintColor: tabColor,
                 inactiveTintColor: 'gray',
             }}
-            
+            tabStacks
             backBehavior={"history"}
+        
           
         >
             <Tab.Screen
@@ -402,7 +421,17 @@ const tabStacks = () => {
                             <Image style={{ height: 25, width: 25, resizeMode: 'contain' }} source={require('./app/assets/images/icons/shop.jpeg')} />
                     ),
                 }}
-                
+        //     listeners={({ navigation, route }) => ({
+        //     tabPress: e => {
+        //         console.log('When tab press Listener************',route)
+        //     // if (route.state && route.state.routeNames.length > 0) {
+        //     //     navigation.navigate('Device')
+        //     // }
+        //     },
+        // })}
+            // listeners={{ focus: () => BackHandler.addEventListener('hardwareBackPress',handleBackButton())
+            //             ,blur: () => BackHandler.removeEventListener('hardwareBackPress',handleBackButton())
+            // }}
                 
                  />
             <Tab.Screen
@@ -410,13 +439,19 @@ const tabStacks = () => {
                 component={CartStack}
                 options={{
                     tabBarLabel: 'Cart',
+                    //tabBarBadge:3,
                     tabBarIcon: ({ color, size }) => (
                         color == tabColor ?
                             <Image style={{ height: 25, width: 25, resizeMode: 'contain' }} source={require('./app/assets/images/icons/cart_green.png')} />
                             :
                             <Image style={{ height: 25, width: 25, resizeMode: 'contain' }} source={require('./app/assets/images/icons/cart.jpeg')} />
                     ),
-                }} />
+                }} 
+                //  listeners={{ focus: () => BackHandler.addEventListener('hardwareBackPress',handleBackButton())
+                //       ,blur: () => BackHandler.removeEventListener('hardwareBackPress',handleBackButton())
+                //  }}
+
+                />
 
 
             <Tab.Screen
@@ -430,7 +465,13 @@ const tabStacks = () => {
                             :
                             <Image style={{ height: 20, width: 20, resizeMode: 'contain' }} source={require('./app/assets/images/icons/orders.png')} />
                     ),
-                }} />
+                }} 
+
+        //         listeners={{ focus: () => BackHandler.addEventListener('hardwareBackPress',handleBackButton())
+        //               ,blur: () => BackHandler.removeEventListener('hardwareBackPress',handleBackButton())
+        //   }}
+
+                />
 
             <Tab.Screen
                 name="MyAccountStack"
@@ -443,7 +484,14 @@ const tabStacks = () => {
                             :
                             <Image style={{ height: 20, width: 20, resizeMode: 'contain' }} source={require('./app/assets/images/icons/account.png')} />
                     ),
-                }} />
+                }} 
+
+        //         listeners={{ focus: () => BackHandler.addEventListener('hardwareBackPress',handleBackButton())
+        //               ,blur: () => BackHandler.removeEventListener('hardwareBackPress',handleBackButton())
+        //   }}
+
+
+                />
 
 
 
@@ -468,7 +516,7 @@ const tabStacks = () => {
 }
 
 const RNRedux = () => {
-  
+    
     return (
         <Provider store={store}>
 {/* {AuthLogin()} */}
@@ -498,5 +546,24 @@ const RNRedux = () => {
 //    </NavigationContainer>
 //   </Provider>
 // )
+
+
+
+
+const mapStateToProps = state => (
+
+    {
+
+        promoList: state.commonReducer.promoList,
+        catListHome: state.commonReducer.catListHome,
+        isLoad:state.commonReducer.isLoad,
+        cartItems:state.commonReducer.cartItems,
+    }
+
+);
+
+
+
+export default connect(mapStateToProps,null)(RNRedux)
 
 AppRegistry.registerComponent(appName, () =>  RNRedux);

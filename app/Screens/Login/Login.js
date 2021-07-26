@@ -6,7 +6,8 @@ import {commonActionPostLogin} from '../../action/commonAction'
 import axios from 'axios';
 import {reset} from '../../Component/RootNavigation'
 import SplashScreen from 'react-native-splash-screen'
-import {themeColor} from '../../Component/config'
+import {themeColor,dangerRed} from '../../Component/config'
+
 
 
 
@@ -148,6 +149,9 @@ return(
 {this.textInputRender("Enter Mobile Number")}
 {this.textInputRender("Password")}
 {this.buttonRenderView()}
+<Text style={{fontSize:12,fontWeight:'900',color:'#000',marginTop:20,color:'white'}}>
+        If you don't have any account then <Text style={{color:themeColor,fontWeight:'800',fontSize:15,textDecorationLine:'underline'}} onPress={()=>{this.props.navigation.navigate('Register')}}>Register here {" "}</Text>
+    </Text>
 <View style={{height:50}}/>
 {this.loader()}
 {/* <Text style={{fontSize:10,fontWeight:'700',color:'#fff',marginTop:20}}>

@@ -440,8 +440,8 @@ return(
 {this.textInputRender("Enter Confirm Password")}
 {/* {this.textInputRender("Enter Password")} */}
 {this.buttonRenderView()}
-{this.GSignInButton()}
-<Text style={{fontSize:12,fontWeight:'700',color:'#000',marginTop:20}}>
+{/* {this.GSignInButton()} */}
+<Text style={{fontSize:12,fontWeight:'900',color:'#000',marginTop:20}}>
         If you have an account then <Text style={{color:themeColor,fontWeight:'800',fontSize:15,textDecorationLine:'underline'}} onPress={()=>{this.goToLoginPage()}}>login here {" "}</Text>
     </Text>
 {this.loader()}

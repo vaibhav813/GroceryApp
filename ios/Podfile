@@ -26,6 +26,8 @@ target 'groceryApp' do
 
 
 
+  pod 'react-native-geocoder', :path => '../node_modules/react-native-geocoder'
+
   target 'groceryAppTests' do
     inherit! :complete
     # Pods for testing

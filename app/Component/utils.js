@@ -1,5 +1,6 @@
 import React from 'react';
 import { View } from 'react-native';
+import Geolocation from '@react-native-community/geolocation'
 
 // const componentName = ({
 //     children, style,
@@ -13,11 +14,13 @@ export const removeItemFromArr=(arr,itemObj)=>{
    // console.log('getting array and object ',arr,'----- ',itemObj)
     let newArr=[];
     arr.map(item=>{
-        if(item.Id==itemObj.Id){
-            arr.pop(item)
+        if(item.Id!=itemObj.Id){
+            //arr.pop(item)
+            newArr.push(item)
         }
     })
 console.log('getting array and object new Arr ',arr)
+return newArr
 }
 
 
@@ -32,6 +35,10 @@ export const addItemFromArr=(arr,itemObj)=>{
     
      console.log('getting array and object new Arr ',arr)
  }
+
+
+
+
 
 //export default componentName;
 

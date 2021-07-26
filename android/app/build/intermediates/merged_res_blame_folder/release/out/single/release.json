@@ -108,12 +108,12 @@
         "source": "/Users/vaibhavgupta/Desktop/Project/Github/GroceryApp/android/app/build/generated/res/react/release/drawable-mdpi/node_modules_reactnativedropdownpicker_src_themes_light_icons_arrowup.png"
     },
     {
-        "merged": "/Users/vaibhavgupta/Desktop/Project/Github/GroceryApp/android/app/build/intermediates/res/merged/release/mipmap-hdpi_ic_launcher.png.flat",
-        "source": "/Users/vaibhavgupta/Desktop/Project/Github/GroceryApp/android/app/src/main/res/mipmap-hdpi/ic_launcher.png"
-    },
-    {
         "merged": "/Users/vaibhavgupta/Desktop/Project/Github/GroceryApp/android/app/build/intermediates/res/merged/release/raw_node_modules_entities_lib_maps_legacy.json.flat",
         "source": "/Users/vaibhavgupta/Desktop/Project/Github/GroceryApp/android/app/build/generated/res/react/release/raw/node_modules_entities_lib_maps_legacy.json"
+    },
+    {
+        "merged": "/Users/vaibhavgupta/Desktop/Project/Github/GroceryApp/android/app/build/intermediates/res/merged/release/mipmap-hdpi_ic_launcher.png.flat",
+        "source": "/Users/vaibhavgupta/Desktop/Project/Github/GroceryApp/android/app/src/main/res/mipmap-hdpi/ic_launcher.png"
     },
     {
         "merged": "/Users/vaibhavgupta/Desktop/Project/Github/GroceryApp/android/app/build/intermediates/res/merged/release/drawable-mdpi_app_assets_images_icons_cart.jpeg.flat",
@@ -158,10 +158,6 @@
     {
         "merged": "/Users/vaibhavgupta/Desktop/Project/Github/GroceryApp/android/app/build/intermediates/res/merged/release/drawable-mdpi_app_assets_images_icons_orders.png.flat",
         "source": "/Users/vaibhavgupta/Desktop/Project/Github/GroceryApp/android/app/build/generated/res/react/release/drawable-mdpi/app_assets_images_icons_orders.png"
-    },
-    {
-        "merged": "/Users/vaibhavgupta/Desktop/Project/Github/GroceryApp/android/app/build/intermediates/res/merged/release/drawable-mdpi_app_assets_images_cart_g2.png.flat",
-        "source": "/Users/vaibhavgupta/Desktop/Project/Github/GroceryApp/android/app/build/generated/res/react/release/drawable-mdpi/app_assets_images_cart_g2.png"
     },
     {
         "merged": "/Users/vaibhavgupta/Desktop/Project/Github/GroceryApp/android/app/build/intermediates/res/merged/release/drawable-mdpi_node_modules_reactnativedropdownpicker_src_themes_dark_icons_arrowup.png.flat",
@@ -240,11 +236,11 @@
         "source": "/Users/vaibhavgupta/Desktop/Project/Github/GroceryApp/android/app/build/generated/res/react/release/drawable-mdpi/app_assets_images_icons_shop_green.png"
     },
     {
-        "merged": "/Users/vaibhavgupta/Desktop/Project/Github/GroceryApp/android/app/build/intermediates/res/merged/release/drawable-mdpi_node_modules_reactnavigation_stack_src_views_assets_backiconmask.png.flat",
-        "source": "/Users/vaibhavgupta/Desktop/Project/Github/GroceryApp/android/app/build/generated/res/react/release/drawable-mdpi/node_modules_reactnavigation_stack_src_views_assets_backiconmask.png"
-    },
-    {
         "merged": "/Users/vaibhavgupta/Desktop/Project/Github/GroceryApp/android/app/build/intermediates/res/merged/release/raw_node_modules_stringifyentities_lib_constant_dangerous.json.flat",
         "source": "/Users/vaibhavgupta/Desktop/Project/Github/GroceryApp/android/app/build/generated/res/react/release/raw/node_modules_stringifyentities_lib_constant_dangerous.json"
+    },
+    {
+        "merged": "/Users/vaibhavgupta/Desktop/Project/Github/GroceryApp/android/app/build/intermediates/res/merged/release/drawable-mdpi_node_modules_reactnavigation_stack_src_views_assets_backiconmask.png.flat",
+        "source": "/Users/vaibhavgupta/Desktop/Project/Github/GroceryApp/android/app/build/generated/res/react/release/drawable-mdpi/node_modules_reactnavigation_stack_src_views_assets_backiconmask.png"
     }
 ]

@@ -173,6 +173,7 @@ class AllCategory extends Component {
     this.setState({ selectId: selectId });
      this.setState({catId:0},()=>{
       this.callAllCategoryProduct()
+     // this.getProductDetailAccordingSubCategory()
       this.setState({ isVisible: false }, () => {});
      })
    
@@ -351,12 +352,15 @@ class AllCategory extends Component {
     this.setState({isLoad:true})
     console.log("selectItemCategory ", item);
     this.setState({ isVisible: true });
-    this.setState({catId: item.item.Id });
+    this.setState({catId: item.item.Id },()=>{
+
+      this.setState({ selectId: item.index });
+      this.getProductDetailAccordingSubCategory();
+      this.getSubCategoryList(item);
+    });
 
     // this.setState({arr:[]})
-    this.setState({ selectId: item.index });
-
-    this.getSubCategoryList(item);
+   
   };
 
   
@@ -632,6 +636,8 @@ return(
   };
 
 listItemView=(item)=>{
+       Object.assign(item, { itemPrice: item.MinRate, Qty: 1 });
+            Object.assign(item, { count: 1 });
     return(
 <TouchableOpacity style={styles.listItem} onPress={()=>{this.props.navigation.navigate("DetailScreen",{item:item})}}>
 

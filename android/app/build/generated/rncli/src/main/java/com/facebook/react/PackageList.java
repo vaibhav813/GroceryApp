@@ -21,6 +21,8 @@ import org.reactnative.maskedview.RNCMaskedViewPackage;
 import co.apptailor.googlesignin.RNGoogleSigninPackage;
 // react-native-firebase-push-notifications
 import com.afrihost.firebase.notifications.FirebasePushNotificationsPackage;
+// react-native-geocoder
+import com.devfd.RNGeocoder.RNGeocoderPackage;
 // react-native-gesture-handler
 import com.swmansion.gesturehandler.react.RNGestureHandlerPackage;
 // react-native-network-state
@@ -93,6 +95,7 @@ public class PackageList {
       new RNCMaskedViewPackage(),
       new RNGoogleSigninPackage(),
       new FirebasePushNotificationsPackage(),
+      new RNGeocoderPackage(),
       new RNGestureHandlerPackage(),
       new RNNetworkStatePackage(),
       new RazorpayPackage(),

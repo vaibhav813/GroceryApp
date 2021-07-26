@@ -17,7 +17,7 @@ export default class Authentication extends Component {
       this.checkAuth()
   }
 
-  
+
    checkAuth=()=>{
         
    
@@ -28,7 +28,8 @@ export default class Authentication extends Component {
         console.log('**********************TOKEN***************',res)
              // setToken(res)
              if(res==null){
-              this.props.navigation.navigate('Login')
+               this.props.navigation.navigate('Login')
+           // this.props.navigation.navigate('Register')
              }
          else{
              this.props.navigation.navigate('tabHome')

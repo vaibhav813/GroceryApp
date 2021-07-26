@@ -1,37 +1,97 @@
 import React, { Component } from 'react';
-import { View, Text,StyleSheet,Image,TouchableOpacity,Platform,StatusBar,BackHandler,Alert } from 'react-native';
+import { View, Text,StyleSheet,Image,TouchableOpacity,Platform,StatusBar,BackHandler,Alert,ToastAndroid } from 'react-native';
 import {themeColor} from '../../Component/config';
 import NetworkInfo from '../../Component/NetInfo/index'
 import _get from 'lodash/get';
 import * as RootNavigation from '../../Component/RootNavigation'
-import { getFocusedRouteNameFromRoute } from '@react-navigation/native';
+// import { getFocusedRouteNameFromRoute } from '@react-navigation/native';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
-const count=1;
+let currentCount = 0;
 export default class Header extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      backClickCount:0
     };
+    //this.springValue = new Animated.Value(100) ;
   }
 
 componentDidMount(){
-    console.log('Header Props--- ')
+    console.log('Header Props--- ',createBottomTabNavigator)
     // RootNavigation.reset(this.props.props,this.props.props.route.name)
-  //  BackHandler.addEventListener('hardwareBackPress', ()=>this.handleBackButton());
+    if(Platform.OS=="android"){
+      BackHandler.addEventListener('hardwareBackPress', ()=>this.handleBackPress());
+    }
+   
 }
 
 
-// UNSAFE_componentWillMount() {
-//   BackHandler.addEventListener('hardwareBackPress', ()=>this.handleBackButton());
-// }
+UNSAFE_componentWillMount() {
+  if(Platform.OS=="android"){
+  BackHandler.addEventListener('hardwareBackPress', ()=>this.handleBackPress());
+  }
+}
 
-// componentWillUnmount() {
-//   BackHandler.removeEventListener('hardwareBackPress', ()=>this.handleBackButton());
-// }
+componentWillUnmount() {
+  if(Platform.OS=="android"){
+  BackHandler.removeEventListener('hardwareBackPress', ()=>this.handleBackPress());
+  }
+}
 
-// handleBackButton=()=>{
-// this.handleBackButton()
-// }
+handleBackPress=()=>{
+// this.handleBackButton1()
+this.onBackPress()
+}
+
+
+_spring() {
+  this.setState({backClickCount: 1}, () => {
+    ToastAndroid.show('Press again to close app',2000);
+      this.setState({backClickCount:this.state.backClickCount+1})
+  });
+
+}
+
+handleBackButton1 = () => {
+  console.log('This state handle back button ',this.state.backClickCount)
+  this.state.backClickCount == 1 ? BackHandler.exitApp() : this._spring();
+
+  return true;
+};
+
+onBackPress = () => {
+  console.log('Current count--- ',currentCount)
+  setTimeout(() => {
+    currentCount = 0;
+  }, 2000); 
+
+  if (currentCount <= 1) {
+  
+   ToastAndroid.show('Press again to close app',2000);
+   currentCount =currentCount + 1;
+   console.log('Current count 1--- ',currentCount)
+  
+  } 
+
+  else if(currentCount==2){
+    console.log('Current count 2--- ',currentCount)
+    // BackHandler.exitApp()
+    this.props.props.navigation.goBack(null)
+  }
+  else
+  {
+    console.log('Current count 3 --- ',currentCount)
+    //BackHandler.exitApp()
+  
+  }
+
+
+  return true;
+
+
+  
+};
 
 
 handleBackButton = () => {               
@@ -55,20 +115,35 @@ handleBackButton = () => {
 renderCartView=()=>{
     return(
         <View>
+        {_get(this.props,'count',0)==0?null:
         <TouchableOpacity style={styles.badge}>
             <Text style={{color:'#fff',fontSize:9,fontWeight:'900',fontFamily:'../../assets/fonts/BlackberryJamPersonalUse-rXOB.ttf'}}>{_get(this.props,'count',0)}</Text>
         </TouchableOpacity>
+        }
         <TouchableOpacity style={{width:50}} onPress={()=>{this.moveToCart()}}>
+
         
         <Image source={require('../../assets/images/user/white_cart.png')} style={styles.image}/>
         </TouchableOpacity>
+        
         </View>
     )
 }
 moveToCart=()=>{
   console.log('Move to screen Cart')
-  RootNavigation.navigate('ConfirmCartScreen',{})
+  RootNavigation.navigate('CartScreen',{})
 }
+
+
+goBack=()=>{
+ let cangoBack = this.props.props.navigation.canGoBack();
+  console.log('Check Back Props----',cangoBack,' Nav--- ',this.props.props.navigation)
+  this.props.props.navigation.pop()
+}
+
+
+
+
 
   render() {
     return (
@@ -78,7 +153,7 @@ moveToCart=()=>{
     <NetworkInfo/>
       <View style={styles.headerView}>
       <View style={styles.view1}>
-      <TouchableOpacity style={{height:35,width:50}} onPress={()=>{this.props.props.navigation.pop()}} >
+      <TouchableOpacity style={{height:35,width:50}} onPress={()=>{this.goBack()}} >
       <Image source={require('../../assets/images/user/back_white.png')} style={[styles.image,{height:'100%'}]}/>
       </TouchableOpacity>
        

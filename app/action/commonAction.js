@@ -32,7 +32,8 @@ const instance = axios.create ({
     headers:{
      // 'Content-Type': 'application/json, text/plain, */*',
     // 'Content-Type': 'application/json',
-     'Content-Type': 'application/json'
+     'Content-Type': 'application/json',
+   
       
     }
 });
@@ -178,11 +179,12 @@ const showSnackBar=(text,color)=>{
                 
                 
                instance.post(`${url}`,data).then(res=>{
-                console.log('Response ',res)
+                console.log('@@@@@@@@@ Response @@@@@@@ ',res)
                 if(res.status==200){
               
                     dispatch(setLoader(false))
                     dispatch(receive(res.data.data,res.status,resolve,constants,identifier,key)) 
+                    
                    // alert("Registered Successfully!")
                   
                 }
@@ -191,12 +193,13 @@ const showSnackBar=(text,color)=>{
                     dispatch(setLoader(false))
                     dispatch(receiveError(res.data.data,res.status,reject,constants,identifier,key))
                     //alert("Something Wrong.Please Try Again!")
+                
                  
                 }
               
               
                 
-            
+               // return res.status;
         
             }).catch(err=>{
               console.log('Error--- ',err.response)

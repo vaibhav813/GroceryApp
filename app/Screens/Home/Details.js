@@ -1,4 +1,4 @@
-import React, {PureComponent} from 'react';
+import React, { PureComponent } from "react";
 import {
   View,
   Text,
@@ -8,19 +8,23 @@ import {
   ScrollView,
   Image,
   SafeAreaView,
-  FlatList, TouchableOpacity
-} from 'react-native';
+  FlatList,
+  TouchableOpacity,
+} from "react-native";
 
- import {getDataSaveList,commonActionPost,getCommonDataAction} from '../../action/commonAction'
-import {themeColor} from '../../Component/config';
+import {
+  getDataSaveList,
+  commonActionPost,
+  getCommonDataAction,
+} from "../../action/commonAction";
+import { themeColor } from "../../Component/config";
 import { connect } from "react-redux";
-import Header from '../../Component/Header/index'
-import {imageBaseUrl} from '../../Component/config'
-import _get from 'lodash/get';
+import Header from "../../Component/Header/index";
+import { imageBaseUrl } from "../../Component/config";
+import _get from "lodash/get";
 import HTML from "react-native-render-html";
-import {DetailTextSkelton,ListItems} from '../../Component/SkeltonRow'
-
-
+import { DetailTextSkelton, ListItems } from "../../Component/SkeltonRow";
+import Loader from "../../Component/Loader";
 
 // let images = [
 //   {img: 'https://i.ibb.co/LQmZb1D/muton.jpg'},
@@ -28,29 +32,26 @@ import {DetailTextSkelton,ListItems} from '../../Component/SkeltonRow'
 //   {img: 'https://i.ibb.co/nCc4bTD/watch2.jpg'},
 // ];
 
-
-
-
 const otherData = [
   {
-    name: 'Fastrack Watch',
+    name: "Fastrack Watch",
     price: 2000,
-    img: 'https://i.ibb.co/nCc4bTD/watch2.jpg',
+    img: "https://i.ibb.co/nCc4bTD/watch2.jpg",
   },
   {
-    name: 'Fastrack Watch',
+    name: "Fastrack Watch",
     price: 2000,
-    img: 'https://i.ibb.co/nCc4bTD/watch2.jpg',
+    img: "https://i.ibb.co/nCc4bTD/watch2.jpg",
   },
   {
-    name: 'Fastrack Watch',
+    name: "Fastrack Watch",
     price: 2000,
-    img: 'https://i.ibb.co/nCc4bTD/watch2.jpg',
+    img: "https://i.ibb.co/nCc4bTD/watch2.jpg",
   },
   {
-    name: 'Fastrack Watch',
+    name: "Fastrack Watch",
     price: 2000,
-    img: 'https://i.ibb.co/nCc4bTD/watch2.jpg',
+    img: "https://i.ibb.co/nCc4bTD/watch2.jpg",
   },
 ];
 
@@ -59,161 +60,296 @@ class Details extends PureComponent {
     super(props);
     this.state = {
       selectedItem: 0,
-      item:{},
-      productId:0,
-      variantId:0,
-      Images:[]
+      item: {},
+      productId: 0,
+      variantId: 0,
+      Images: [],
     };
     this.flatListRef = null;
-    
   }
   componentDidMount() {
-    console.log('cartItems data Component Did Mount----- ', this.props.loginData);
-    this.setState({productId:this.props.route.params.item.Id},()=>{
-      this.getItemDetail(this.state.productId,0 )
-      this.getVarientList(this.state.productId)
-      //this.pushImages()
-      this.setState({item:this.props.route.params.item})
-    })
+    this.setState({ productId: this.props.route.params.item.Id });
+    this.getItemDetail(this.props.route.params.item.Id, 0);
+    this.getVarientList(this.props.route.params.item.Id);
 
-  
-    
+    //this.setState({ variantId: this.props.varientList[0].Id });
+    this.setState({ item: this.props.route.params.item });
   }
 
-  getVarientList=(PID)=>{
+  getCartList = (cart) => {
+    //   const obj={
+    //     UserId:this.props.loginData.Id,
+    //   	CartType:cart,
+    // }
+    let Id = this.props.loginData.Id || 2;
+    let url = "";
+    let constant = {};
+    let identifier = "";
+    let key = "";
+    let type = "";
 
+    url = "/getcartlist";
+    constant = {
+      init: "CART_LIST_INIT",
+      success: "CART_LIST_SUCCESS",
+      error: "CART_LIST_ERROR",
+    };
+    identifier = "CART_LIST";
+    key = "getcartlist";
+    type = "?UserId=" + Id + "&CartType=" + cart;
 
-const url="/ProductVariantList"
+    const data = this.props.getCommonDataAction(
+      url,
+      constant,
+      identifier,
+      key,
+      type
+    );
+    this.props.navigation.navigate("CartScreen",{itemList:this.props.getcartlist});
+  };
 
-    
-  const constant = 
-  {init:"VARIENT_LIST_INIT",
-    success:"VARIENT_LIST_SUCCESS",
-  error:"VARIENT_LIST_ERROR"
-  }
-  const identifier = "VARIENT_LIST";
-  const key="varientList";
-  const type =
-  "?ProductId=" +PID;
-  
+  getWishList = (cart) => {
+    let Id = this.props.loginData.Id || 2;
+    let url = "";
+    let constant = {};
+    let identifier = "";
+    let key = "";
+    let type = "";
 
-  const data=this.props.getCommonDataAction(url,constant,identifier,key,type)
-  //console.log('****************Varient List Data*************** ',this.props.varientList)
-  }
+    url = "/getcartlist";
+    constant = {
+      init: "WISH_LIST_INIT",
+      success: "WISH_LIST_SUCCESS",
+      error: "WISH_LIST_ERROR",
+    };
+    identifier = "WISH_LIST";
+    key = "getwishlist";
+    type = "?UserId=" + Id + "&CartType=" + cart;
 
+    const data = this.props.getCommonDataAction(
+      url,
+      constant,
+      identifier,
+      key,
+      type
+    );
+  };
 
-getItemDetail=(PId,VID)=>{
- 
-      const url="/productdetails"
-    const constant = 
-    {init:"PRODUCT_DETAILS_INIT",
-      success:"PRODUCT_DETAILS_SUCCESS",
-    error:"PRODUCT_DETAILS_ERROR"
-    }
+  getVarientList = (PID) => {
+    const url = "/ProductVariantList";
+
+    const constant = {
+      init: "VARIENT_LIST_INIT",
+      success: "VARIENT_LIST_SUCCESS",
+      error: "VARIENT_LIST_ERROR",
+    };
+    const identifier = "VARIENT_LIST";
+    const key = "varientList";
+    const type = "?ProductId=" + PID;
+
+    const data = this.props.getCommonDataAction(
+      url,
+      constant,
+      identifier,
+      key,
+      type
+    );
+
+    let Id = _get(this.props, "varientList[0].Id", 0);
+    console.log("*****VARIENT LIST********", this.props.varientList);
+    this.setState({ variantId: Id });
+  };
+
+  getItemDetail = (PId, VID) => {
+    const url = "/productdetails";
+    const constant = {
+      init: "PRODUCT_DETAILS_INIT",
+      success: "PRODUCT_DETAILS_SUCCESS",
+      error: "PRODUCT_DETAILS_ERROR",
+    };
     const identifier = "PRODUCT_DETAILS";
-    const key="productDetails";
-    const type =
-    "?ProductId=" +PId+"&VariantId=" +VID;
-    
+    const key = "productDetails";
+    const type = "?ProductId=" + PId + "&VariantId=" + VID;
 
-    const data=this.props.getCommonDataAction(url,constant,identifier,key,type)
-    this.pushImages()
-    
+    const data = this.props.getCommonDataAction(
+      url,
+      constant,
+      identifier,
+      key,
+      type
+    );
+    this.pushImages();
+
     // //console.log('getItemDetails----------------------->',this.props.productDetails)
+  };
 
-  
-}
+  pushImages = () => {
+    // console.log('imageBackgroundScrolls Items ',_get(this.props,'productDetails',{}))
+    // let arr=[];
+    this.state.Images.push(
+      _get(this.props, "productDetails.Image1", ""),
+      _get(this.props, "productDetails.Image2", ""),
+      _get(this.props, "productDetails.Image3", ""),
+      _get(this.props, "productDetails.Image4", "")
+    );
+    this.setState({ Images: this.state.Images });
+    // console.log('Images in Array########### 1 ',arr)
+    // console.log('BackgroundImages imageBackgroundScrolls in Array########### 2 ',this.state.Images)
+  };
 
-pushImages=()=>{
-// console.log('imageBackgroundScrolls Items ',_get(this.props,'productDetails',{}))
-  // let arr=[];
-  this.state.Images.push(_get(this.props,'productDetails.Image1',''),
-  _get(this.props,'productDetails.Image2',''),
-  _get(this.props,'productDetails.Image3',''),
-  _get(this.props,'productDetails.Image4','')
-  )
-  this.setState({Images:this.state.Images})
-  // console.log('Images in Array########### 1 ',arr)
- // console.log('BackgroundImages imageBackgroundScrolls in Array########### 2 ',this.state.Images)
-}
+  addToCart = (cart) => {
+    //  console.log('User id--',this.props.loginData.Id,' Product Id ',this.state.productId,' Variant Id ',this.state.variantId)
+    console.log(
+      "Varient list when click AddTocart-----",
+      this.props.varientList
+    );
+    const obj = {
+      UserId: _get(this.props.loginData,'Id',2),
+      ProductId: this.state.productId,
+    //  VariantId: this.state.variantId,
+      VariantId:this.props.varientList[0].Id,
+      CartType: cart,
+      Qty: 1,
+    };
+    let url = "";
+    let constant = {};
+    let identifier = "";
+    let key = "";
 
+    //if(cart==1){
 
-  addToCart=(cart)=>{
-    console.log('User id--',this.props.loginData.Id,' Product Id ',this.state.productId,' Variant Id ',this.state.variantId)
-  const obj={
-      UserId:this.props.loginData.Id||2,
-    	ProductId:this.state.productId,
-    	VariantId:this.state.variantId,
-    	CartType:cart,
-    	Qty:1,
-  }
-      const url="/addtocart"
-    const constant = 
-    {init:"ADD_TO_CART_INIT",
-      success:"ADD_TO_CART_SUCCESS",
-    error:"ADD_TO_CART_ERROR"
-    }
-    const identifier = "ADD_TO_CART";
-    const key="addtocart";
+    url = "/addtocart";
+    constant = {
+      init: "ADD_TO_CART_INIT",
+      success: "ADD_TO_CART_SUCCESS",
+      error: "ADD_TO_CART_ERROR",
+    };
+    identifier = "ADD_TO_CART";
+    key = "addtocart";
 
-    const data=this.props.commonActionPost(obj,url,constant,identifier,key)
+    this.props.commonActionPost(obj, url, constant, identifier, key);
+    setTimeout(() => {
+      this.getCartList(cart);
+    }, 1000);
+    
+    
 
-  }
+    //}
+    // else{
 
-  imageBackgroundScrolls = item => {
-    console.log('imageBackgroundScrolls Method------- ',imageBaseUrl+item.item);
+    //    url="/addtocart"
+    //    constant =
+    //   {init:"ADD_TO_WISHLIST_INIT",
+    //     success:"ADD_TO_WISHLIST_SUCCESS",
+    //   error:"ADD_TO_WISHLIST_ERROR"
+    //   }
+    //    identifier = "ADD_TO_WISHLIST";
+    //    key="addtowishlist";
+
+    //    this.props.commonActionPost(obj,url,constant,identifier,key)
+    //   this.getCartList(cart);
+    //   this.props.navigation.navigate("WishListScreen")
+
+    // }
+  };
+
+  addToWishList = (cart) => {
+    console.log(
+      "ADD TO WISH LIST*******",
+      "User id--",
+      this.props.loginData.Id,
+      " Product Id ",
+      this.state.productId,
+      " Variant Id ",
+      this.state.variantId
+    );
+    console.log(
+      "Varient list when click WishList-----",
+      this.props.varientList
+    );
+    const obj = {
+      UserId: this.props.loginData.Id || 2,
+      ProductId: this.state.productId,
+      // VariantId: this.state.variantId,
+      VariantId:this.props.varientList[0].Id,
+      CartType: cart,
+      Qty: 1,
+    };
+    const url = "/addtocart";
+    const constant = {
+      init: "ADD_TO_WISHLIST_INIT",
+      success: "ADD_TO_WISHLIST_SUCCESS",
+      error: "ADD_TO_WISHLIST_ERROR",
+    };
+    const identifier = "ADD_TO_WISHLIST";
+    const key = "addtowishlist";
+
+    console.log("Add To CART SEND DATA------", "URL--", url, " DATA_____", obj);
+
+    const data = this.props.commonActionPost(
+      obj,
+      url,
+      constant,
+      identifier,
+      key
+    );
+    this.getWishList(cart);
+    this.props.navigation.navigate("WishListScreen");
+  };
+
+  imageBackgroundScrolls = (item) => {
+    // console.log('imageBackgroundScrolls Method------- ',imageBaseUrl+item.item);
     return (
       <View style={styles.imageView}>
         <Image
-          style={[styles.bigImage,{resizeMode:"contain"}]} 
-          source={{uri: imageBaseUrl+item.item}}
-          
+          style={[styles.bigImage, { resizeMode: "contain" }]}
+          source={{ uri: imageBaseUrl + item.item }}
         />
       </View>
     );
   };
 
   imageFlatlist = () => {
- console.log('Background Images to be place ',this.state.Images)
-
- 
+    //console.log('Background Images to be place ',this.state.Images)
 
     return (
-      <View style={{ height: '20%', width: '100%'}}>
+      <View style={{ height: "20%", width: "100%" }}>
         <FlatList
-          style={{height: '100%', width: '100%',borderRadius:10}}
+          style={{ height: "100%", width: "100%", borderRadius: 10 }}
           horizontal={true}
           // data={images}
           data={this.state.Images}
-          ref={s => (this.flatListRef = s)}
-          renderItem={item => this.imageBackgroundScrolls(item)}
+          ref={(s) => (this.flatListRef = s)}
+          renderItem={(item) => this.imageBackgroundScrolls(item)}
           keyExtractor={(item, index) => {
-         return  index.toString();
-        }}
+            return index.toString();
+          }}
         />
       </View>
     );
   };
 
-  smallFlatListView = item => {
+  smallFlatListView = (item) => {
     return (
       <View
         style={{
           borderRadius: 5,
           marginLeft: 10,
           borderWidth: 2,
-          borderColor: this.state.selectedItem == item.index ? '#fff' : null,
+          borderColor: this.state.selectedItem == item.index ? "#fff" : null,
           backgroundColor:
-            this.state.selectedItem == item.index ? 'rgba(0,0,0,0.2)' : null,
-            opacity:this.state.selectedItem == item.index ?1:0.5
-        }}>
+            this.state.selectedItem == item.index ? "rgba(0,0,0,0.2)" : null,
+          opacity: this.state.selectedItem == item.index ? 1 : 0.5,
+        }}
+      >
         <TouchableOpacity
-          style={{height: '100%', width: '100%'}}
-          onPress={() => this.moveToPosition(item.index)}>
+          style={{ height: "100%", width: "100%" }}
+          onPress={() => this.moveToPosition(item.index)}
+        >
           <Image
-            style={{height: 50, width: 50, resizeMode: 'cover'}}
-           // blurRadius={this.state.selectedItem == item.index ? 0 : 3}
-           source={{uri: imageBaseUrl+item.item}}
+            style={{ height: 50, width: 50, resizeMode: "cover" }}
+            // blurRadius={this.state.selectedItem == item.index ? 0 : 3}
+            source={{ uri: imageBaseUrl + item.item }}
             // source={{uri: item.item.img}}
           />
         </TouchableOpacity>
@@ -221,7 +357,7 @@ pushImages=()=>{
     );
   };
   onPressHandler(id) {
-    this.setState({selectedItem: id});
+    this.setState({ selectedItem: id });
   }
 
   smallImageFlatlist = () => {
@@ -229,27 +365,28 @@ pushImages=()=>{
       <View
         style={{
           height: 55,
-          width: '100%',
-          bottom: '82%',
-          position: 'absolute',
-        }}>
-        <FlatList
-          style={{height: '100%', width: '100%', marginLeft: 20}}
-          horizontal={true}
-         // data={images}
-         data={this.state.Images}
-          renderItem={item => this.smallFlatListView(item)}
-          keyExtractor={(item, index) => {
-         return  index.toString();
+          width: "100%",
+          bottom: "82%",
+          position: "absolute",
         }}
+      >
+        <FlatList
+          style={{ height: "100%", width: "100%", marginLeft: 20 }}
+          horizontal={true}
+          // data={images}
+          data={this.state.Images}
+          renderItem={(item) => this.smallFlatListView(item)}
+          keyExtractor={(item, index) => {
+            return index.toString();
+          }}
         />
       </View>
     );
   };
 
-  moveToPosition = index => {
-    this.setState({selectedItem: index});
-    this.flatListRef.scrollToIndex({index: index});
+  moveToPosition = (index) => {
+    this.setState({ selectedItem: index });
+    this.flatListRef.scrollToIndex({ index: index });
   };
 
   rateAndItemReview = () => {
@@ -257,40 +394,52 @@ pushImages=()=>{
       <View
         style={{
           padding: 5,
-          justifyContent: 'center',
-          alignItems: 'flex-start',
-          width: '100%',
+          justifyContent: "center",
+          alignItems: "flex-start",
+          width: "100%",
           borderWidth: 0,
-        }}>
-        <Text style={{fontWeight: '700', fontSize: 18}}>
-         {_get(this.props,'productDetails.ProcuctCombinationName','No name')}
+        }}
+      >
+        <Text style={{ fontWeight: "700", fontSize: 18 }}>
+          {_get(this.props, "productDetails.ProcuctCombinationName", "No name")}
         </Text>
         <View
           style={{
-            flexDirection: 'row',
-            width: '100%',
-            justifyContent: 'space-between',
-          }}>
+            flexDirection: "row",
+            width: "100%",
+            justifyContent: "space-between",
+          }}
+        >
           <Text>
-           In{" "}
-            <Text style={{fontWeight: '600', fontSize: 15}}>
-            {_get(this.props,'productDetails.CategoryName','No name')}
+            In{" "}
+            <Text style={{ fontWeight: "600", fontSize: 15 }}>
+              {_get(this.props, "productDetails.CategoryName", "No name")}
             </Text>
           </Text>
           {/* <Text style={{color: '#FFA500'}}>★★★★★</Text> */}
         </View>
         <View
           style={{
-            flexDirection: 'row',
-            width: '100%',
-            justifyContent: 'space-between',
+            flexDirection: "row",
+            width: "100%",
+            justifyContent: "space-between",
             marginTop: 10,
-          }}>
-          <Text style={{fontWeight: '700', fontSize: 20}}>
-            {' '}
-            ₹ {_get(this.props,'productDetails.Rate','0.0')}{''}{' '}
-            <Text style={{fontWeight: '300', color: '#808080', fontSize: 15,textDecorationLine:'line-through'}}>
-             {" "}₹ {_get(this.props,'productDetails.MRP','0.0')}{" "}
+          }}
+        >
+          <Text style={{ fontWeight: "700", fontSize: 20 }}>
+            {" "}
+            ₹ {_get(this.props, "productDetails.Rate", "0.0")}
+            {""}{" "}
+            <Text
+              style={{
+                fontWeight: "300",
+                color: "#808080",
+                fontSize: 15,
+                textDecorationLine: "line-through",
+              }}
+            >
+              {" "}
+              ₹ {_get(this.props, "productDetails.MRP", "0.0")}{" "}
             </Text>
             {/* <Text
               style={{
@@ -321,39 +470,53 @@ pushImages=()=>{
     return (
       <View
         style={{
-          flexDirection: 'row',
-          justifyContent: 'space-between',
+          flexDirection: "row",
+          justifyContent: "space-between",
           height: 60,
-          width: '100%',
-        }}>
+          width: "100%",
+          borderWidth: 0,
+          padding: 5,
+        }}
+      >
         <View
           style={{
-            flex: 0.8,
-            height: '100%',
-            flexDirection: 'row',
-            justifyContent: 'flex-start',
-            alignItems: 'center',
-            marginLeft: 5,
-          }}>
-          <TouchableOpacity style={styles.wishList} onPress={()=>{this.addToCart(2)}}>
+            width: "100%",
+            height: "100%",
+            flexDirection: "row",
+            justifyContent: "center",
+            alignItems: "center",
+            borderWidth: 0,
+          }}
+        >
+          <TouchableOpacity
+            style={styles.wishList}
+            onPress={() => {
+              this.addToWishList(2);
+            }}
+          >
             <Text style={styles.wishlistText}>♡</Text>
-            <View style={{width: 5}} />
+            <View style={{ width: 5 }} />
             <Text style={styles.wishlistText}>Wishlist</Text>
           </TouchableOpacity>
-          <View style={{width: 35}} />
-          <TouchableOpacity style={styles.wishList} onPress={()=>{this.addToCart(1)}}>
+          <View style={{ width: 30 }} />
+          <TouchableOpacity
+            style={styles.wishList}
+            onPress={() => {
+              this.addToCart(1);
+            }}
+          >
             <Image
-              style={{height: 20, width: 20}}
-              source={require('../../assets/images/icons/cart.jpeg')}
+              style={{ height: 20, width: 20 }}
+              source={require("../../assets/images/icons/cart.jpeg")}
             />
-            <View style={{width: 5}} />
-            <Text style={[styles.wishlistText, {color: '#000'}]}>
+            <View style={{ width: 5 }} />
+            <Text style={[styles.wishlistText, { color: "#000" }]}>
               Add to cart
             </Text>
           </TouchableOpacity>
         </View>
 
-        <View
+        {/* <View
           style={{flex: 0.2, justifyContent: 'center', alignItems: 'center'}}>
           <TouchableOpacity style={styles.share}>
             <Image
@@ -361,36 +524,27 @@ pushImages=()=>{
               source={require('../../assets/images/icons/cart.jpeg')}
             />
           </TouchableOpacity>
-        </View>
+        </View> */}
       </View>
     );
   };
 
   description = () => {
     return (
-     
-      <View style={[styles.descriptionView,{marginTop:10}]}>
+      <View style={[styles.descriptionView, { marginTop: 10 }]}>
         <Text style={styles.bigText}> Description</Text>
         <View style={styles.descriptionDetails}>
-
-        {_get(this.props,'productDetails.Description','')!=''?
-     
-          <Text>
-         
-            {_get(this.props,'productDetails.Description','--')}
-          
-          </Text>
-
-          :
-          this.skeltonTextView()}
+          {_get(this.props, "productDetails.Description", "") != "" ? (
+            <Text>{_get(this.props, "productDetails.Description", "--")}</Text>
+          ) : (
+            this.skeltonTextView()
+          )}
         </View>
       </View>
-
-
     );
   };
 
-  specificationView = text => {
+  specificationView = (text) => {
     return (
       <View style={styles.descriptionView}>
         <Text style={styles.bigText}>{text}</Text>
@@ -398,92 +552,109 @@ pushImages=()=>{
     );
   };
 
-  specification = item => {
+  specification = (item) => {
     // return specifications.map(item => {
     //   //console.log('specifications ', item);
-      return (
-        <View style={styles.descriptionView}>
-          <Text style={{fontSize: 10}}>
-          {_get(this.props,'productDetails.Description','')!=''?
-          <HTML source={{ html: _get(this.props,'productDetails.BulletPoint','<h5>No Data</h5') }} contentWidth='100%' />
-          :
-          this.skeltonTextView()
-          }
-            {/* ● <Text style={{fontSize: 15}}>{item.specification}</Text> */}
-          </Text>
-        </View>
-      );
+    return (
+      <View style={styles.descriptionView}>
+        <Text style={{ fontSize: 10 }}>
+          {_get(this.props, "productDetails.Description", "") != "" ? (
+            <HTML
+              source={{
+                html: _get(
+                  this.props,
+                  "productDetails.BulletPoint",
+                  "<h5>No Data</h5"
+                ),
+              }}
+              contentWidth="100%"
+            />
+          ) : (
+            this.skeltonTextView()
+          )}
+          {/* ● <Text style={{fontSize: 15}}>{item.specification}</Text> */}
+        </Text>
+      </View>
+    );
     // });
   };
 
-varientOnPress=(item)=>{
-  this.setState({variantId:item.Id},()=>{
-    this.getItemDetail(this.state.productId,item.Id)
-  })
-  
-}
+  varientOnPress = (item) => {
+    this.setState({ variantId: item.Id }, () => {
+      this.getItemDetail(this.state.productId, item.Id);
+    });
+  };
 
-
-renderVarientItems=(item)=>{
-  //console.log('renderVarientItems******* ',item,'Image- ',imageBaseUrl+item.Image1)
-  return(
-    <TouchableOpacity
-          style={styles.varientItems} onPress={()=>{this.varientOnPress(item)}} >
-          <View style={styles.otherInfo}>
-            <Image source={{uri:imageBaseUrl+item.Image1}} style={{height:60,width:50,resizeMode:'contain'}}/>
-          </View>
-          <View style={styles.otherInfo}>
-            <Text>{item.Name}</Text>
-          </View>
-        </TouchableOpacity>
-  )
-}
+  renderVarientItems = (item) => {
+    //console.log('renderVarientItems******* ',item,'Image- ',imageBaseUrl+item.Image1)
+    return (
+      <TouchableOpacity
+        style={styles.varientItems}
+        onPress={() => {
+          this.varientOnPress(item);
+        }}
+      >
+        <View style={styles.otherInfo}>
+          <Image
+            source={{ uri: imageBaseUrl + item.Image1 }}
+            style={{ height: 60, width: 50, resizeMode: "contain" }}
+          />
+        </View>
+        <View style={styles.otherInfo}>
+          <Text>{item.Name}</Text>
+        </View>
+      </TouchableOpacity>
+    );
+  };
 
   otherInfo = () => {
-    return(
-    <View style={{width:'100%'}}>
-{_get(this.props,'varientList.length',[])>0?
-    <FlatList
-      horizontal={true}
-     style={{padding:5,width:'100%',borderRadius:10,backgroundColor:'#ccc'}}
-     data={_get(this.props,'varientList',[])}
-     renderItem={item=>this.renderVarientItems(item.item)}
-     keyExtractor={item=> item.index}
-    />
-    :
-    <ListItems length={[1,2,3,4]} style={styles.varientListSkelton}/>
-}
-    
-    </View>
-    )
+    return (
+      <View style={{ width: "100%" }}>
+        {_get(this.props, "varientList.length", []) > 0 ? (
+          <FlatList
+            horizontal={true}
+            style={{
+              padding: 5,
+              width: "100%",
+              borderRadius: 10,
+              backgroundColor: "#ccc",
+            }}
+            data={_get(this.props, "varientList", [])}
+            renderItem={(item) => this.renderVarientItems(item.item)}
+            keyExtractor={(item) => item.index}
+          />
+        ) : (
+          <ListItems length={[1, 2, 3, 4]} style={styles.varientListSkelton} />
+        )}
+      </View>
+    );
   };
 
   relatedProductView = () => {
     return (
-        
       <FlatList
-        style={{width: '100%', height: 600,backgroundColor:'#'}}
+        style={{ width: "100%", height: 600, backgroundColor: "#" }}
         horizontal={true}
         showsHorizontalScrollIndicator={false}
         showsVerticalScrollIndicator
         data={otherData}
-        renderItem={item => this.otherProductItems(item)}
+        renderItem={(item) => this.otherProductItems(item)}
         keyExtractor={(item, index) => {
-         return  index.toString();
+          return index.toString();
         }}
       />
     );
   };
 
-  otherProductItems = item => {
+  otherProductItems = (item) => {
     return (
       <View style={styles.otherProductItemView}>
         <Image
-          source={{uri: item.item.img}}
+          source={{ uri: item.item.img }}
           style={{
             height: 200,
-            width: '100%',
-            resizeMode: 'cover',
+            width: "100%",
+            resizeMode: "cover",
             borderRadius: 10,
             borderBottomLeftRadius: 0,
             borderBottomRightRadius: 0,
@@ -492,121 +663,118 @@ renderVarientItems=(item)=>{
         {this.specificationView(item.item.name)}
         <View
           style={{
-            flexDirection: 'row',
-            width: '100%',
-            justifyContent: 'space-between',
-            alignItems: 'center',
+            flexDirection: "row",
+            width: "100%",
+            justifyContent: "space-between",
+            alignItems: "center",
             padding: 10,
-          }}>
-          <Text style={{color:'#000',fontWeight:'600'}}>₹{item.item.price}</Text>
+          }}
+        >
+          <Text style={{ color: "#000", fontWeight: "600" }}>
+            ₹{item.item.price}
+          </Text>
           <TouchableOpacity
             style={{
               height: 30,
               width: 80,
               borderRadius: 20,
-              backgroundColor: 'rgba(0,0,0,0.4)',
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}>
-            <Text style={{color:'#fff',fontWeight:'600'}}>Add</Text>
+              backgroundColor: "rgba(0,0,0,0.4)",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <Text style={{ color: "#fff", fontWeight: "600" }}>Add</Text>
           </TouchableOpacity>
         </View>
       </View>
     );
   };
 
-  goToCartAction=()=>{
-    return(
-      <TouchableOpacity style={styles.goToCart} onPress={()=>{this.goToCartPage()}}>
-      {/* <Text style={{color:'#fff',fontWeight:'800'}}>Cart Items: {this.state.cartArr.length}</Text> */}
-        <Text style={{color:'#fff',fontWeight:'700',fontSize:15}}>Buy Now {" "}</Text>
-        <Image source={require('../../assets/images/user/next_white.png')} style={{height:20,width:20}}/>
+  goToCartAction = () => {
+    return (
+      <TouchableOpacity
+        style={styles.goToCart}
+        onPress={() => {
+          this.goToCartPage();
+        }}
+      >
+        {/* <Text style={{color:'#fff',fontWeight:'800'}}>Cart Items: {this.state.cartArr.length}</Text> */}
+        <Text style={{ color: "#fff", fontWeight: "700", fontSize: 15 }}>
+          Buy Now{" "}
+        </Text>
+        <Image
+          source={require("../../assets/images/user/next_white.png")}
+          style={{ height: 20, width: 20 }}
+        />
       </TouchableOpacity>
-    )
-  }
-  goToCartPage=()=>{
-   this.saveDataToCart()
-    
-    this.props.navigation.navigate('CartScreen',{items:this.state.item})
-  }
+    );
+  };
+  goToCartPage = () => {
+    this.saveDataToCart();
 
+    this.props.navigation.navigate("CartScreen", { items: this.state.item });
+  };
 
-  checkObjExists=(obj,arr)=>{
+  checkObjExists = (obj, arr) => {
     let flag = false;
-arr.some(item=>{
-  //console.log(item.Id,'==',obj.Id)
-  if(item.Id==obj.Id){
-    //console.log('In If--- ',item.Id,'==',obj.Id)
-    flag=true;
-  //return
+    arr.some((item) => {
+      //console.log(item.Id,'==',obj.Id)
+      if (item.Id == obj.Id) {
+        //console.log('In If--- ',item.Id,'==',obj.Id)
+        flag = true;
+        //return
+      }
+    });
+    //console.log('We have flag value here ',flag)
+    return flag;
+  };
 
-  }
- 
-})
-//console.log('We have flag value here ',flag)
-return flag;
-  }
-
-  saveDataToCart=()=>{
-    let data= {};
-    let arr=[];
-    if(this.props.cartItems && this.props.cartItems.length>0){
-     
-      
+  saveDataToCart = () => {
+    let data = {};
+    let arr = [];
+    if (this.props.cartItems && this.props.cartItems.length > 0) {
       //arr=this.props.cartItems;
       // this.props.cartItems.some(item=>{
       //   //console.log('Check Array befor save ********* ',item," And ",this.props.route.params.item)
       //   if(item.Id!=this.props.route.params.item.Id){
-         
+
       //     arr.push(this.props.route.params.item)
       //   }
       // })
-      let check = this.checkObjExists(this.props.route.params.item,this.props.cartItems)
-      if(!check){
-        arr=this.props.cartItems;
-        arr.push(this.props.route.params.item)
+      let check = this.checkObjExists(
+        this.props.route.params.item,
+        this.props.cartItems
+      );
+      if (!check) {
+        arr = this.props.cartItems;
+        arr.push(this.props.route.params.item);
+      } else {
+        arr = this.props.cartItems;
       }
-      else{
-        arr=this.props.cartItems;
-      }
-     
-     // data = arr;
-    }
-    else{
-      data= this.props.route.params.item
-      arr.push(data)
+
+      // data = arr;
+    } else {
+      data = this.props.route.params.item;
+      arr.push(data);
     }
 
     const key = "cartItems";
-     const identifier = "SAVE_CART_ITEMS";
-  
-    this.props.getCartSaveList(
-      arr,
-      identifier,
-      key,
-    );
+    const identifier = "SAVE_CART_ITEMS";
 
+    this.props.getCartSaveList(arr, identifier, key);
+  };
 
-  }
+  skeltonTextView = () => {
+    return <DetailTextSkelton />;
+  };
 
-
-skeltonTextView=()=>{
-  return(
-
-<DetailTextSkelton/>
-
-
-  )
-}
-
-
-  render() {
-    
+  mainComp = () => {
     return (
-      <View style={styles.container}>
-      <Header title="Details" props={this.props} right={false} />
-      <View style={{flex:1,padding:5}}>
-        <ScrollView contentContainerStyle={{flexGrow: 1}} showsVerticalScrollIndicator={false}>
+      <View style={{ flex: 1, padding: 5 }}>
+        <ScrollView
+          contentContainerStyle={{ flexGrow: 1 }}
+          showsVerticalScrollIndicator={false}
+        >
           <View style={styles.container}>
             {this.imageFlatlist()}
             {this.smallImageFlatlist()}
@@ -614,18 +782,33 @@ skeltonTextView=()=>{
             {this.wishListButton()}
             {this.description()}
 
-            {this.specificationView('Specifications')}
+            {this.specificationView("Specifications")}
             {this.specification()}
-            {this.specificationView('All Variant')}
+            {this.specificationView("All Variant")}
             {this.otherInfo()}
-            {this.specificationView('Related Products')}
+            {this.specificationView("Related Products")}
             {this.relatedProductView()}
-           
           </View>
         </ScrollView>
-        
-        {this.goToCartAction()}
-        </View>
+
+        {/* {
+          this.props.getcartlist.length>0?
+          this.goToCartAction():
+          null
+          } */}
+      </View>
+    );
+  };
+
+  render() {
+    return (
+      <View style={styles.container}>
+        <Header title="Details" props={this.props} right={false} />
+        {this.mainComp()}
+        {/* {this.props.isLoad?
+      <Loader isLoad={this.props.isLoad} text="Loading..."/>
+      :
+        this.mainComp()} */}
       </View>
     );
   }
@@ -635,9 +818,9 @@ const styles = StyleSheet.create({
     flex: 2,
 
     // alignItems: 'center',
-   // paddingTop: Platform.OS == 'ios' ? 20 : null,
+    // paddingTop: Platform.OS == 'ios' ? 20 : null,
     //padding: 2,
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
     paddingBottom: 10,
 
     // borderWidth:1
@@ -647,132 +830,138 @@ const styles = StyleSheet.create({
     /// height: 300,
     // padding:10,
     borderRadius: 10,
-   
-    borderColor: '#fff',
-    
+
+    borderColor: "#fff",
+
     // borderWidth: 1,
   },
   bigImage: {
     flex: 1,
-borderRadius:10,
-//borderWidth: 1,
+    borderRadius: 10,
+    //borderWidth: 1,
     // borderWidth:1
   },
   wishList: {
-    height: '80%',
-    flex: 0.43,
+    height: "100%",
+    flex: 0.5,
     padding: 10,
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
     shadowOpacity: 0.8,
-    shadowColor: '#ccc',
-    shadowOffset:{
-     height:5,width:5
+    shadowColor: "#AEAEAE",
+    shadowOffset: {
+      height: 5,
+      width: 5,
     },
     elevation: 20,
-    shadowRadius:15,
-    flexDirection: 'row',
-    justifyContent: 'flex-start',
-    alignItems: 'center',
+    shadowRadius: 15,
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
     borderRadius: 5,
   },
   wishlistText: {
-    color: 'red',
+    color: "red",
     //marginLeft:5
   },
   share: {
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
     padding: 12,
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
     shadowOpacity: 0.8,
-    shadowColor: '#ccc',
-    shadowOffset:{
-     height:5,width:5
+    shadowColor: "#ccc",
+    shadowOffset: {
+      height: 5,
+      width: 5,
     },
     elevation: 5,
-    shadowRadius:5,
+    shadowRadius: 5,
     borderRadius: 5,
   },
   descriptionView: {
     padding: 5,
-    justifyContent: 'center',
-    alignItems: 'flex-start',
-    width: '100%',
-   // borderWidth:1
+    justifyContent: "center",
+    alignItems: "flex-start",
+    width: "100%",
+    // borderWidth:1
   },
   descriptionDetails: {
     padding: 5,
   },
-  bigText: {fontWeight: '700', fontSize: 18},
-  otherInfo: {flex: 0.5, alignItems: 'flex-start', paddingLeft: 5},
+  bigText: { fontWeight: "700", fontSize: 18 },
+  otherInfo: { flex: 0.5, alignItems: "flex-start", paddingLeft: 5 },
 
   otherProductItemView: {
-    height: '90%',
+    height: "90%",
     width: 210,
-  backgroundColor:'#fff',
+    backgroundColor: "#fff",
     borderRadius: 10,
     marginLeft: 10,
-    alignSelf: 'center',
-   shadowOpacity: 0.8,
-    shadowColor: '#ccc',
-    shadowOffset:{
-     height:5,width:5
+    alignSelf: "center",
+    shadowOpacity: 0.8,
+    shadowColor: "#ccc",
+    shadowOffset: {
+      height: 5,
+      width: 5,
     },
     elevation: 5,
-    shadowRadius:5,
+    shadowRadius: 5,
   },
-  goToCart:{
-    width:'100%',
-    backgroundColor:themeColor,
-    borderRadius:10,
-    //right: '30%', 
-   // bottom: '92%', 
-    alignSelf:'center',
-    alignItems:'center',
-    justifyContent:'space-between',
-    elevation:5,
-    shadowOpacity:0.8,
-    shadowColor:'#ccc',
-    padding:12,
-    flexDirection:'row',
-   // position: 'absolute', 
-  
+  goToCart: {
+    width: "100%",
+    backgroundColor: themeColor,
+    borderRadius: 10,
+    //right: '30%',
+    // bottom: '92%',
+    alignSelf: "center",
+    alignItems: "center",
+    justifyContent: "space-between",
+    elevation: 5,
+    shadowOpacity: 0.8,
+    shadowColor: "#ccc",
+    padding: 12,
+    flexDirection: "row",
+    // position: 'absolute',
   },
-  varientItems:{
-   // height:"100%",
-    width:120,
-   // flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
+  varientItems: {
+    // height:"100%",
+    width: 120,
+    // flexDirection: 'row',
+    justifyContent: "center",
+    alignItems: "center",
     padding: 5,
-    borderWidth:0,
-    borderRadius:10,
-backgroundColor:'#fff',
-marginLeft:5   
-    
+    borderWidth: 0,
+    borderRadius: 10,
+    backgroundColor: "#fff",
+    marginLeft: 5,
   },
-  varientListSkelton:{
-    height:80,width:80,borderRadius:10
-  }
+  varientListSkelton: {
+    height: 80,
+    width: 80,
+    borderRadius: 10,
+  },
 });
-
 
 const mapStateToProps = (state) => ({
   //promoList: state.commonReducer.promoList,
-  cartItems: state.commonReducer.cartItems||[],
-  productDetails:state.commonReducer.productDetails,
-  varientList:state.commonReducer.varientList,
-  loginData:state.commonReducer.loginData,
-
+  cartItems: state.commonReducer.cartItems || [],
+  productDetails: state.commonReducer.productDetails,
+  varientList: state.commonReducer.varientList,
+  loginData: state.commonReducer.loginData,
+  getcartlist: state.commonReducer.getcartlist || [],
+  getwishlist: state.commonReducer.getwishlist || [],
+  isLoad: state.commonReducer.isLoad,
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  getCartSaveList: (data,  identifier, key) =>
-  dispatch(getDataSaveList(data,  identifier, key)),
-  commonActionPost:(obj,url,constant,identifier,key)=>{dispatch(commonActionPost(obj,url,constant,identifier,key))},
-  getCommonDataAction: (url, constants, identifier, key, type) =>
-  {dispatch(getCommonDataAction(url, constants, identifier, key, type))}
-
+  getCartSaveList: (data, identifier, key) =>
+    dispatch(getDataSaveList(data, identifier, key)),
+  commonActionPost: (obj, url, constant, identifier, key) => {
+    dispatch(commonActionPost(obj, url, constant, identifier, key));
+  },
+  getCommonDataAction: (url, constants, identifier, key, type) => {
+    dispatch(getCommonDataAction(url, constants, identifier, key, type));
+  },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Details);
