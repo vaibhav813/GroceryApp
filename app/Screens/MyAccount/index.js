@@ -45,18 +45,25 @@ export default class Home extends Component {
             this.props.navigation.navigate('AddressScreen')
         }
         else{
-            console.log('Clicked function Else----',type)
+            this.props.navigation.navigate('CompanyInfoScreen',{name:type})
         }
     }
 
+
+
+
     listItems = (type,color) => {
+
+{/* type == "Promos" ?
+                            <Image source={require('../../assets/images/user/discount1.png')} style={{ height: 25, width: 25, backgroundColor: themeColor }} />
+                            : */}
+
         return (
             <TouchableOpacity style={{ height: 60, width: '100%', flexDirection: 'row', alignItems: 'center', borderWidth: 1, borderColor: '#ccc' }} onPress={()=>{this.multiFunc(type)}}>
                 <View style={{ flex: 0.2, borderWidth: 0, height: '100%', justifyContent: 'center', alignItems: 'center' }}>
                     <View style={[styles.iconBackground,{backgroundColor:color}]}>
-                        {type == "Promos" ?
-                            <Image source={require('../../assets/images/user/discount1.png')} style={{ height: 25, width: 25, backgroundColor: themeColor }} />
-                            :
+                        {
+                            
                             type == "My Address" ?
                                 <Image source={require('../../assets/images/user/address.png')} style={{ height: 25, width: 25, backgroundColor: '#000' }} />
                                 :
@@ -89,7 +96,7 @@ export default class Home extends Component {
         return (
 
             <View style={styles.view2}>
-                {this.listItems('Promos','#fff')}
+                {/* {this.listItems('Promos','#fff')} */}
                 {this.listItems('My Address','#fff')}
 
                 {this.listItems('Terms,Privacy And Policy','#fff')}

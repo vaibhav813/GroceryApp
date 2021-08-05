@@ -92,13 +92,22 @@ class Seemore extends Component {
     this.props.navigation.navigate(screen, params);
   };
 
+
+dispatchScreen=(item)=>{
+  console.log('Dispatch item from See More Screen------ ',item)
+  this.navigate("VenderListDetails", { item: item.item });
+  // this.props.companyInfo.IsSingle?
+  // this.navigate('AllCategoryScreen',{item:item.item}):
+  // this.navigate("VenderListDetails", { item: item.item });
+}
+
   categoryItems = (item) => {
     console.log("Items---- ", item);
     return (
       <TouchableOpacity
         style={styles.itemView}
         onPress={() => {
-          this.navigate("VenderListDetails", { item: item.item });
+         this.dispatchScreen(item)
         }}
       >
         <View style={{ flex: 0.2 }}>
@@ -167,6 +176,7 @@ const styles = StyleSheet.create({
 const mapStateToProps = (state) => ({
   //promoList: state.commonReducer.promoList,
   catListAll: state.commonReducer.catListAll,
+  companyInfo:state.commonReducer.companyInfo,
 });
 
 const mapDispatchToProps = (dispatch) => ({

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, TextInput, FlatList, ScrollView, Image, BackHandler,Dimensions,RefreshControl} from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, TextInput, FlatList, ScrollView, Image, BackHandler,Dimensions,RefreshControl,ImageBackground} from 'react-native';
 
 import { commonActionGet, commonActionPost, getTypeListAction } from '../../action/commonAction'
 import { connect } from 'react-redux';
@@ -9,6 +9,8 @@ import { ListItems, PromoList } from '../../Component/SkeltonRow';
 import Header from '../../Component/Header'  
 import VenderList from '../../Screens/Vender/index'
 import SplashScreen from 'react-native-splash-screen'
+import ProductBox from '../../Component/ProductBox'
+
 
 
 
@@ -24,12 +26,10 @@ class Home extends Component {
         super(props)
         this.state = {
 
-            listData: [{ "id": 1, "name": 'vegitable' }, { "id": 2, "name": 'fruits' },
-            { "id": 3, "name": 'meat' }, { "id": 4, "name": 'seafood' }, { "id": 5, "name": 'milk & egg' },
-            { "id": 6, "name": 'bread' }, { "id": 7, "name": 'frozen' }, { "id": 8, "name": 'organic' }],
+           
 
             offerList: [1, 2, 3],
-
+message:'',
         }
 
     }
@@ -60,12 +60,50 @@ class Home extends Component {
         // console.warn('Object of netInfo ',NetInfo.addEventListener)
         this.getPromos();
         this.getCategoryListHome();
-       
-      
+       this.getCompanyInfo()
+      this.getHomeProductDetail()
          
     }
+    getCompanyInfo=async()=>{
 
+        const url = "/companyinfo";
+        const constant = {
+          init: "COMPANY_INFO_INIT",
+          success: "COMPANY_INFO_SUCCESS",
+          error: "COMPANY_INFO_ERROR",
+        };
+        const identifier = "COMPANY_INFO";
+        const key = "companyInfo";
+        const obj = { };
+        // const type = "?Id=" + itemId;
+    
+        let dataRes= await this.props.commonActionPost(obj, url, constant, identifier, key);
+         console.log('******Company Info************',dataRes)
+    }
    
+
+    getHomeProductDetail=async()=>{
+
+        const url = "/homepageproduct";
+        const constant = {
+          init: "HOME_PRODUCT_LIST_INIT",
+          success: "HOME_PRODUCT_LIST_SUCCESS",
+          error: "HOME_PRODUCT_LIST_ERROR",
+        };
+        const identifier = "HOME_PRODUCT_LIST";
+        const key = "homeProductList";
+        const obj = {
+            uriData: ''
+        }
+        const type="";
+        let dataRes= await this.props.getTypeListAction(obj,url,constant,identifier,key,type)
+        // const obj = { };
+        
+    
+        // let dataRes= await this.props.commonActionPost(obj, url, constant, identifier, key);
+         console.log('******Home Product List************',dataRes)
+    }
+
 
     componentWillUnmount() {
 
@@ -81,6 +119,8 @@ class Home extends Component {
     onRefresh=()=>{
         this.getPromos();
         this.getCategoryListHome();
+        this.getCompanyInfo()
+        this.getHomeProductDetail()
     }
 
     getPromos = () => {
@@ -173,7 +213,7 @@ class Home extends Component {
 
                             <Image source={{ uri: imageBaseUrl + item.ImgLogo }} style={{ height: 40, width: 40,resizeMode:'contain' }} />
 
-                            <Text style={{ color: '#808080', marginTop: 5 }}>{item.Name}</Text>
+                            <Text style={{ color: '#808080', marginTop: 5,fontSize:10 }} numberOfLines={0}>{item.Name}</Text>
 
                         </TouchableOpacity>
                 )
@@ -222,25 +262,30 @@ class Home extends Component {
         )
     }
 
-    onTouch = () => {
-
-    }
+    
 
     categoryView = () => {
-        console.log(' this.props.catListHome--- ', this.props.catListHome)
-      
+      //  console.log(' this.props.catListHome--- ', _get(this.props, 'catListHome', []).length)
+      {/* <ListItems style={styles.listRow} length={[1,2,3,4,5,6]}/> */}
               
             return (
-         
-                this.props.catListHome && _get(this.props, 'catListHome', []).length == 0 ?
-                <ListItems style={styles.listRow} length={[1,2,3,4,5,6]}/>
+                <View style={styles.categoryViewParent}>
+                {_get(this.props, 'catListHome', []).length== 0 ?
+               
+                
+                <ListItems style={styles.listRow} length={[1,2,3,4,5,6]}/> 
+
+               
+             
                 :
-                <View style={styles.categoryView}>
-                   {this.categoryItems()}
+             
+                   this.categoryItems()}
+                 
                   
                  
-                  </View>
+              
             
+                  </View>
             )
 
 
@@ -252,14 +297,14 @@ class Home extends Component {
 
 
         return (
-            <View style={{ width: '100%', height: 250, backgroundColor: '#fff' }}>
+            <View style={{ width: '100%', height: 240, backgroundColor: '#fff',paddingRight:10,paddingLeft:10 }}>
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', borderWidth: 0, padding: 5, paddingBottom: 0 }}>
                     {/* <Text style={{fontWeight:'500',fontSize:20}}>Promos for you</Text> */}
-                    {this.textView('Promos for you')}
+                    {/* {this.textView('Promos for you')} */}
                     {/* <Text style={{ color: '#0000FB' }}>see more...</Text> */}
                 </View>
 
-                {this.props.promoList && _get(this.props, 'promoList', []).length == 0 ?
+                {_get(this.props, 'promoList', []).length == 0 ?
                     <PromoList />
                     :
                     this.flatlistView()
@@ -278,44 +323,40 @@ class Home extends Component {
         )
     }
 
+    handleInputValue=(val)=> {
+        console.log("Getting value from Child******* ",val)
+        this.setState({ message: val },()=>{});
+      }
+
     boxRenderView = () => {
+    let productList = this.props.homeProductList||[];
+
+
+       
         return (
-            <View
-                style={styles.boxParentView}>
-                {this.boxRender()}
-                {this.boxRender()}
-                {this.boxRender()}
-                {this.boxRender()}
+            <View style={styles.boxParentView}>
+                    {productList.map((items)=>{
+                        return(
+                            <ProductBox item={items} 
+                            handleInput={this.handleInputValue} 
+
+                            /> 
+                        )
+                                 
+            })}
             </View>
+           
         )
     }
 
-    boxRender = () => {
-        return (
-
-            <TouchableOpacity style={styles.boxView} activeOpacity={0.9}>
-
-                <View style={{ height: 25, width: 40, borderRadius: 5, backgroundColor: '#ffe6e6', alignItems: 'center', justifyContent: 'center' }}>
-                    <Text style={{ color: 'orangered' }}>5%</Text>
-                </View>
-                <Image style={{ height: 90, width: 90, alignSelf: 'center' }} source={require('../../assets/images/green/g5.png')} />
-
-                <View style={{ width: '100%', height: 20 }}>
-                    <Text style={{ fontSize: 15, fontWeight: '600' }}>Tomato</Text>
-                </View>
-                <View style={styles.priceAndAdd}>
-                    <Text style={{ fontSize: 15, fontWeight: '400', color: "green" }}>$0.8/kg</Text>
-                    <TouchableOpacity style={styles.add}><Text style={{ color: "red" }}>+</Text></TouchableOpacity>
-                </View>
-
-            </TouchableOpacity>
-        )
-    }
+    
 
 
 
 
     render() {
+         let {IsSingle} = this.props.companyInfo|| false;
+        console.log('Company Info IsSingle----- ',IsSingle)
         return (
             <View style={styles.container}>
             <Header title="Home" props={this.props} right={true} count={_get(this.props.cartItems,'length',0)}/>
@@ -325,6 +366,7 @@ class Home extends Component {
                 
                 refreshControl={
           <RefreshControl
+          style={{backgroundColor:'#fff'}}
             refreshing={this.props.isLoad}
            colors={[themeColor,'#8685ff','#f36c1f','#fc0040']}
            tintColor={themeColor}
@@ -333,22 +375,44 @@ class Home extends Component {
           />
         }
                 >
-                   
-                    {this.searchRender()}
-                    <View style={styles.break} />
-                    {this.textView('What do you looking for?')}
-                    <View style={styles.break} />
-                    {this.categoryView()}
+                
+               
 
+<View style={{backgroundColor:themeColor,borderWidth:0}}>
 
-                    <View style={[styles.break, { marginTop: 5, marginBottom: 0, borderWidth: 0 }]} />
+                {this.searchRender()}
+                {this.categoryView()}
+                <View style={{height:35}} />
+            </View>
+
+               <View>
+               {/* <View style={{height:35}} /> */}
+                    <View style={[styles.break, { marginTop: 0, marginBottom: 0, borderWidth: 0,borderWidth:1 }]} />
+                    <View style={{borderWidth:0,borderRadius:20,overflow:'hidden',top:-25}}>
                     {this.offersView()} 
+                  
                     <View style={[styles.break, { marginTop: 5, marginBottom: 0, borderWidth: 0 }]} />
+                    {!IsSingle?
+                  <View>
                     {this.textView("Recommended Venders")}
                     <VenderList props={this.props} id={0} length={[1,2]}/>
+                    </View>
+                    :
+                    null
+                    }
+                    </View>
+                    
+
+                    <View style={{borderWidth:0}}>
                     {this.textView("Best selling products")}
+                    <View style={{borderWidth:0,padding:8}}>
                     {this.boxRenderView()} 
-                   
+                    </View>
+                    </View>
+                     
+                    </View>
+
+                  
                 </ScrollView>
             </View>
         )
@@ -359,11 +423,19 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
        // marginBottom: 40,
+      
     },
-
+    imageDoodle: {
+        flex: 1,
+        // width: '100%',
+        // height: '100%',
+       // opacity: 0.8,
+        backgroundColor:themeColor
+      },
+     
     search: {
-        width: '100%',
-        height: 40,
+        width: '95%',
+        height: 60,
         flexDirection: 'row',
         borderRadius: 10,
         shadowOpacity: 0.4,
@@ -372,8 +444,13 @@ const styles = StyleSheet.create({
             height: 8
         },
         elevation: 5,
-        shadowColor: '#ccc',
-        backgroundColor: '#fff'
+        //shadowColor: '#ccc',
+        shadowColor: 'rgba(0,0,0,0.25)',
+        backgroundColor: '#fff',
+        alignSelf:'center',
+        marginTop:10,
+        marginBottom:10,
+       
     },
 
     break: {
@@ -392,7 +469,8 @@ const styles = StyleSheet.create({
 
     },
     categoryView: {
-        height:categoryHeight,
+      //  height:categoryHeight,
+      height:'9%',
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
@@ -400,13 +478,14 @@ const styles = StyleSheet.create({
        // marginBottom: 10,
        // padding: 10,
        // overflow: 'hidden',
-        // borderWidth:1
+       ///  borderWidth:1
     },
 
     itemView: {
         height: 90,
-        width: '30%',
+        width: '29%',
         margin: 5,
+        padding:10,
         borderRadius: 5,
         backgroundColor: '#fff',
         shadowOpacity: 0.8,
@@ -415,10 +494,12 @@ const styles = StyleSheet.create({
             height: 10
         },
         elevation: 5,
-        shadowRadius: 8,
-        shadowColor: '#ccc',
+        shadowRadius: 5,
+        shadowColor: 'rgba(0,0,0,0.25)',
         justifyContent: 'center',
         alignItems: 'center',
+        //borderWidth:1
+       // backgroundColor:themeColor
     },
 
     flatList: {
@@ -432,14 +513,15 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         width: '100%',
-        marginTop: 10,
+        marginTop: 0,
         flexWrap: 'wrap',
-        justifyContent: 'space-around',
-        marginBottom:57
+        justifyContent: 'flex-start',
+        marginBottom:57,
+        
     },
 
     boxView: {
-        height: 200,
+       // height: 200,
         width: '48%',
         borderRadius: 10,
         backgroundColor: '#fff',
@@ -451,25 +533,47 @@ const styles = StyleSheet.create({
         elevation: 5,
         shadowColor: '#808080',
         padding: 10,
-        marginTop: 10
+        marginTop: 6,
+        marginLeft:6
     },
     priceAndAdd:
     {
         flexDirection: 'row',
         width: '100%',
-        padding: 5,
+       // padding: 5,
         justifyContent: 'space-between',
-        alignItems: 'center'
+        alignItems: 'center',borderWidth:0,
+        marginTop:10
+       
+        
     },
 
+    // add: {
+    //     height: 40,
+    //     width: 40,
+    //     justifyContent: 'center',
+    //     alignItems: 'center',
+    //     borderRadius: 40,
+    //     elevation: 8,
+    //     backgroundColor: '#f5f5f5',
+    //     shadowOffset: {
+    //         width: 5,
+    //         height: 5
+    //     },
+    //     shadowOpacity: 0.8,
+    //     shadowColor: '#ccc'
+         
+    // },
     add: {
-        height: 40,
-        width: 40,
+        // height: 30,
+        // width: 50,
+        padding:5,
+        flex:0.4,
         justifyContent: 'center',
         alignItems: 'center',
-        borderRadius: 40,
+        borderRadius: 5,
         elevation: 8,
-        backgroundColor: '#f5f5f5',
+        backgroundColor: themeColor,
         shadowOffset: {
             width: 5,
             height: 5
@@ -482,9 +586,10 @@ const styles = StyleSheet.create({
         // height:90,
         // width:110,
         height:height/9.5,
-        width:width/3.4,
+        width:width/4.4,
         margin:5,
         borderRadius:10,
+       
     },
     offerListItems:{ 
         height: "90%", width: 300, 
@@ -493,6 +598,23 @@ const styles = StyleSheet.create({
         shadowOpacity:0.8,
         shadowColor:'#ccc',
         shadowRadius:10 
+    },
+    categoryViewParent:
+    {
+        borderWidth:0,
+        flexDirection:'row',
+        flexWrap:'wrap',
+        margin:10,
+        justifyContent:'center',
+        //alignItems:'flex-start',
+        borderRadius:10,
+        padding:10,
+        backgroundColor:'#f5f5f5',
+        shadowOpacity:3,
+        shadowColor:'rgba(0,0,0,0.25)',
+        shadowRadius:10,
+        elevation: 5,
+       // borderWidth:1
     }
 
 })
@@ -506,6 +628,8 @@ const mapStateToProps = state => (
         catListHome: state.commonReducer.catListHome,
         isLoad:state.commonReducer.isLoad,
         cartItems:state.commonReducer.cartItems,
+        homeProductList:state.commonReducer.homeProductList,
+        companyInfo: state.commonReducer.companyInfo,
     }
 
 );

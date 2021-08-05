@@ -21,8 +21,6 @@ import org.reactnative.maskedview.RNCMaskedViewPackage;
 import co.apptailor.googlesignin.RNGoogleSigninPackage;
 // react-native-firebase-push-notifications
 import com.afrihost.firebase.notifications.FirebasePushNotificationsPackage;
-// react-native-geocoder
-import com.devfd.RNGeocoder.RNGeocoderPackage;
 // react-native-gesture-handler
 import com.swmansion.gesturehandler.react.RNGestureHandlerPackage;
 // react-native-network-state
@@ -41,8 +39,6 @@ import com.azendoo.reactnativesnackbar.SnackbarPackage;
 import org.devio.rn.splashscreen.SplashScreenReactPackage;
 // react-native-svg
 import com.horcrux.svg.SvgPackage;
-// react-native-vector-icons
-import com.oblador.vectoricons.VectorIconsPackage;
 // react-native-webview
 import com.reactnativecommunity.webview.RNCWebViewPackage;
 
@@ -95,7 +91,6 @@ public class PackageList {
       new RNCMaskedViewPackage(),
       new RNGoogleSigninPackage(),
       new FirebasePushNotificationsPackage(),
-      new RNGeocoderPackage(),
       new RNGestureHandlerPackage(),
       new RNNetworkStatePackage(),
       new RazorpayPackage(),
@@ -105,7 +100,6 @@ public class PackageList {
       new SnackbarPackage(),
       new SplashScreenReactPackage(),
       new SvgPackage(),
-      new VectorIconsPackage(),
       new RNCWebViewPackage()
     ));
   }

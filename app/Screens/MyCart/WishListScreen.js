@@ -11,7 +11,7 @@ import {
 import _get from "lodash/get";
 import _isEmpty from "lodash/isEmpty";
 import Snackbar from "react-native-snackbar";
-import { themeColor, dangerRed } from "../../Component/config";
+import { themeColor, dangerRed, imageBaseUrl } from "../../Component/config";
 import Header from "../../Component/Header/index";
 import { connect } from "react-redux";
 import { removeItemFromArr, addItemFromArr } from "../../Component/utils";
@@ -58,7 +58,7 @@ class WishListScreen extends Component {
       ],
 
       cartItems: [],
-    };
+    }; 
   }
 
   componentDidMount() {
@@ -99,7 +99,7 @@ class WishListScreen extends Component {
       type
     );
 
-    // console.log('Gert List @@@@@@@ **** ',data)
+     console.log('Gert List @@@@@@@ **** ',data)
   };
 
   removeItem = (item) => {
@@ -163,8 +163,8 @@ setTimeout(()=>{
         </View>
         <View style={styles.cartView}>
           <View style={styles.first}>
-            {/* <Image style={{ height: 55, width: 80, alignSelf: 'center' }} source={{uri:item.item.Image1}} /> */}
-            <Image
+            <Image style={{ height: 55, width: 80, alignSelf: 'center' }} source={{uri:imageBaseUrl +item.item.Image1}} />
+            {/* <Image
               style={{
                 height: 80,
                 width: 80,
@@ -172,7 +172,7 @@ setTimeout(()=>{
                 resizeMode: "contain",
               }}
               source={require("../../assets/images/cart/g3.png")}
-            />
+            /> */}
           </View>
           <View style={styles.second}>
             <Text
@@ -204,7 +204,7 @@ setTimeout(()=>{
               </Text>
             </View>
 
-            <View
+            {/* <View
               style={{
                 flexDirection: "row",
                 justifyContent: "space-between",
@@ -225,7 +225,7 @@ setTimeout(()=>{
               <TouchableOpacity style={styles.buttonView}>
                 <Text style={{ color: "#fff" }}>Add to cart</Text>
               </TouchableOpacity>
-            </View>
+            </View> */}
           </View>
         </View>
       </View>
@@ -380,11 +380,11 @@ setTimeout(()=>{
     //   arr.push(item)
     // })
     //this.setState({cartItems:arr})
-    console.log("In Flat List Array------------ ", this.props.getwishlist);
+    console.log("Wish list in flat list------------ ", this.props.getwishlist);
     return (
       <FlatList
         style={{ width: "100%", borderWidth: 0, height: 10 }}
-        data={this.props.getwishlist}
+        data={this.props.getwishlist.CList}
         //data={this.state.list}
         renderItem={(item) => this.cartView(item)}
        // ListEmptyComponent={()=>this.emptyView()}
@@ -400,7 +400,7 @@ setTimeout(()=>{
     return (
       <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
         <Text style={{ color: "red", fontWeight: "bold", fontSize: 20 }}>
-          No Item In Cart
+          No Item In Wishlist
         </Text>
         <TouchableOpacity
           style={{
@@ -427,27 +427,28 @@ setTimeout(()=>{
       return(
         <View style={{ flex: 1, justifyContent:'center',alignItems:'center' }}>
         <Loader isLoad={this.props.isLoad} text="Loading..." />
-        <Text>Loading...</Text>
+       
         </View>
       )
   }
 
   render() {
-      console.log('Is Load----- ',this.props.isLoad)
+      console.log('wish list render****** ',this.props.getwishlist)
     return (
       <View style={styles.container}>
         <Header title="Wishlist" props={this.props} right={false} />
+        <View style={{flex:1,padding:10}}>
         {
             this.props.isLoad?
             this.loader()
             :
-            this.props.getwishlist && this.props.getwishlist.length>0?
+            _get(this.props.getwishlist,'CList',[]) && _get(this.props.getwishlist,'CList',[]).length>0?
             this.flatListView() 
             :
             this.emptyView() 
             }
       
-          
+          </View>
 
       </View>
     );

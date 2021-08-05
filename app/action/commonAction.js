@@ -5,7 +5,7 @@ import store from '../store/index';
 import {getData,saveData} from '../Component/Storage/index';
 import jwt_decode from "jwt-decode";
 import SnackBar from 'react-native-snackbar';
-import {themeColor,dangerRed} from '../Component/config'
+import {themeColor,dangerRed,BASE_URL} from '../Component/config'
 
 
 import AsyncStorage from "@react-native-community/async-storage"
@@ -27,7 +27,7 @@ const Token = async () => {
 const instance = axios.create ({
     // baseURL: 'http://192.168.1.100:4000',
     //baseURL: 'http://localhost:4000',
-    baseURL:"https://groceryapis.thezetacode.com/api",
+    baseURL:BASE_URL,
     timeout:20000,
     headers:{
      // 'Content-Type': 'application/json, text/plain, */*',
@@ -64,7 +64,7 @@ export const request = (constants, identifier,key) => {
     });
   };
 
-    export const receive = (json, status, resolve, constants,identifier,key) => {
+    export const receive = (json, status, resolve,constants,identifier,key) => {
         resolve(json);
         return {
           type: constants.success,
@@ -77,7 +77,7 @@ export const request = (constants, identifier,key) => {
       };
 
 
-      export const receiveError = (err, errCode, reject, constants, identifier,key) => {
+      export const receiveError = (err, errCode,  reject,constants, identifier,key) => {
         reject(err);
         return ({
           type: constants.error,
@@ -123,14 +123,63 @@ const showSnackBar=(text,color)=>{
 
 }
 
+
+
+export const commonActionPostLogin1 =  (data,url,constants,identifier,key) => (dispatch) =>{
+  
+    return new Promise((resolve,reject)=>{
+      resolve('Success!');
+     
+      //      dispatch(setLoader(true))
+      //     dispatch(request(constants,identifier,key)) 
+          
+          
+      //  instance.post(`${url}`,data).then(res=>{
+      //     console.log('Response ',res)
+      //     if(res.status==200){
+        
+      //         dispatch(setLoader(false))
+             
+      //         saveData('token',res.data.data)
+      //         var decoded = jwt_decode(res.data.data);
+      //      //   dispatch(receive(decoded,res.status,resolve,constants,identifier,key)) 
+      //         console.log('Login Data ',decoded)
+      //      //   RootNavigation.navigate("tabHome",{})
+      //        // showSnackBar("Logged In Successfully!",themeColor)
+      //        resolve(res)
+      //          dispatch(receive(decoded,res.status,resolve,constants,identifier,key)) 
+             
+            
+      //     }
+      //     else{
+      //       reject(res)
+      //         dispatch(setLoader(false))
+              
+      //         showSnackBar("Something wrong!",dangerRed)   
+      //          dispatch(receiveError(res.data.data,res.status,reject,constants,identifier,key))     
+           
+      //     }   
+                                   
+      // }).catch(err=>{
+      //   console.log('Login Error--- ',err.response)
+      //   showSnackBar(err.message,dangerRed)  
+      //     dispatch(setLoader(false))
+      //        dispatch(receiveError(err.message,"404",reject,constants,identifier,key))
+        
+          
+      // })
+    })
+};
+
     
       export const commonActionPostLogin =  (data,url,constants,identifier,key) => (dispatch) =>{
         console.log('Post Data -- ',data)
+        dispatch(setLoader(true))
           return new Promise((resolve,reject)=>{
             
            
-                 dispatch(setLoader(true))
-                dispatch(request(constants,identifier,key)) 
+                
+              //  dispatch(request(constants,identifier,key)) 
                 
                 
                instance.post(`${url}`,data).then(res=>{
@@ -145,14 +194,17 @@ const showSnackBar=(text,color)=>{
                     console.log('Login Data ',decoded)
                     RootNavigation.navigate("tabHome",{})
                     showSnackBar("Logged In Successfully!",themeColor)
+                   // resolve(res)
+                    dispatch(receive(decoded,res.status,resolve,constants,identifier,key)) 
                    
                   
                 }
                 else{
                   
                     dispatch(setLoader(false))
-                    dispatch(receiveError(res.data.data,res.status,reject,constants,identifier,key))
-                    showSnackBar("Something wrong!",dangerRed)        
+                    
+                    showSnackBar("Something wrong!",dangerRed)   
+                  dispatch(receiveError(res.data.data,res.status,reject,constants,identifier,key))     
                  
                 }   
                                          
@@ -160,7 +212,7 @@ const showSnackBar=(text,color)=>{
               console.log('Login Error--- ',err.response)
               showSnackBar(err.message,dangerRed)  
                 dispatch(setLoader(false))
-                dispatch(receiveError(err.message,"404",reject,constants,identifier,key))
+            dispatch(receiveError(err.message,"404",reject,constants,identifier,key))
               
                 
             })
@@ -175,30 +227,30 @@ const showSnackBar=(text,color)=>{
             
            
                  dispatch(setLoader(true))
-                dispatch(request(constants,identifier,key)) 
+              //  dispatch(request(constants,identifier,key)) 
                 
                 
                instance.post(`${url}`,data).then(res=>{
                 console.log('@@@@@@@@@ Response @@@@@@@ ',res)
-                if(res.status==200){
+                // if(res.status==200){
               
-                    dispatch(setLoader(false))
-                    dispatch(receive(res.data.data,res.status,resolve,constants,identifier,key)) 
-                    
-                   // alert("Registered Successfully!")
+                //     dispatch(setLoader(false))
+                //     dispatch(receive(res.data.data,res.status,resolve,constants,identifier,key)) 
+                //    // return res;
+                //    // alert("Registered Successfully!")
                   
-                }
-                else{
+                // }
+                // else{
                   
-                    dispatch(setLoader(false))
-                    dispatch(receiveError(res.data.data,res.status,reject,constants,identifier,key))
-                    //alert("Something Wrong.Please Try Again!")
+                //     dispatch(setLoader(false))
+                //     dispatch(receiveError(res.data.data,res.status,reject,constants,identifier,key))
+                //     //alert("Something Wrong.Please Try Again!")
                 
-                 
-                }
+                //  //return res;
+                // }
               
-              
-                
+                dispatch(setLoader(false))
+                dispatch(receive(res.data.data,res.status,resolve,constants,identifier,key)) 
                // return res.status;
         
             }).catch(err=>{
@@ -206,6 +258,10 @@ const showSnackBar=(text,color)=>{
                 dispatch(setLoader(false))
                 dispatch(receiveError(err.message,"404",reject,constants,identifier,key))
               
+                if(err.response=='timeout of 20000ms exceeded'){
+                  console.log('******Time Out error******* ')
+                }
+
                 console.log('Error--- ',err.response)
               
             })
@@ -226,7 +282,7 @@ const showSnackBar=(text,color)=>{
           console.log('Get Data 2  -- ',data)
          
             dispatch(setLoader(true))
-              dispatch(request(constants,identifier,key))  
+           //   dispatch(request(constants,identifier,key))  
               
               
              instance.get(url,data).then(res=>{
@@ -245,6 +301,9 @@ const showSnackBar=(text,color)=>{
           }).catch(err=>{
               dispatch(setLoader(false))
               dispatch(receiveError(err.message,"404",reject,constants,identifier,key))
+              if(err.response=='timeout of 20000ms exceeded'){
+                console.log('******Time Out error******* ')
+              }
               console.log('Error--- ',err)
               console.log('Error--- ',err.response)
             
@@ -262,7 +321,7 @@ const showSnackBar=(text,color)=>{
       return new Promise((resolve,reject)=>{
           
           dispatch(setLoader(true))
-            dispatch(request(constants,identifier,key)) 
+          //  dispatch(request(constants,identifier,key)) 
             console.log('Url data--- ',url+type+data.uriData)
           
            instance.get(url+type+data.uriData).then(res=>{
@@ -280,6 +339,9 @@ const showSnackBar=(text,color)=>{
           console.log('Error--- ',err.response)   
           dispatch(setLoader(false))
             dispatch(receiveError(err.message,err.status,reject,constants,identifier,key))
+            if(err.response=='timeout of 20000ms exceeded'){
+              console.log('******Time Out error******* ')
+            }
             console.log('Error--- ',err)          
         })
      })
@@ -288,15 +350,15 @@ const showSnackBar=(text,color)=>{
 
 
 
-  export const getCommonDataAction = (url,constants,identifier,key,type) => (dispatch) =>{
-    return new Promise((resolve,reject)=>{
+  export const getCommonDataAction = (url,constants,identifier,key,type) => (dispatch) =>
+     new Promise((resolve,reject)=>{
         
         dispatch(setLoader(true))
-          dispatch(request(constants,identifier,key)) 
+         // dispatch(request(constants,identifier,key)) 
        //   console.log('getCategoryListAction data--- ',url+type+data.type)
         
-         instance.get(url+type).then(res=>{
-          console.log('Response ',res)
+     instance.get(url+type).then(res=>{
+          console.log(' ########### Response getCommonDataAction ########### ',res)
           if(res.status==200){
             dispatch(setLoader(false))
               dispatch(receive(res.data.data,res.status,resolve,constants,identifier,key)) 
@@ -310,11 +372,14 @@ const showSnackBar=(text,color)=>{
         console.log('Error--- ',err.response)   
         dispatch(setLoader(false))
           dispatch(receiveError(err.message,err.status,reject,constants,identifier,key))
+          if(err.response=='timeout of 20000ms exceeded'){
+            console.log('******Time Out error******* ')
+          }
           console.log('Error--- ',err)          
       })
    })
   
-};
+
 
 
 export const getDataSaveList=(data,identifier,key) => (dispatch) =>{

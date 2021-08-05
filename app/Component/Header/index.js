@@ -18,98 +18,44 @@ export default class Header extends Component {
   }
 
 componentDidMount(){
-    console.log('Header Props--- ',createBottomTabNavigator)
+   // console.log('Header Props--- ',createBottomTabNavigator)
     // RootNavigation.reset(this.props.props,this.props.props.route.name)
-    if(Platform.OS=="android"){
+
       BackHandler.addEventListener('hardwareBackPress', ()=>this.handleBackPress());
-    }
+
    
 }
 
 
 UNSAFE_componentWillMount() {
-  if(Platform.OS=="android"){
+ // if(Platform.OS=="android"){
   BackHandler.addEventListener('hardwareBackPress', ()=>this.handleBackPress());
-  }
+  //}
 }
 
 componentWillUnmount() {
-  if(Platform.OS=="android"){
+
   BackHandler.removeEventListener('hardwareBackPress', ()=>this.handleBackPress());
-  }
+
 }
 
 handleBackPress=()=>{
-// this.handleBackButton1()
-this.onBackPress()
+  this.handleBackButton()
+//console.log('Click on back press')
+  return true;
 }
 
-
-_spring() {
-  this.setState({backClickCount: 1}, () => {
-    ToastAndroid.show('Press again to close app',2000);
-      this.setState({backClickCount:this.state.backClickCount+1})
-  });
-
-}
-
-handleBackButton1 = () => {
-  console.log('This state handle back button ',this.state.backClickCount)
-  this.state.backClickCount == 1 ? BackHandler.exitApp() : this._spring();
-
+handleBackButton = () => {
+  Alert.alert("Hold on!", "Are you sure you want to go back?", [
+    {
+      text: "Cancel",
+      onPress: () => null,
+      style: "cancel"
+    },
+    { text: "YES", onPress: () => BackHandler.exitApp() }
+  ]);
   return true;
 };
-
-onBackPress = () => {
-  console.log('Current count--- ',currentCount)
-  setTimeout(() => {
-    currentCount = 0;
-  }, 2000); 
-
-  if (currentCount <= 1) {
-  
-   ToastAndroid.show('Press again to close app',2000);
-   currentCount =currentCount + 1;
-   console.log('Current count 1--- ',currentCount)
-  
-  } 
-
-  else if(currentCount==2){
-    console.log('Current count 2--- ',currentCount)
-    // BackHandler.exitApp()
-    this.props.props.navigation.goBack(null)
-  }
-  else
-  {
-    console.log('Current count 3 --- ',currentCount)
-    //BackHandler.exitApp()
-  
-  }
-
-
-  return true;
-
-
-  
-};
-
-
-handleBackButton = () => {               
-  Alert.alert(
-      'Grocery App',
-      'Are you want to close this app?', [{
-          text: 'Cancel',
-          onPress: () => console.log('Cancel Pressed'),
-          style: 'cancel'
-      }, {
-          text: 'OK',
-          onPress: () => BackHandler.exitApp()
-      }, ], {
-          cancelable: false
-      }
-   )
-   return true;
- }
 
 
 renderCartView=()=>{

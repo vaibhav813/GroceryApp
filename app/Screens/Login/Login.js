@@ -6,7 +6,7 @@ import {commonActionPostLogin} from '../../action/commonAction'
 import axios from 'axios';
 import {reset} from '../../Component/RootNavigation'
 import SplashScreen from 'react-native-splash-screen'
-import {themeColor,dangerRed} from '../../Component/config'
+import {themeColor,dangerRed,mixColor} from '../../Component/config'
 
 
 
@@ -67,7 +67,7 @@ const obj = {
 // console.log('Action ',this.props.login(obj))
 
 // const url="/GenerateJWTToken";
-const url="/AppData"
+const url="/appdata"
 const constant = 
 {init:"USER_LOGIN_INIT",
   success:"USER_LOGIN_SUCCESS",
@@ -76,7 +76,7 @@ error:"USER_LOGIN_ERROR"
 const identifier = "USER_LOGIN";
 const key="loginData";
 
-const data=this.props.commonActionPostLogin(obj,url,constant,identifier,key)
+const data=  this.props.commonActionPostLogin(obj,url,constant,identifier,key)
 //reset(this.props,'Login');
 console.log('Login Data Response---',data)
 console.log('Login Data Props---',this.props.loginData)
@@ -92,7 +92,7 @@ console.log('Login Data Props---',this.props.loginData)
 buttonRenderView=()=>{
     return(
         <TouchableOpacity style={styles.button} onPress={()=>this.gotoHome()}>
-<Text style={{color:'#fff',fontWeight:'600'}}>Login</Text>
+        <Text style={{color:'#fff',fontWeight:'600'}}>Login</Text>
 
         </TouchableOpacity>
     )
@@ -124,7 +124,8 @@ loader=()=>{
 
     return(
         this.props.isLoad?
-<ActivityIndicator size='large' color={themeColor}/>
+        <View style={{height:100,width:100,alignItems:'center',justifyContent:'center'}}>
+<ActivityIndicator size='large' color={themeColor}/></View>
 : null
 
     )
@@ -149,7 +150,7 @@ return(
 {this.textInputRender("Enter Mobile Number")}
 {this.textInputRender("Password")}
 {this.buttonRenderView()}
-<Text style={{fontSize:12,fontWeight:'900',color:'#000',marginTop:20,color:'white'}}>
+<Text style={{fontSize:12,fontWeight:'900',color:'#000',marginTop:20,color:themeColor}}>
         If you don't have any account then <Text style={{color:themeColor,fontWeight:'800',fontSize:15,textDecorationLine:'underline'}} onPress={()=>{this.props.navigation.navigate('Register')}}>Register here {" "}</Text>
     </Text>
 <View style={{height:50}}/>
@@ -163,7 +164,7 @@ return(
 
 
 
-</ImageBackground>
+ </ImageBackground>
 </View>
 
 )
@@ -219,10 +220,12 @@ const styles= StyleSheet.create({
     button:{
         height:50,
         width:'70%',
+        // backgroundColor:themeColor,
         backgroundColor:themeColor,
         justifyContent:'center',
         alignItems:'center',
-        borderRadius:20
+        borderRadius:20,
+        borderWidth:0
     },
     textInputView:{
         height:40,

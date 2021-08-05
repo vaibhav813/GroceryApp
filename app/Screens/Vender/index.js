@@ -213,7 +213,7 @@ componentDidMount(){
   }
 
   onPressItem=(item)=>{
-// console.log('onPressItem--- ',item)
+ console.log('onPressItem From Vender List--- ',item)
      this.props.props.navigation.navigate('AllCategoryScreen',{item:item})
   }
 

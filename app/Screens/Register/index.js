@@ -1,5 +1,5 @@
 import React,{Component} from 'react';
-import {View,StyleSheet,TextInput,Text,ImageBackground, TouchableOpacity,ToastAndroid,ActivityIndicator} from 'react-native';
+import {View,StyleSheet,TextInput,Text,ImageBackground, TouchableOpacity,ToastAndroid,ActivityIndicator,ScrollView} from 'react-native';
 import { connect } from 'react-redux';
 import SplashScreen from 'react-native-splash-screen'
 import {commonActionPost} from '../../action/commonAction'
@@ -21,7 +21,10 @@ constructor(props)
 super(props)
 this.state={val:'',name:'',phone:'',mail:'',address:'',type:'',password:'',
 userInfo:{},
-isLoad:false,confirmPass:""}
+isLoad:false,confirmPass:"",
+token:''
+
+}
 }
 componentDidMount(){
 
@@ -92,7 +95,7 @@ componentWillUnmount() {
   getCurrentUserInfo = async () => {
     try {
       const userInfo = await GoogleSignin.signInSilently();
-      console.log('User Info--- ',userInfo)
+      //console.log('User Info--- ',userInfo)
       this.setState({ userInfo });
     } catch (error) {
       if (error.code === statusCodes.SIGN_IN_REQUIRED) {
@@ -106,7 +109,7 @@ componentWillUnmount() {
 
   getCurrentUser = async () => {
     const currentUser = await GoogleSignin.getCurrentUser();
-    console.log('Get Current user ',currentUser)
+   // console.log('Get Current user ',currentUser)
     this.setState({ currentUser });
   };
 
@@ -132,7 +135,7 @@ getCurrentLocation=()=>{
     //Will give you the current location
     (position) => {
       //getting the Longitude from the location json
-      console.log('Position ',position)
+     // console.log('Position ',position)
       const currentLongitude =
         JSON.stringify(position.coords.longitude);
   
@@ -151,7 +154,8 @@ getCurrentLocation=()=>{
 getToken = async () => {
     //get the messeging token
     const token = await notifications.getToken()
-    console.log('Token ---- ',token)
+  //  console.log('Token ---- ',token)
+    //this.setState({token:token})
     //you can also call messages.getToken() (does the same thing)
     return token
   }
@@ -278,10 +282,11 @@ return(
 
 registeredUserValues=async()=>{
 // this.setState({isLoad:true})
-
+let tokenVal = await this.getToken();
+// console.log('response Register ****** ',tokenVal)
 
    if(this.state.name=='' || this.state.phone==""||this.state.mail==""||this.state.password==""|| this.state.confirmPass==""){
-       console.log('All Fields Name ',this.state.name +" Phone "+this.state.phone+" Mail "+this.state.mail+" addr "+this.state.address)
+     //  console.log('All Fields Name ',this.state.name +" Phone "+this.state.phone+" Mail "+this.state.mail+" addr "+this.state.address)
     alert("All fields require!")
    }
 else{
@@ -295,11 +300,13 @@ else{
         "EmailId":this.state.mail,
         "Password":this.state.password,
         "ConfirmPassword":this.state.confirmPass,
+        "FcmToken":tokenVal
         //"position":"22.3345555,11.2234666"
        }
 
-    
+       console.log('User Info Register ****** ',userInfo)
 
+      
 
    const url="/usersignup";
    const constants={
@@ -311,9 +318,12 @@ const identifier = "USER_REGISTER";
 const key = "registerUser";
 
 const data = await this.props.commonActionPost(userInfo,url,constants,identifier,key)
-console.log('response Register ',data)
+console.log('response Register ******* ',data)
 
-  
+if(this.props.isLoad){
+  this.props.navigation.navigate('tabHome')
+}
+
 }
 // this.props.navigation.navigate('Login')
 }
@@ -402,7 +412,9 @@ loader=()=>{
 
     return(
         this.props.isLoad?
-<ActivityIndicator size='large' color={themeColor}/>
+        <View style={{height:100,width:100,alignItems:'center',justifyContent:'center'}}>
+        <ActivityIndicator size='large' color={themeColor}/>
+        </View>
 : null
 
     )
@@ -424,7 +436,9 @@ render(){
 
 return(
 
-<View style={styles.container}>
+<ScrollView 
+//style={styles.container} 
+contentContainerStyle={styles.container}>
 <ImageBackground source={require('../../assets/images/register.jpeg')} style={styles.image} imageStyle={{ resizeMode:'cover'}}>
 
 {/* <View style={styles.parentView_one}>
@@ -447,7 +461,7 @@ return(
 {this.loader()}
 
 </ImageBackground>
-</View>
+</ScrollView>
 
 )
 

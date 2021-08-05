@@ -1,4 +1,4 @@
-#Sun Jul 25 17:15:59 IST 2021
+#Wed Aug 04 22:10:11 IST 2021
 base.0=/Users/vaibhavgupta/Desktop/Project/Github/GroceryApp/android/app/build/intermediates/dex/release/mergeDexRelease/classes.dex
 path.1=classes2.dex
 renamed.1=classes2.dex

@@ -11,19 +11,20 @@ import {
   Platform,
   Keyboard,
   TouchableWithoutFeedback,
+  Modal
 } from "react-native";
-import DropDownPicker from "react-native-dropdown-picker";
+
 import { themeColor } from "../../Component/config";
 import Header from "../../Component/Header/index";
 import { connect } from "react-redux";
 import { getDataSaveList,commonActionPost} from "../../action/commonAction";
 import _get from "lodash/get";
 import SplashScreen from "react-native-splash-screen";
-import {getCurrentLocation} from '../../Component/utils'
 import Geolocation from '@react-native-community/geolocation'
-import Geocoder from 'react-native-geocoder';
+// import Geocoder from 'react-native-geocoder';
 import {dangerRed} from '../../Component/config'
 import _isEmpty from 'lodash/isEmpty';
+import Loader from '../../Component/Loader'
 
 
 class Address extends Component {
@@ -34,11 +35,7 @@ class Address extends Component {
       name: "",
       addr: "",
       addrType: "Office",
-      // listObj: [
-      //     { "id":1,"title": "Home","name":'' ,"details": "91,bhagirath nagar,gopalpura by pass,jaipur,Rajasthan", "isSelect": "true" },
-      //     { "id":2,"title": "Work", "name":"","details": "95,bhagirath nagar,gopalpura by pass,jaipur,Rajasthan" , "isSelect": "false"},
-      //     { "id":3,"title": "Work",  "name":"","details": "100,bhagirath nagar,gopalpura by pass,jaipur,Rajasthan" , "isSelect": "false"}
-      // ]
+     
       listObj: [],
       latitude:'',
       longitude:'',
@@ -49,7 +46,9 @@ class Address extends Component {
       pinCode:0,addressType:0,
       selectItem:{},
       itemId:0,
-      userId:0
+      userId:0,
+      isVisible:false,
+      addressTypeList:[{label:'Home',value:0},{label:'Office',value:1},{label:'Other',value:2}]
 
     };
   }
@@ -61,7 +60,29 @@ class Address extends Component {
    this.getAddressList();
   }
 
+
+  selectAddressDefault=async(item)=>{
+    //console.log('select by default address ',item)
+    let UserId = this.props.loginData.Id||2;
+    const url = "/defaultaddress";
+    const constant = {
+      init: "DEFAULT_ADDRESS_INIT",
+      success: "DEFAULT_ADDRESS_SUCCESS",
+      error: "DEFAULT_ADDRESS_ERROR",
+    };
+    const identifier = "DEFAULT_ADDRESS";
+    const key = "defaultAddress";
+    const obj = { Id: item.item.Id, UserId:UserId};
+    // const type = "?Id=" + itemId;
+
+    let dataRes= await this.props.commonActionPost(obj, url, constant, identifier, key);
+    console.log('Default data response---- ',dataRes)
+  }
+
+
   selectAddress = (item) => {
+
+this.selectAddressDefault(item);
 
 
     if(!_isEmpty(item)){
@@ -129,11 +150,11 @@ const latLong={
   lng:this.state.longitude
 }
 
-  Geocoder.geocodePosition(latLong).then(res => {
-    // res is an Array of geocoding object (see below)
-    console.log('Get User address from lat long----',res)
-})
-.catch(err => console.log(err))
+//   Geocoder.geocodePosition(latLong).then(res => {
+//     // res is an Array of geocoding object (see below)
+//     console.log('Get User address from lat long----',res)
+// })
+// .catch(err => console.log(err))
 }
 
 
@@ -149,21 +170,22 @@ const latLong={
   };
 
   renderItem = (item) => {
-   // console.log("Item is ", item);
+    console.log("Address Item is ", item);
 
     return (
       <TouchableOpacity
         style={[
           styles.listItems,
-          { borderColor: item.item.isSelect == "true" ? themeColor : "#ccc" },
+          { borderColor: item.item.IsSelect == true ? themeColor : "#ccc" },
         ]}
         onPress={() => this.selectAddress(item)}
       >
         <View style={{ width: 200 }}>
           {/* <Text style={{ fontWeight: "600" }}>{item.item.title}</Text> */}
-          <Text style={{ fontWeight: "600" }}>Address Type</Text>
+          <Text style={{ fontWeight: "600" }}>{item.item.Addresstype==0?"Home":item.item.Addresstype==1?"Office":"Other"}</Text>
           <Text>{item.item.HouseNo},  <Text>{item.item.StreetName}</Text> </Text>
-          {/* <Text>{item.item.StreetName}</Text> */}
+          <Text>{item.item.Landmark}</Text>
+          <Text>{item.item.Pincode}</Text>
         </View>
         {item.item.title == "Home" ? (
           <View
@@ -250,15 +272,15 @@ const latLong={
   addAddressToServer=async(type)=>{
 
     // let Id= type=='setAddress'?0:this.props.userAddressList.Id;
-    let Id=this.state.itemId||0;
-    let UserId=this.props.loginData.Id||2;
-    let HouseNo=this.state.houseNumber;
-    let StreetName=this.state.streetName;
-    let Landmark=this.state.landMark;
-    let StateId=this.state.stateId;
-    let CityId=this.state.cityId;
-    let Pincode=this.state.pinCode;
-    let Addresstype=this.state.addressType;
+    let Id = this.state.itemId||0;
+    let UserId = this.props.loginData.Id||2;
+    let HouseNo = this.state.houseNumber;
+    let StreetName = this.state.streetName;
+    let Landmark = this.state.landMark;
+    let StateId = this.state.stateId;
+    let CityId = this.state.cityId;
+    let Pincode = this.state.pinCode;
+    let Addresstype = this.state.addressType;
 
     const addressInfo={
       Id:Id,
@@ -342,15 +364,17 @@ console.log('Users Address List ',data)
   };
 
   setAddressFunc = () => {
+    console.log('Submit address----- ',this.state.houseNumber,this.state.streetName,this.state.pinCode,this.state.landMark,this.state.stateId,this.state.cityId,this.state.addressType)
     if (
       this.state.houseNumber == "" ||
       this.state.streetName == "" ||
       this.state.pinCode == ""||
-      this.state.landMark==""||
-      this.state.stateId==""||
-      this.state.cityId==""||
-      this.state.addressType==""
+      this.state.landMark==""
+     
     ) {
+       // this.state.stateId==""||
+      // this.state.cityId==""||
+      // this.state.addressType==""
       alert("All fields are require.");
     }
     else{
@@ -423,12 +447,12 @@ manageAddressList=(addressObj)=>{
  
 
   setAddress = () => {
-    console.log('We have selected value is-----',this.state.selectItem)
+    console.log('We have selected value is-----',this.state.addressType)
 
 
 
     return (
-      <View style={{ height: "30%", width: "100%" }}>
+      <View style={{  width: "100%" }}>
         <TextInput
           style={{
             height: 50,
@@ -445,35 +469,6 @@ manageAddressList=(addressObj)=>{
           placeholder="Enter House Number"
         />
 
-        <TextInput
-          style={{
-            height: 50,
-            borderWidth: 1,
-            borderColor: "#ccc",
-            padding: 10,
-            marginTop: 10,
-            borderRadius: 5,
-          }}
-          onChangeText={(text) => this.setState({ streetName: text })}
-          value={this.state.streetName}
-          placeholderTextColor={"#808080"}
-          placeholder="Enter Street Name"
-        />
-
-        <TextInput
-          style={{
-            height: 50,
-            borderWidth: 1,
-            borderColor: "#ccc",
-            padding: 10,
-            marginTop: 10,
-            borderRadius: 5,
-          }}
-          onChangeText={(text) => this.setState({ landMark: text })}
-          value={this.state.landMark}
-          placeholderTextColor={"#808080"}
-          placeholder="Enter Landmark"
-        />
 
      <TextInput
           style={{
@@ -483,14 +478,34 @@ manageAddressList=(addressObj)=>{
             padding: 10,
             marginTop: 10,
             borderRadius: 5,
+            color: "#000",
           }}
-          onChangeText={(text) => this.setState({ stateId: text })}
-          value={this.state.stateId}
+          onChangeText={(text) => this.setState({ streetName: text })}
+          value={this.state.streetName}
           placeholderTextColor={"#808080"}
-          placeholder="Enter State Id"
+          placeholder="Enter Street Name"
         />
 
-        <TextInput
+<TextInput
+          style={{
+            height: 50,
+            borderWidth: 1,
+            borderColor: "#ccc",
+            padding: 10,
+            marginTop: 10,
+            borderRadius: 5,
+            color: "#000",
+          }}
+          onChangeText={(text) => this.setState({ landMark: text })}
+          value={this.state.landMark}
+          placeholderTextColor={"#808080"}
+          placeholder="Enter Landmark"
+        />
+
+      
+
+       
+        {/* <TextInput
           style={{
             height: 50,
             borderWidth: 1,
@@ -503,7 +518,7 @@ manageAddressList=(addressObj)=>{
           value={this.state.cityId}
           placeholderTextColor={"#808080"}
           placeholder="Enter City Id"
-        />
+        /> */}
 
         <TextInput
           style={{
@@ -520,7 +535,7 @@ manageAddressList=(addressObj)=>{
           placeholder="Enter Pincode"
         />
 
-        <TextInput
+        {/* <TextInput
           style={{
             height: 50,
             borderWidth: 1,
@@ -533,46 +548,175 @@ manageAddressList=(addressObj)=>{
           value={this.state.addressType}
           placeholderTextColor={"#808080"}
           placeholder="Enter Address Type"
-        />
+        /> */}
+        {this.setValueonView(this.state.addressType==0?'Home':this.state.addressType==1?"Office":"Other",'addressType')}
+        {/* {this.setValueonView(this.state.addressType)} */}
+         {this.setValueonView(this.state.stateId,'state')}
+        {this.setValueonView(this.state.cityId,'city')}
 
-       {this.addButton("Add", "setAddress")} 
+       
 
       </View>
     );
   };
 
-  render() {
-   
-    return (
-      <View style={styles.container}>
-        <Header title="My Address" props={this.props} right={false} />
+  
 
-        {this.state.address ? (
+addAddressView=()=>{
+  return(
 
-              <View style={{flex:1,padding:10}}>
+    <View style={styles.container}>
+    <Header title="My Address" props={this.props} right={false} />
+    <View style={{flex:1,padding:10}}>
            
-             
-                {this.setAddress()}
-               
-                <View style={{ height: Platform.OS == "ios" ? 50 : 100 }} />
-                {/* {this.addButton("Add", "setAddress")} */}
-              
-             
-          
-     
-   
-          </View>
-        ) : (
-          <View style={{ flex: 1, padding: 10 }}>
-            {this.addressView()}
-            {this.addButton("Add", "Address")}
-            {this.addButton("Countinue", "Coutinue")}
-          </View>
-        )}
-      </View>
-    );
-  }
+        
+    {this.setAddress()}
+    {
+      this.state.isVisible?
+     this.modalView():null
+    }
+  
+    {/* <ModalDropdown options={['option 1', 'option 2','option 2','option 2','option 2','option 2']} style={{height:40,width:"100%"}} 
+    //isFullWidth={true}
+    dropdownStyle={{width:'50%',backgroundColor:'tomato'}}
+     onSelect={(i,item)=>{this.selectItem(item)}}/> */}
+    
+    <View style={{ height: Platform.OS == "ios" ? 50 : 100 }} />
+    {this.addButton("Add", "setAddress")} 
+    
+  
+    {/* {
+*/}
+
+
+
+</View>
+</View>
+  )
 }
+
+selectAddressView=()=>{
+  return(
+    <View style={styles.container}>
+    <Header title="My Address" props={this.props} right={false} />
+        <View style={{ flex: 1, padding: 10 }}>
+        {this.props.isLoad?
+        <Loader isLoad={this.props.isLoad} text="Loading...Please Wait. "/>
+        :
+        this.props.userAddressList && this.props.userAddressList.length>0?
+           this.addressView()
+          :
+          this.emptyComp()
+         
+        }
+          {this.addButton("Add", "Address")}
+          {this.addButton("Countinue", "Coutinue")}
+           
+          </View>
+          </View>
+  )
+}
+
+
+  selectItem=(item)=>{
+    console.log('Select Items ',item)
+  }
+
+  clickOnVisibleModal=()=>{
+    this.setState({isVisible:true})
+    }
+    
+    
+    modalView=()=>{
+      console.log('render Modal Items----',this.state.addressTypeList)
+      return(
+    <TouchableWithoutFeedback style={styles.centeredView}  onPress={()=>{this.setState({isVisible:false})}}>
+          <Modal
+            animationType="slide"
+            transparent={true}
+            visible={this.state.isVisible}
+            onRequestClose={() => {
+             this.setState({isVisible:false})
+            }}
+          >
+            <View style={styles.centeredView}>
+              <View style={styles.modalView}>
+                {this.flatListView()}
+                
+
+
+               
+              </View>
+            </View>
+          </Modal>
+        
+        </TouchableWithoutFeedback>
+      )
+    }
+
+    flatListView=()=>{
+
+      return(
+        <FlatList
+        style={{width:'100%',backgroundColor:'#fff',padding:10,borderRadius:10}}
+        data={this.state.addressTypeList}
+        renderItem={(item)=>this.renderModalItem(item.item)}
+        keyExtractor={(item, index) => {
+         return  index.toString();
+        }}
+        />
+      )
+    }
+    renderModalItem=(item)=>{
+      console.log('render Modal Items View----',item)
+      return(
+      <TouchableOpacity style={{height:40,width:'100%',justifyContent:'center',alignItems:'flex-start',paddingLeft:10,borderWidth:1,borderRadius:5,marginTop:5,backgroundColor:'#fff',borderColor:themeColor}}
+      onPress={()=>this.selectOptions(item)}
+      >
+      <Text style={{color:themeColor}}>{item.label}</Text>
+      </TouchableOpacity>
+      )
+    }
+
+    setValueonView=(text,type)=>{
+      return(
+<TouchableOpacity style={{height:50,width:'100%',justifyContent:'center',alignItems:'flex-start',borderWidth:1,borderRadius:5, marginTop: 10,paddingLeft:10,borderColor:'#ccc'}} 
+onPress={()=>this.setState({isVisible:true})}>
+  <Text>{text}</Text>
+</TouchableOpacity>
+
+      )
+    }
+
+    selectOptions=(item)=>{
+     this.setState({isVisible:false})
+     this.setState({addressType:item.value})
+    }
+
+
+
+
+    render() {
+   
+      return (    
+        
+  
+          this.state.address ? 
+            this.addAddressView()
+               
+           : 
+            this.selectAddressView()
+      );
+    }
+}
+
+
+
+
+
+
+
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -599,6 +743,33 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     marginTop: 10,
   },
+  centeredView: {
+    flex: 1,
+    width:'100%',
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 22,
+  //  backgroundColor:"rgba(0,0,0,0.25)",
+    //borderWidth:1
+   
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: "white",
+    borderRadius:10,
+    //padding: 10,
+   // height:'50%',
+    width:'90%',
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5
+  }
 });
 
 const mapStateToProps = (state) => ({
@@ -606,6 +777,7 @@ const mapStateToProps = (state) => ({
   savedAddress: state.commonReducer.savedAddress || [],
   loginData: state.commonReducer.loginData||{},
   userAddressList:state.commonReducer.userAddressList,
+  isLoad:state.commonReducer.isLoad,
 });
 
 const mapDispatchToProps = (dispatch) => ({

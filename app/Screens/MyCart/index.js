@@ -11,7 +11,7 @@ import {
 import _get from "lodash/get";
 import _isEmpty from "lodash/isEmpty";
 import Snackbar from "react-native-snackbar";
-import { themeColor } from "../../Component/config";
+import { imageBaseUrl, themeColor } from "../../Component/config";
 import Header from "../../Component/Header/index";
 import { connect } from "react-redux";
 import { removeItemFromArr, addItemFromArr } from "../../Component/utils";
@@ -20,9 +20,14 @@ import {
   getCommonDataAction,
   commonActionGet,
   commonActionPost,
+  
 } from "../../action/commonAction";
 
 import Loader from "../../Component/Loader";
+import SnackBar from "../../Component/SnackBar";
+import Toast from 'react-native-simple-toast';
+
+
 
 class MyCart extends Component {
   constructor(props) {
@@ -32,27 +37,59 @@ class MyCart extends Component {
 
       cartItems: [],
       isLoad:false,
+      snackBarVisible:true
     };
   }
 
   componentDidMount() {
     //  this.setState({ cartItems: this.props.cartItems });
-    console.log('Get Cart List from Detail page******* ',this.props.route)
-    this.getCartList(1);
-    console.log(
-      "In get Cart List********** ",
-      this.props.getcartlist,
-      " Cart Item ",
-      this.props.cartItems
-    );
-    this.props.getcartlist.map(item=>{
-      Object.assign(item,{count:item.Qty,itemPrice:item.Qty*item.Rate})
-    })
-    this.setState({ cartItems: this.props.getcartlist });
+  //  console.log('Get Cart List from Detail page******* ',this.props.route)
+    const unsubscribed = this.props.navigation.addListener('focus', () => {
+      this.callInitialsMethods();
+   
+   
+    });
+  //  this.callInitialsMethods();
   }
 
+callInitialsMethods=()=>{
+   this.getCartList(1);
+  //   console.log(
+  //     "In get Cart List********** ",
+  //     this.props.getcartlist,
+  //     " Cart Item ",
+  //     this.props.cartItems
+  //   );
+  //   // this.props.getcartlist.map(item=>{
+  //   //   Object.assign(item,{count:item.Qty,itemPrice:item.Qty*item.Rate})
+  //   // })
+     //this.setState({ cartItems: this.props.getcartlist });
+    //  console.log('In get Cart List 1234 ',this.props.updateCart)
+    //  console.log('In get Cart List 1234 ',this.props.updateCart.CList)
+    
+   // this.saveCartListLocally(this.props.updateCart.CList)
+   
+   this.setState({cartItems:this.props.getcartlist.CList},()=>{
+    this.saveCartListLocally(this.props.getcartlist.CList)
+  })
+}
+
+
+
+setListInState=()=>{
+//  console.log('Set List In State----####### ',this.props.updateCart.CList)
+this.setState({cartItems:this.props.updateCart.CList},()=>{
+  this.saveCartListLocally(this.props.updateCart.CList)
+})
+  // this.setState({isLoad:true},()=>{ 
+  //  this.setState({cartItems:this.props.updateCart.CList})
+  // })
+  this.saveCartListLocally(this.props.updateCart.CList)
+}
+
+
   getCartList = (cart) => {
-    console.log("login Props are ", this.props.loginData);
+   // console.log("login Props are ", this.props.loginData);
 
     let Id = this.props.loginData.Id || 2;
 
@@ -64,7 +101,9 @@ class MyCart extends Component {
     };
 
     const identifier = "CART_LIST";
-    const key = "getcartlist";
+    // const key = "getcartlist";
+    const key = "updateCart";
+
     const type = "?UserId=" + Id + "&CartType=" + cart;
     this.setState({ isLoad:false })
     const data = this.props.getCommonDataAction(
@@ -74,8 +113,9 @@ class MyCart extends Component {
       key,
       type
     );
-
-    // console.log('In get Cart List********** ',this.props.getcartlist)
+   
+ 
+    
   };
 
   removeItemFromCart = (itemId) => {
@@ -88,12 +128,14 @@ this.setState({ isLoad:true })
       error: "REMOVE_CART_ITEM_ERROR",
     };
     const identifier = "REMOVE_CART_ITEM";
-    const key = "removeCartItem";
+    //const key = "removeCartItem";updateCart
+    const key = "updateCart";
     const obj = { Id: itemId };
     // const type = "?Id=" + itemId;
 
     this.props.commonActionPost(obj, url, constant, identifier, key);
-    this.getCartList(1);
+    this.setListInState()
+   // this.getCartList(1);
   };
 
   cartView = (item) => {
@@ -103,19 +145,25 @@ this.setState({ isLoad:true })
     // let itemPrice = Number(_get(item,'item.count',1))*Number(_get(item,'item.now',0))
     let itemPrice =
       Number(_get(item, "item.Qty", 1)) * Number(_get(item, "item.Rate", 0));
+    let discount = (_get(item, "item.MRP", 0)-_get(item, "item.Rate", 0))*100/_get(item, "item.MRP", 0)
+//console.log('We have price discount per item ',discount)
+
     return (
       <View style={styles.cartView}>
         <View style={styles.first}>
           <View style={styles.percent}>
             <Text style={{ color: "orangered" }}>
-              {_get(item, "item.discount", "1%")}
+              {/* {_get(item, "item.discount", "1%")} */}
+              {discount}%
             </Text>
           </View>
-          {/* <Image style={{ height: 55, width: 80, alignSelf: 'center' }} source={{uri:item.Image}} /> */}
-          <Image
+          <View style={{height: 100, width: 90,marginTop:10}}>
+          <Image style={{ height:'100%',width:'100%',resizeMode:'contain' }} source={{uri:imageBaseUrl+item.item.Image1}} />
+          </View>
+          {/* <Image
             style={{ height: 55, width: 80, alignSelf: "center" }}
             source={require("../../assets/images/cart/g3.png")}
-          />
+          /> */}
         </View>
         <View style={styles.second}>
           <Text style={{ fontWeight: "600", fontSize: 20, marginTop: 5 }}>
@@ -155,7 +203,8 @@ this.setState({ isLoad:true })
               <TouchableOpacity
                 style={styles.button}
                 onPress={() => {
-                  this.increaseCount(item.item);
+                  //this.increaseCount(item.item);
+                  this.updateCartItems(2,item.item.Id)
                 }}
               >
                 <Text>+</Text>
@@ -166,7 +215,8 @@ this.setState({ isLoad:true })
               <TouchableOpacity
                 style={styles.button}
                 onPress={() => {
-                  this.decrease(item.item);
+                 // this.decrease(item.item);
+                 this.updateCartItems(1,item.item.Id)
                 }}
               >
                 <Text>-</Text>
@@ -180,6 +230,48 @@ this.setState({ isLoad:true })
     {
     }
   };
+
+
+  updateCartItems=async(type,id)=>{
+
+    let Id = this.props.loginData.Id || 2;
+
+    const url = "/updatecart";
+    const constant = {
+      init: "UPDATE_CART_VALUE_INIT",
+      success: "UPDATE_CART_VALUE_SUCCESS",
+      error: "UPDATE_CART_VALUE_ERROR",
+    };
+
+    const identifier = "UPDATE_CART_VALUE";
+    const key = "updateCart";
+    const obj={
+      Id:id,
+      UpdateType:type,
+      CartType:1,
+      UserId:Id
+    }
+    let data = await this.props.commonActionPost(obj, url, constant, identifier, key)
+    // console.log('Get Cart data Response $$$$$$$ ',this.props.updateCart)
+    this.setState({snackBarVisible:true})
+    setTimeout(()=>{
+      this.setState({snackBarVisible:false})
+    },1000)
+    
+    this.setListInState()
+
+    // this.callInitialsMethods()
+    
+   // setTimeout(()=>{
+    //   console.log('Get Cart data Response $$$$$$$ ',this.props.updateCart)
+    //   this.callInitialsMethods()
+    // },1000)
+   
+  
+
+
+  }
+
 
   increaseCount = (item) => {
     let arr = [];
@@ -256,11 +348,12 @@ this.setState({ isLoad:true })
     );
      this.setState({ cartList: arr });
 
-    const key = "getcartlist";
-    const identifier = "CART_LIST";
+    const key = "commonCartList";
+    const identifier = "COMMON_CART_LIST";
 
     this.props.getCartSaveList(arr, identifier, key);
   };
+
 
   snackBar = (text) => {
     Snackbar.show({
@@ -284,7 +377,8 @@ this.setState({ isLoad:true })
 
   subTotalView = () => {
     console.log("In subTotalView ");
-    let itemArr = _get(this.props, "getcartlist", []);
+    // let itemArr = _get(this.props, "getcartlist", []);
+    let itemArr = _get(this.props, "updateCart.CList", []);
     let totalAmt = 0;
     console.log(
       "In subTotalView **************",
@@ -326,17 +420,19 @@ this.setState({ isLoad:true })
   };
 
   flatListView = () => {
-    console.log("In Flat List Array------------ ", this.props.getcartlist);
+    //console.log("flatListView %%%%%%%%% ------------ ",this.state.cartItems);
+   
     return (
       <FlatList
         style={{ width: "100%", borderWidth: 0, height: 10 }}
-        // data={this.state.cartItems}
-        data={this.props.getcartlist}
+         data={_get(this.props.updateCart,'CList',[])}
+        //data={list}
         renderItem={(item) => this.cartView(item)}
      //   ListFooterComponent={()=>this.subTotalView()}
         keyExtractor={(item, index) => {
           return index.toString();
         }}
+     //   ListEmptyComponent={()=> this.emptyView()}
       />
     );
   };
@@ -368,24 +464,77 @@ this.setState({ isLoad:true })
     );
   };
 
+
+
   render() {
+   console.log('In My Cart Response Props ',this.props)
+    
     return (
       <View style={styles.container}>
         <Header title="My Cart" props={this.props} right={false} />
         { this.props.isLoad || this.state.isLoad? (
           <Loader isLoad={this.props.isLoad} text="Loading..." />
-        ) : this.props.getcartlist &&
-          _get(this.props, "getcartlist.length", []) > 0 ? (
+        ) : 
+      //  _get(this.props.updateCart,'CList',[]) && _get(this.props.updateCart,'CList.length',[])>0?
+   
           <View style={{ flex: 1, padding: 10 }}>
             {this.flatListView()}
-            {this.subTotalView()}    
+            {/* <FlatList
+            style={{ width: "100%", borderWidth: 1, height: 10 }}
+             data={_get(this.props.updateCart,'CList',[])}
+           // data={this.props.commonCartList}
+            renderItem={(item) => this.cartView(item)}
+        //   ListFooterComponent={()=>this.subTotalView()}
+            keyExtractor={(item, index) => {
+              return index.toString();
+            }}
+        //   ListEmptyComponent={()=> this.emptyView()}
+          /> */}
+          {/* <SnackBar text={this.props.updateCart.Msg}/>  */}
+            {this.subTotalView()} 
+            
+           {/* { this.state.snackBarVisible && _get(this.props.updateCart,'Msg','')?
+    
+           <SnackBar text={this.props.updateCart.Msg+" In My Cart"+this.state.snackBarVisible}/>
+           
+            :
+            null} */}
           </View>
-        ) : (
-          this.emptyView()
-        )}
+        
+         
+         }
       </View>
     );
   }
+
+  componentWillUnmount(){
+    console.log('*******************************My Cart component Will Unmount*******************************')
+  }
+
+      //  {/* <SnackBar text={this.props.updateCart.Msg+" My Cart"}/> */}
+  // render() {
+  //   console.log('Get Cart data Response $$$$$$$ ',this.props.updateCart.Msg)
+  //   return (
+  //     <View style={styles.container}>
+  //       <Header title="My Cart" props={this.props} right={false} />
+  //       { this.props.isLoad || this.state.isLoad? (
+  //         <Loader isLoad={this.props.isLoad} text="Loading..." />
+  //       ) : this.props.getcartlist &&
+  //         _get(this.props, "getcartlist.length", []) > 0 ? (
+  //         <View style={{ flex: 1, padding: 10 }}>
+  //           {this.flatListView()}
+  //           {this.subTotalView()} 
+  //          { this.props.updateCart && this.props.updateCart.Msg ?
+  //           <SnackBar text={this.props.updateCart.Msg}/>
+  //           :
+  //           null}
+  //         </View>
+  //       ) : (
+  //         this.emptyView()
+  //       )}
+  //     </View>
+  //   );
+  // }
 }
 
 const styles = StyleSheet.create({
@@ -464,6 +613,8 @@ const mapStateToProps = (state) => ({
   loginData: state.commonReducer.loginData,
   getcartlist: state.commonReducer.getcartlist || [],
   isLoad: state.commonReducer.isLoad || false,
+  updateCart:state.commonReducer.updateCart||{},
+  commonCartList:state.commonReducer.commonCartList,
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -482,3 +633,27 @@ const mapDispatchToProps = (dispatch) => ({
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(MyCart);
+
+
+
+
+// import React, { Component } from 'react';
+// import { View, Text } from 'react-native';
+
+// export default class index extends Component {
+//   constructor(props) {
+//     super(props);
+//     this.state = {
+//     };
+//   }
+
+//   render() {
+//     console.log('Call My Cart Render Method*********************')
+//     return (
+//       <View>
+//         <Text> index </Text>
+//       </View>
+//     );
+//   }
+// }
+

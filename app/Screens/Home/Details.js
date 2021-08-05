@@ -17,7 +17,7 @@ import {
   commonActionPost,
   getCommonDataAction,
 } from "../../action/commonAction";
-import { themeColor } from "../../Component/config";
+import { dangerRed, themeColor,success } from "../../Component/config";
 import { connect } from "react-redux";
 import Header from "../../Component/Header/index";
 import { imageBaseUrl } from "../../Component/config";
@@ -25,6 +25,8 @@ import _get from "lodash/get";
 import HTML from "react-native-render-html";
 import { DetailTextSkelton, ListItems } from "../../Component/SkeltonRow";
 import Loader from "../../Component/Loader";
+import SnackBar from '../../Component/SnackBar'
+
 
 // let images = [
 //   {img: 'https://i.ibb.co/LQmZb1D/muton.jpg'},
@@ -55,7 +57,7 @@ const otherData = [
   },
 ];
 
-class Details extends PureComponent {
+class Details extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -64,48 +66,97 @@ class Details extends PureComponent {
       productId: 0,
       variantId: 0,
       Images: [],
+      showSnackBar:false,
+      color:'#808080',
+      message:'Something is wrong! Please try again.',
+      varientListState:[]
     };
     this.flatListRef = null;
   }
   componentDidMount() {
-    this.setState({ productId: this.props.route.params.item.Id });
-    this.getItemDetail(this.props.route.params.item.Id, 0);
-    this.getVarientList(this.props.route.params.item.Id);
+   
+    this.initialCallingMethods()
 
-    //this.setState({ variantId: this.props.varientList[0].Id });
-    this.setState({ item: this.props.route.params.item });
   }
+
+initialCallingMethods=()=>{
+  this.setState({ productId: this.props.route.params.item.Id });
+ // this.getVarientList(this.props.route.params.item.Id);
+  // this.getItemDetail(this.props.route.params.item.Id, 0);
+  // console.log('Varient list in component did mount********',this.props.varientList,' Props varient List ',this.props.route.params.vList)
+ // console.log('Varient list in component did mount******** Props varient List ',this.props.route.params.vList)
+  //this.setState({varientListState:this.props.route.params.vList})
+
+  // let Id = _get(this.props, "route.params.vList[0].Id", 0);
+  // console.log('Varient list  Id in component did mount********',Id)
+  //this.getItemDetail(this.props.route.params.item.Id, 0);
+  this.getVarientList(this.props.route.params.item.Id)
+this.getRelatedProducts();
+ // this.setState({variantId:this.props.route.params.vList[0].Id})
+  //this.setState({variantId:Id})
+  this.setState({ item: this.props.route.params.item });
+} 
+ 
+
+getRelatedProducts=async()=>{
+
+  const obj={
+        VendorId:this.props.loginData.Id||2, //It will be change
+      	ProductId:this.props.route.params.item.Id,
+    }
+
+
+    const url = "/relatedproducts";
+   const constant = {
+      init: "RELATED_PRODUCTS_INIT",
+      success: "RELATED_PRODUCTS_SUCCESS",
+      error: "RELATED_PRODUCTS_ERROR",
+    };
+   const identifier = "RELATED_PRODUCTS";
+   const key = "relatedProductsList";
+
+   let data= await this.props.commonActionPost(obj, url, constant, identifier, key);
+    console.log('In get related project---- ',data)
+}
+
 
   getCartList = (cart) => {
     //   const obj={
     //     UserId:this.props.loginData.Id,
     //   	CartType:cart,
     // }
-    let Id = this.props.loginData.Id || 2;
-    let url = "";
-    let constant = {};
-    let identifier = "";
-    let key = "";
-    let type = "";
+    // let Id = this.props.loginData.Id || 2;
+    // let url = "";
+    // let constant = {};
+    // let identifier = "";
+    // let key = "";
+    // let type = "";
 
-    url = "/getcartlist";
-    constant = {
-      init: "CART_LIST_INIT",
-      success: "CART_LIST_SUCCESS",
-      error: "CART_LIST_ERROR",
-    };
-    identifier = "CART_LIST";
-    key = "getcartlist";
-    type = "?UserId=" + Id + "&CartType=" + cart;
+    // url = "/getcartlist";
+    // constant = {
+    //   init: "CART_LIST_INIT",
+    //   success: "CART_LIST_SUCCESS",
+    //   error: "CART_LIST_ERROR",
+    // };
+    // identifier = "CART_LIST";
+    // key = "getcartlist";
+    // type = "?UserId=" + Id + "&CartType=" + cart;
 
-    const data = this.props.getCommonDataAction(
-      url,
-      constant,
-      identifier,
-      key,
-      type
-    );
-    this.props.navigation.navigate("CartScreen",{itemList:this.props.getcartlist});
+    // const data = this.props.getCommonDataAction(
+    //   url,
+    //   constant,
+    //   identifier,
+    //   key,
+    //   type
+    // );
+    // console.log('Add To Cart Data-------  Add to cart props---- ',this.props.addtocart)
+    this.setState({showSnackBar:true})
+    this.setState({showSnackBar:false})
+  //  this.setState({showSnackBar:true})
+  // this.setState({showSnackBar:false})
+
+   
+   // this.props.navigation.navigate("CartScreen",{itemList:this.props.getcartlist});
   };
 
   getWishList = (cart) => {
@@ -133,6 +184,7 @@ class Details extends PureComponent {
       key,
       type
     );
+
   };
 
   getVarientList = (PID) => {
@@ -147,7 +199,7 @@ class Details extends PureComponent {
     const key = "varientList";
     const type = "?ProductId=" + PID;
 
-    const data = this.props.getCommonDataAction(
+    const data =  this.props.getCommonDataAction(
       url,
       constant,
       identifier,
@@ -155,12 +207,26 @@ class Details extends PureComponent {
       type
     );
 
-    let Id = _get(this.props, "varientList[0].Id", 0);
-    console.log("*****VARIENT LIST********", this.props.varientList);
-    this.setState({ variantId: Id });
+    console.log("*****VARIENT LIST********11111", data);
+    setTimeout(()=>{
+      if(this.props.varientList!=undefined){
+        let Id = this.props.varientList[0].Id||0;
+        this.setState({ variantId: Id });
+       }
+    },1000)
+
+    this.getItemDetail(this.props.route.params.item.Id, 0);
+    
   };
 
   getItemDetail = (PId, VID) => {
+
+   // let Id = _get(this.props, "varientList[0].Id", 0);
+    console.log("*****VARIENT LIST********", this.props.varientList);
+    console.log("*****VARIENT LIST ID ********", VID);
+  //  this.setState({ variantId: VID });
+
+
     const url = "/productdetails";
     const constant = {
       init: "PRODUCT_DETAILS_INIT",
@@ -171,7 +237,7 @@ class Details extends PureComponent {
     const key = "productDetails";
     const type = "?ProductId=" + PId + "&VariantId=" + VID;
 
-    const data = this.props.getCommonDataAction(
+   this.props.getCommonDataAction(
       url,
       constant,
       identifier,
@@ -180,24 +246,22 @@ class Details extends PureComponent {
     );
     this.pushImages();
 
-    // //console.log('getItemDetails----------------------->',this.props.productDetails)
+    
   };
 
   pushImages = () => {
     // console.log('imageBackgroundScrolls Items ',_get(this.props,'productDetails',{}))
     // let arr=[];
-    this.state.Images.push(
-      _get(this.props, "productDetails.Image1", ""),
-      _get(this.props, "productDetails.Image2", ""),
-      _get(this.props, "productDetails.Image3", ""),
-      _get(this.props, "productDetails.Image4", "")
-    );
-    this.setState({ Images: this.state.Images });
+  //  let productImage =_get(this.props.productDetails,'ProductImage',[])
+  //   this.setState({ Images: productImage});
+
+  let productImage =_get(this.props.productDetails,'ProductImage',[])
+    this.setState({ Images: productImage});
     // console.log('Images in Array########### 1 ',arr)
     // console.log('BackgroundImages imageBackgroundScrolls in Array########### 2 ',this.state.Images)
   };
 
-  addToCart = (cart) => {
+  addToCart = async(cart) => {
     //  console.log('User id--',this.props.loginData.Id,' Product Id ',this.state.productId,' Variant Id ',this.state.variantId)
     console.log(
       "Varient list when click AddTocart-----",
@@ -206,8 +270,8 @@ class Details extends PureComponent {
     const obj = {
       UserId: _get(this.props.loginData,'Id',2),
       ProductId: this.state.productId,
-    //  VariantId: this.state.variantId,
-      VariantId:this.props.varientList[0].Id,
+      VariantId: this.state.variantId,
+     // VariantId:this.props.varientList[0].Id,
       CartType: cart,
       Qty: 1,
     };
@@ -227,10 +291,12 @@ class Details extends PureComponent {
     identifier = "ADD_TO_CART";
     key = "addtocart";
 
-    this.props.commonActionPost(obj, url, constant, identifier, key);
-    setTimeout(() => {
-      this.getCartList(cart);
-    }, 1000);
+    let data= await this.props.commonActionPost(obj, url, constant, identifier, key);
+    
+    this.getCartList(cart);
+    // setTimeout(() => {
+    //   this.getCartList(cart);
+    // }, 1000);
     
     
 
@@ -270,8 +336,8 @@ class Details extends PureComponent {
     const obj = {
       UserId: this.props.loginData.Id || 2,
       ProductId: this.state.productId,
-      // VariantId: this.state.variantId,
-      VariantId:this.props.varientList[0].Id,
+       VariantId: this.state.variantId,
+     // VariantId:this.props.varientList[0].Id,
       CartType: cart,
       Qty: 1,
     };
@@ -293,41 +359,51 @@ class Details extends PureComponent {
       identifier,
       key
     );
-    this.getWishList(cart);
+  //  this.getWishList(cart);
     this.props.navigation.navigate("WishListScreen");
   };
 
   imageBackgroundScrolls = (item) => {
-    // console.log('imageBackgroundScrolls Method------- ',imageBaseUrl+item.item);
+  //   console.log('imageBackgroundScrolls Method------- ',item.item);
+     let {Images} = item.item;
     return (
       <View style={styles.imageView}>
         <Image
-          style={[styles.bigImage, { resizeMode: "contain" }]}
-          source={{ uri: imageBaseUrl + item.item }}
+          style={[styles.bigImage, { resizeMode: "cover",marginRight:10 }]}
+          source={{ uri: imageBaseUrl + Images }}
         />
       </View>
     );
   };
 
   imageFlatlist = () => {
-    //console.log('Background Images to be place ',this.state.Images)
+    console.log('Background Images to be place ',this.state.Images)
 
     return (
       <View style={{ height: "20%", width: "100%" }}>
+      {this.props.productDetails && this.props.productDetails.ProductImage.length>0?
         <FlatList
           style={{ height: "100%", width: "100%", borderRadius: 10 }}
           horizontal={true}
+          showsHorizontalScrollIndicator={false}
           // data={images}
-          data={this.state.Images}
+         // data={this.state.Images}
+          
+          data={this.props.productDetails.ProductImage}
           ref={(s) => (this.flatListRef = s)}
           renderItem={(item) => this.imageBackgroundScrolls(item)}
           keyExtractor={(item, index) => {
             return index.toString();
           }}
         />
+        :
+        <Loader isLoad={this.props.isLoad} text="Loading..."/>
+      }
       </View>
     );
   };
+
+
 
   smallFlatListView = (item) => {
     return (
@@ -342,6 +418,7 @@ class Details extends PureComponent {
           opacity: this.state.selectedItem == item.index ? 1 : 0.5,
         }}
       >
+       
         <TouchableOpacity
           style={{ height: "100%", width: "100%" }}
           onPress={() => this.moveToPosition(item.index)}
@@ -349,10 +426,11 @@ class Details extends PureComponent {
           <Image
             style={{ height: 50, width: 50, resizeMode: "cover" }}
             // blurRadius={this.state.selectedItem == item.index ? 0 : 3}
-            source={{ uri: imageBaseUrl + item.item }}
+            source={{ uri: imageBaseUrl + item.item.Images }}
             // source={{uri: item.item.img}}
           />
         </TouchableOpacity>
+       
       </View>
     );
   };
@@ -370,16 +448,34 @@ class Details extends PureComponent {
           position: "absolute",
         }}
       >
-        <FlatList
+
+       <FlatList
           style={{ height: "100%", width: "100%", marginLeft: 20 }}
           horizontal={true}
           // data={images}
-          data={this.state.Images}
+         // data={this.state.Images}
+         data={_get(this.props.productDetails,"ProductImage",[])}
           renderItem={(item) => this.smallFlatListView(item)}
           keyExtractor={(item, index) => {
             return index.toString();
           }}
         />
+
+{/* {this.props.productDetails && this.props.productDetails.ProductImage.length>0?
+        <FlatList
+          style={{ height: "100%", width: "100%", marginLeft: 20 }}
+          horizontal={true}
+          // data={images}
+         // data={this.state.Images}
+         data={this.props.productDetails.ProductImage}
+          renderItem={(item) => this.smallFlatListView(item)}
+          keyExtractor={(item, index) => {
+            return index.toString();
+          }}
+        />
+ :
+        <Loader isLoad={this.props.isLoad} text="Loading..."/>
+       } */}
       </View>
     );
   };
@@ -390,6 +486,8 @@ class Details extends PureComponent {
   };
 
   rateAndItemReview = () => {
+   console.log('Item Details Review^^^^^^^^^^ ',this.props.productDetails)
+
     return (
       <View
         style={{
@@ -400,8 +498,8 @@ class Details extends PureComponent {
           borderWidth: 0,
         }}
       >
-        <Text style={{ fontWeight: "700", fontSize: 18 }}>
-          {_get(this.props, "productDetails.ProcuctCombinationName", "No name")}
+        <Text style={{ fontWeight: "700", fontSize: 18 }} numberOfLines={1}>
+          {_get(this.props, "productDetails.ProductData.ProcuctCombinationName", "No name")}
         </Text>
         <View
           style={{
@@ -413,7 +511,7 @@ class Details extends PureComponent {
           <Text>
             In{" "}
             <Text style={{ fontWeight: "600", fontSize: 15 }}>
-              {_get(this.props, "productDetails.CategoryName", "No name")}
+              {_get(this.props, "productDetails.ProductData.CategoryName", "No name")}
             </Text>
           </Text>
           {/* <Text style={{color: '#FFA500'}}>★★★★★</Text> */}
@@ -428,7 +526,7 @@ class Details extends PureComponent {
         >
           <Text style={{ fontWeight: "700", fontSize: 20 }}>
             {" "}
-            ₹ {_get(this.props, "productDetails.Rate", "0.0")}
+            ₹ {_get(this.props, "productDetails.ProductData.Rate", "0.0")}
             {""}{" "}
             <Text
               style={{
@@ -439,7 +537,7 @@ class Details extends PureComponent {
               }}
             >
               {" "}
-              ₹ {_get(this.props, "productDetails.MRP", "0.0")}{" "}
+              ₹ {_get(this.props, "productDetails.ProductData.MRP", "0.0")}{" "}
             </Text>
             {/* <Text
               style={{
@@ -496,7 +594,7 @@ class Details extends PureComponent {
           >
             <Text style={styles.wishlistText}>♡</Text>
             <View style={{ width: 5 }} />
-            <Text style={styles.wishlistText}>Wishlist</Text>
+            <Text style={styles.wishlistText}>Add To Wishlist</Text>
           </TouchableOpacity>
           <View style={{ width: 30 }} />
           <TouchableOpacity
@@ -534,8 +632,8 @@ class Details extends PureComponent {
       <View style={[styles.descriptionView, { marginTop: 10 }]}>
         <Text style={styles.bigText}> Description</Text>
         <View style={styles.descriptionDetails}>
-          {_get(this.props, "productDetails.Description", "") != "" ? (
-            <Text>{_get(this.props, "productDetails.Description", "--")}</Text>
+          {_get(this.props, "productDetails.ProductData.Description", "") != "" ? (
+            <Text>{_get(this.props, "productDetails.ProductData.Description", "--")}</Text>
           ) : (
             this.skeltonTextView()
           )}
@@ -558,12 +656,12 @@ class Details extends PureComponent {
     return (
       <View style={styles.descriptionView}>
         <Text style={{ fontSize: 10 }}>
-          {_get(this.props, "productDetails.Description", "") != "" ? (
+          {_get(this.props, "productDetails.ProductData.Description", "") != "" ? (
             <HTML
               source={{
                 html: _get(
                   this.props,
-                  "productDetails.BulletPoint",
+                  "productDetails.ProductData.BulletPoint",
                   "<h5>No Data</h5"
                 ),
               }}
@@ -582,11 +680,13 @@ class Details extends PureComponent {
   varientOnPress = (item) => {
     this.setState({ variantId: item.Id }, () => {
       this.getItemDetail(this.state.productId, item.Id);
+      this.scrollListReftop.scrollTo({x: 0, y: 0, animated: true})
+
     });
   };
 
   renderVarientItems = (item) => {
-    //console.log('renderVarientItems******* ',item,'Image- ',imageBaseUrl+item.Image1)
+    console.log('click on varient then ID &&&&&&&&& ******* ',item)
     return (
       <TouchableOpacity
         style={styles.varientItems}
@@ -608,9 +708,10 @@ class Details extends PureComponent {
   };
 
   otherInfo = () => {
+console.log("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ Varient List ",this.props.varientList)
     return (
       <View style={{ width: "100%" }}>
-        {_get(this.props, "varientList.length", []) > 0 ? (
+        {_get(this.props,'varientList', []).length > 0 ? (
           <FlatList
             horizontal={true}
             style={{
@@ -619,7 +720,7 @@ class Details extends PureComponent {
               borderRadius: 10,
               backgroundColor: "#ccc",
             }}
-            data={_get(this.props, "varientList", [])}
+            data={_get(this.props,'varientList', [])}
             renderItem={(item) => this.renderVarientItems(item.item)}
             keyExtractor={(item) => item.index}
           />
@@ -628,12 +729,34 @@ class Details extends PureComponent {
         )}
       </View>
     );
+
+
+    // return (
+    //   <View style={{ width: "100%" }}>
+    //     {_get(this.props, "varientList", []).length > 0 ? (
+    //       <FlatList
+    //         horizontal={true}
+    //         style={{
+    //           padding: 5,
+    //           width: "100%",
+    //           borderRadius: 10,
+    //           backgroundColor: "#ccc",
+    //         }}
+    //         data={_get(this.props, "varientList", [])}
+    //         renderItem={(item) => this.renderVarientItems(item.item)}
+    //         keyExtractor={(item) => item.index}
+    //       />
+    //     ) : (
+    //       <ListItems length={[1, 2, 3, 4]} style={styles.varientListSkelton} />
+    //     )}
+    //   </View>
+    // );
   };
 
   relatedProductView = () => {
     return (
       <FlatList
-        style={{ width: "100%", height: 600, backgroundColor: "#" }}
+        style={{ width: "100%", height: 600, backgroundColor: "" }}
         horizontal={true}
         showsHorizontalScrollIndicator={false}
         showsVerticalScrollIndicator
@@ -768,19 +891,66 @@ class Details extends PureComponent {
     return <DetailTextSkelton />;
   };
 
+bottomButton=()=>{
+  let amount=0;
+  return(
+
+<TouchableOpacity
+        style={styles.subTotal}
+        onPress={() => {
+          this.props.navigation.navigate('CartScreen');
+        }}
+      >
+        <View style={{ flex: 0.8 }}>
+          <Text style={{ fontSize: 15, fontWeight: "600", color: "#fff" }}>
+            Subtotal ₹ {amount || 0}{" "}
+          </Text>
+          <Text style={{ color: "#fff" }}>Go to cart{" "}</Text>
+        </View>
+        <TouchableOpacity
+          style={{ flex: 0.1, justifyContent: "center", alignItems: "center" }}
+        >
+          <Image
+            source={require("../../assets/images/user/next_white.png")}
+            style={{ height: 20, width: 10 }}
+          />
+        </TouchableOpacity>
+      </TouchableOpacity>
+
+  )
+}
+
+loaderView=()=>{
+  return(
+<View style={styles.loader}>
+  {this.props.isLoad?
+    <Loader isLoad={this.props.isLoad} text='Loading...'/>
+    :
+    null
+    }
+    </View>
+  )
+  
+}
+
   mainComp = () => {
     return (
       <View style={{ flex: 1, padding: 5 }}>
         <ScrollView
           contentContainerStyle={{ flexGrow: 1 }}
           showsVerticalScrollIndicator={false}
+          ref={(ref) => { this.scrollListReftop = ref; }}
+
         >
           <View style={styles.container}>
+
+         
             {this.imageFlatlist()}
             {this.smallImageFlatlist()}
             {this.rateAndItemReview()}
             {this.wishListButton()}
             {this.description()}
+        
 
             {this.specificationView("Specifications")}
             {this.specification()}
@@ -788,9 +958,37 @@ class Details extends PureComponent {
             {this.otherInfo()}
             {this.specificationView("Related Products")}
             {this.relatedProductView()}
-          </View>
-        </ScrollView>
 
+            {/* {this.state.showSnackBar && this.props.addtocart && this.props.addtocart.Msg ?
+            this.props.addtocart.Msg=="Only 0 Quantity available"?
+          <SnackBar text={_get(this.props.addtocart,'Msg','')} color={dangerRed}/>
+          :
+          <SnackBar text={_get(this.props.addtocart,'Msg','')} color={success}/>
+        
+          :
+          null} */}
+
+        {this.state.showSnackBar && this.props.addtocart && this.props.addtocart.Msg ?
+         
+          <SnackBar text={_get(this.props.addtocart,'Msg','')} color={themeColor}/>
+:
+null
+}
+         
+          </View>
+        
+        </ScrollView>
+       {this.loaderView()}
+       
+
+        {/* {
+          this.props.addtocart && this.props.addtocart.Msg!="Only 0 Quantity available"?
+          this.bottomButton()
+          :
+          null
+          } */}
+
+          
         {/* {
           this.props.getcartlist.length>0?
           this.goToCartAction():
@@ -805,6 +1003,7 @@ class Details extends PureComponent {
       <View style={styles.container}>
         <Header title="Details" props={this.props} right={false} />
         {this.mainComp()}
+        
         {/* {this.props.isLoad?
       <Loader isLoad={this.props.isLoad} text="Loading..."/>
       :
@@ -940,6 +1139,29 @@ const styles = StyleSheet.create({
     width: 80,
     borderRadius: 10,
   },
+  subTotal: {
+    height: 50,
+    width: "100%",
+    backgroundColor: themeColor,
+    justifyContent: "space-between",
+    alignItems: "center",
+    flexDirection: "row",
+    borderRadius: 10,
+    padding: 10,
+    marginTop: 20,
+    //borderWidth:1,
+    position:'absolute',
+    top:'90%',
+    left:'1.5%'
+  },
+  loader:{
+    position:'absolute',
+     right:0,
+     left:0,
+     top:'80%',
+    // bottom:0,
+   // backgroundColor:'#fff'
+  }
 });
 
 const mapStateToProps = (state) => ({
@@ -951,9 +1173,11 @@ const mapStateToProps = (state) => ({
   getcartlist: state.commonReducer.getcartlist || [],
   getwishlist: state.commonReducer.getwishlist || [],
   isLoad: state.commonReducer.isLoad,
+  addtocart:state.commonReducer.addtocart,
 });
 
-const mapDispatchToProps = (dispatch) => ({
+const mapDispatchToProps = (dispatch) => {
+  return{
   getCartSaveList: (data, identifier, key) =>
     dispatch(getDataSaveList(data, identifier, key)),
   commonActionPost: (obj, url, constant, identifier, key) => {
@@ -962,6 +1186,7 @@ const mapDispatchToProps = (dispatch) => ({
   getCommonDataAction: (url, constants, identifier, key, type) => {
     dispatch(getCommonDataAction(url, constants, identifier, key, type));
   },
-});
+}
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(Details);

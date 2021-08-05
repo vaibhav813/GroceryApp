@@ -10,10 +10,11 @@ import {
 } from "react-native";
 import Header from "../../Component/Header/index";
 import { connect } from "react-redux";
-import { themeColor, dangerRed } from "../../Component/config";
+import { themeColor, dangerRed, imageBaseUrl } from "../../Component/config";
 import _get from "lodash/get";
 import { getDataSaveList } from "../../action/commonAction";
 import RazorpayCheckout from 'react-native-razorpay';
+
 
 class ConfirmCart extends Component {
   constructor(props) {
@@ -24,13 +25,13 @@ class ConfirmCart extends Component {
   }
   componentDidMount() {
     console.log("We Have Address ", this.props.savedAddress);
-    console.log("We Have cart Items ", this.props.cartItems);
+    console.log("We Have cart Items ", this.props.updateCart);
     //console.log('We Have Address Component did mount')
   }
   venderInfoCartItem = (item) => {
     console.log("Get Item in cart----", item);
     return (
-      <View style={styles.venderInfoView}>
+      <View style={[styles.venderInfoView,{borderColor:themeColor,borderWidth:1}]}>
         <View style={styles.venderImageItem}>
           <View style={{ flex: 0.3, borderWidth: 0 }}>
             {/* <Image
@@ -39,7 +40,7 @@ class ConfirmCart extends Component {
             /> */}
             <Image
               style={{ height: 100, width: 100, resizeMode: "center" }}
-              source={{ uri: item.Image1 }}
+              source={{ uri: imageBaseUrl+item.Image1 }}
             />
             <TouchableOpacity
               style={styles.remove}
@@ -51,7 +52,7 @@ class ConfirmCart extends Component {
                 source={require("../../assets/images/user/delete.png")}
                 style={{ height: 15, width: 15, resizeMode: "contain" }}
               />
-              
+
               <Text> Remove</Text>
             </TouchableOpacity>
           </View>
@@ -64,8 +65,9 @@ class ConfirmCart extends Component {
               paddingLeft: 10,
             }}
           >
-            <View style={{ borderWidth: 0, paddingBottom: 0 }}>
-              <Text style={styles.titleName}>{_get(item, "Name", "--")}</Text>
+            <View style={{ borderWidth: 0, paddingBottom: 0,marginTop:10 }}>
+              <Text style={styles.titleName} numberOfLines={1}>{_get(item, "Name", "--")}</Text>
+              <Text style={{color:'#808080'}}>(in {_get(item, "ProductName", "--")})</Text>
               <Text style={styles.blackText}>
                 MRP ₹{" "}
                 <Text
@@ -94,7 +96,7 @@ class ConfirmCart extends Component {
                 <Text
                   style={{ fontSize: 10, fontWeight: "bold", color: "#fff" }}
                 >
-                  50%
+                 {this.getDiscount(item)}
                 </Text>
               </View>
             </View>
@@ -107,7 +109,7 @@ class ConfirmCart extends Component {
                 marginTop: 0,
               }}
             >
-              <Text style={styles.blackText}>Count:</Text>
+              <Text style={styles.blackText}>Quantity:</Text>
               <Text>{_get(item, "Qty", 0)}</Text>
             </View>
           </View>
@@ -126,6 +128,9 @@ class ConfirmCart extends Component {
       }
     });
 
+
+   
+
     const key = "cartItems";
     const identifier = "SAVE_CART_ITEMS";
 
@@ -133,9 +138,20 @@ class ConfirmCart extends Component {
 
     // console.log('removeItem from list ',arr)
   };
+
+
+
+  getDiscount=(item)=>{
+    console.log('Get Discount Items ',item)
+    let discount = (item.MRP-item.Rate)*100/item.MRP;
+    console.log('Get discount here_____ ',discount)
+  return discount+"%"
+    }
+
+
   getTotalItems = () => {
     let totalItems = 0;
-    this.props.getcartlist.map((item) => {
+    this.props.updateCart.CList.map((item) => {
       totalItems = totalItems + item.Qty;
     });
     console.log("Get total Items ", totalItems);
@@ -144,8 +160,8 @@ class ConfirmCart extends Component {
 
   calculateItems = () => {
     let minPrice = 0;
-    if (this.props.getcartlist && this.props.getcartlist.length > 0) {
-      this.props.getcartlist.map((item) => {
+    if (this.props.updateCart && this.props.updateCart.CList.length > 0) {
+      this.props.updateCart.CList.map((item) => {
         minPrice = minPrice + item.Rate * item.Qty;
       });
       console.log("Total Price of array ", minPrice);
@@ -210,15 +226,16 @@ class ConfirmCart extends Component {
 
   deliveryAddress = () => {
     let deliveryAddr = "";
-    // console.log('Address array *********** ',this.props.savedAddress)
-    this.props.savedAddress &&
-      this.props.savedAddress.map((item) => {
-        if (item.isSelect == "true") {
+      console.log('Address array *********** ',this.props.userAddressList)
+    this.props.userAddressList &&
+      this.props.userAddressList.map((item) => {
+        if (item.IsSelect == true) {
           deliveryAddr = item;
           return;
         }
       });
-    return deliveryAddr.details;
+      console.log('Selected address *********** ',deliveryAddr)
+    return deliveryAddr.HouseNo+","+deliveryAddr.StreetName+","+deliveryAddr.Landmark+","+deliveryAddr.Pincode;
   };
 
   bottomView = () => {
@@ -375,6 +392,7 @@ class ConfirmCart extends Component {
   };
 
   renderView = () => {
+    console.log('this.props.updateCart.CList----',this.props.updateCart.CList)
     return (
       <View
         style={[
@@ -387,7 +405,8 @@ class ConfirmCart extends Component {
             style={{ borderWidth: 0, height: "100%" }}
             showsVerticalScrollIndicator={false}
          //   data={this.props.cartItems}
-         data={this.props.getcartlist}
+        // data={this.props.getcartlist}
+           data={this.props.updateCart.CList}
             renderItem={(item) => this.venderInfoCartItem(item.item)}
             keyExtractor={(item, index) => {
               return index.toString();
@@ -405,8 +424,8 @@ class ConfirmCart extends Component {
   };
 
   render() {
-    console.log("this.props.cartItems ", this.props.cartItems);
-    return this.props.getcartlist && this.props.getcartlist.length > 0 ? (
+    console.log("this.props.cartItems ", this.props.updateCart);
+    return this.props.updateCart && this.props.updateCart.CList.length > 0 ? (
       <View style={styles.container}>
         <Header title="Confirm Cart" props={this.props} right={false} />
         {this.renderView()}
@@ -438,7 +457,7 @@ const styles = StyleSheet.create({
     shadowRadius: 10,
     elevation: 5,
     borderRadius: 10,
-    //borderWidth:1,
+   // borderWidth:1,
     paddingTop: 0,
   },
   venderImageItem: {
@@ -473,9 +492,10 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = (state) => ({
   //promoList: state.commonReducer.promoList,
-  savedAddress: state.commonReducer.savedAddress,
+  userAddressList: state.commonReducer.userAddressList,
   cartItems: state.commonReducer.cartItems,
   getcartlist: state.commonReducer.getcartlist,
+  updateCart:state.commonReducer.updateCart,
 });
 
 const mapDispatchToProps = (dispatch) => ({

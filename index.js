@@ -1,8 +1,8 @@
-
-
 import { AppRegistry } from 'react-native';
 import React from 'react';
-import { Image, StatusBar,BackHandler } from 'react-native';
+
+import { Image, StatusBar,BackHandler,StyleSheet,View,Text, } from 'react-native';
+import {Button} from 'react-native-paper'
 
 import { name as appName } from './app.json';
 import { NavigationContainer } from '@react-navigation/native';
@@ -34,21 +34,25 @@ import SplashScreen from './app/Screens/Splash/index'
 import AllCategoryScreen from '././app/Screens/Home/AllCategory'
 import Search from '././app/Screens/Home/Search'
 import Details from '././app/Screens/Home/Details'
+import ProductDetails from '././app/Screens/Home/ProductDetails'
 import ConfirmCart from '././app/Screens/MyCart/ConfirmCart'
 import Auth from './app/Screens/index'
 import { connect } from 'react-redux';
 import WishListScreen from './app/Screens/MyCart/WishListScreen'
+import CompanyInfo from './app/Screens/MyAccount/CompanyInfo'
 
-
+import { PersistGate } from 'redux-persist/integration/react'
 
 
 import {
     createBottomTabNavigator
 } from '@react-navigation/bottom-tabs';
+import { YellowBox } from 'react-native';
 
+YellowBox.ignoreWarnings(['Warning: isMounted(...) is deprecated', 'Module RCTImageLoader']);
 
-
-const store = configureStore()
+// const store = configureStore()
+const { store, persistor } = configureStore();
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 const TopTab = createMaterialTopTabNavigator();
@@ -57,8 +61,8 @@ const tabColor = themeColor;
 function HomeStack() {
     return (
         <Stack.Navigator
-           // initialRouteName="Home"
-            initialRouteName="AddressScreen"
+            initialRouteName="Home"
+           // initialRouteName="AddressScreen"
             screenOptions={{
                 headerStyle: { backgroundColor: tabColor },
                 headerTintColor: '#fff',
@@ -115,6 +119,12 @@ function HomeStack() {
              <Stack.Screen
                 name="DetailScreen"
                 component={Details}
+                headerTitleStyle={{ alignSelf: 'center' }}
+                options={{ title: 'Detail' }} />
+
+           <Stack.Screen
+                name="ProductDetailScreen"
+                component={ProductDetails}
                 headerTitleStyle={{ alignSelf: 'center' }}
                 options={{ title: 'Detail' }} />
 
@@ -288,6 +298,13 @@ function MyAccountStack() {
                 component={DeactiveAccount}
                 options={{ title: 'Deactive Account' }} />
 
+<Stack.Screen
+                name="CompanyInfoScreen"
+                component={CompanyInfo}
+                options={{ title: 'Deactive Account' }} />
+
+
+
         </Stack.Navigator>
     );
 }
@@ -310,6 +327,7 @@ const RegisterLoginStack = () => {
         
         <NavigationContainer ref={navigationRef}>
             <StatusBar barStyle="light-content" backgroundColor={themeColor} />
+          
            <Stack.Navigator
                initialRouteName="Auth"
                 // initialRouteName= {token!=null?"tabHome":"Login"}
@@ -353,6 +371,14 @@ const RegisterLoginStack = () => {
                 // options={{ title: 'Home' }}
                 />
 
+                 {/* <Stack.Screen
+                    name="tabHome"
+                    component={AllTabs}
+                    headerTitleStyle={{ alignSelf: 'center' }}
+                    options={{ headerShown: false }}
+                // options={{ title: 'Home' }}
+                /> */}
+
               <Stack.Screen
                     name="Auth"
                     component={Auth}
@@ -392,6 +418,39 @@ const handleBackButton=()=>{
     return true;
 }
 
+const customTabBarStyle = {
+    activeTintColor: '#0091EA',
+    inactiveTintColor: 'gray',
+    style: {backgroundColor: 'white' },
+}
+
+
+
+//  const AllTabs=()=> {
+//   return (
+//     <Tab.Navigator tabBar={(props) => <TabBar {...props} />} >
+ 
+//       <Tab.Screen 
+//         name="HomeStack" 
+//         component={HomeStack} />
+ 
+//       <Tab.Screen 
+//         name="CartStack" 
+//         component={CartStack} />
+ 
+//       <Tab.Screen 
+//         name="MyOrdersStack" 
+//         component={MyOrdersStack} />
+
+// <Tab.Screen 
+//         name="MyAccountStack" 
+//         component={MyAccountStack} />
+ 
+//     </Tab.Navigator>
+//   );
+// }
+
+
 
 const tabStacks = () => {
     return (
@@ -402,16 +461,17 @@ const tabStacks = () => {
                 activeTintColor: tabColor,
                 inactiveTintColor: 'gray',
             }}
+           // tabBarOptions={customTabBarStyle}
             tabStacks
             backBehavior={"history"}
-        
+           // tabBar={(props) => <TabBar {...props} />}
           
         >
             <Tab.Screen
                 name="HomeStack"
                 component={HomeStack}
                 options={{
-                    tabBarLabel: 'Shop',
+                    tabBarLabel: 'Home',
                     tabBarIcon: ({ color, size }) =>
 
                     (
@@ -421,19 +481,8 @@ const tabStacks = () => {
                             <Image style={{ height: 25, width: 25, resizeMode: 'contain' }} source={require('./app/assets/images/icons/shop.jpeg')} />
                     ),
                 }}
-        //     listeners={({ navigation, route }) => ({
-        //     tabPress: e => {
-        //         console.log('When tab press Listener************',route)
-        //     // if (route.state && route.state.routeNames.length > 0) {
-        //     //     navigation.navigate('Device')
-        //     // }
-        //     },
-        // })}
-            // listeners={{ focus: () => BackHandler.addEventListener('hardwareBackPress',handleBackButton())
-            //             ,blur: () => BackHandler.removeEventListener('hardwareBackPress',handleBackButton())
-            // }}
-                
                  />
+
             <Tab.Screen
                 name="CartStack"
                 component={CartStack}
@@ -447,29 +496,30 @@ const tabStacks = () => {
                             <Image style={{ height: 25, width: 25, resizeMode: 'contain' }} source={require('./app/assets/images/icons/cart.jpeg')} />
                     ),
                 }} 
-                //  listeners={{ focus: () => BackHandler.addEventListener('hardwareBackPress',handleBackButton())
-                //       ,blur: () => BackHandler.removeEventListener('hardwareBackPress',handleBackButton())
-                //  }}
+               
 
                 />
+                
 
 
             <Tab.Screen
                 name="MyOrdersStack"
                 component={MyOrdersStack}
                 options={{
-                    tabBarLabel: 'MyOrders',
+                    tabBarLabel: 'My Orders',
                     tabBarIcon: ({ color, size }) => (
                         color == tabColor ?
-                            <Image style={{ height: 20, width: 20, resizeMode: 'contain' }} source={require('./app/assets/images/icons/orders_green.png')} />
+
+                       
+                        <Image style={{ height: 20, width: 20, resizeMode: 'contain' }} source={require('./app/assets/images/icons/orders_green.png')} />
+                          
+                    
                             :
                             <Image style={{ height: 20, width: 20, resizeMode: 'contain' }} source={require('./app/assets/images/icons/orders.png')} />
                     ),
                 }} 
 
-        //         listeners={{ focus: () => BackHandler.addEventListener('hardwareBackPress',handleBackButton())
-        //               ,blur: () => BackHandler.removeEventListener('hardwareBackPress',handleBackButton())
-        //   }}
+       
 
                 />
 
@@ -486,9 +536,7 @@ const tabStacks = () => {
                     ),
                 }} 
 
-        //         listeners={{ focus: () => BackHandler.addEventListener('hardwareBackPress',handleBackButton())
-        //               ,blur: () => BackHandler.removeEventListener('hardwareBackPress',handleBackButton())
-        //   }}
+       
 
 
                 />
@@ -496,18 +544,7 @@ const tabStacks = () => {
 
 
 
-            {/* <Tab.Screen
-                name="MyCheckStack"
-                component={MyCheckStack}
-                options={{
-                    tabBarLabel: 'Check',
-                    tabBarIcon: ({ color, size }) => (
-                        color == tabColor ?
-                            <Image style={{ height: 20, width: 20, resizeMode: 'contain' }} source={require('./app/assets/images/icons/account_green.png')} />
-                            :
-                            <Image style={{ height: 20, width: 20, resizeMode: 'contain' }} source={require('./app/assets/images/icons/account.png')} />
-                    ),
-                }} /> */}
+           
         </Tab.Navigator>
 
 
@@ -519,14 +556,15 @@ const RNRedux = () => {
     
     return (
         <Provider store={store}>
-{/* {AuthLogin()} */}
+        <PersistGate loading={null} persistor={persistor}>
+
             { 
                
                     RegisterLoginStack()
               
                 
                 }
-            {/* {tabStacks()} */}
+                </PersistGate>
 
         </Provider>
     );
@@ -550,20 +588,8 @@ const RNRedux = () => {
 
 
 
-const mapStateToProps = state => (
-
-    {
-
-        promoList: state.commonReducer.promoList,
-        catListHome: state.commonReducer.catListHome,
-        isLoad:state.commonReducer.isLoad,
-        cartItems:state.commonReducer.cartItems,
-    }
-
-);
 
 
-
-export default connect(mapStateToProps,null)(RNRedux)
+//export default RNRedux
 
 AppRegistry.registerComponent(appName, () =>  RNRedux);

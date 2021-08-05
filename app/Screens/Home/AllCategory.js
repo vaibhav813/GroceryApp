@@ -23,7 +23,7 @@ import { imageBaseUrl } from "../../Component/config";
 import { ListItems } from "../../Component/SkeltonRow";
 import {VenderProductList} from '../../Component/SkeltonRow'
 import { themeColor } from "../../Component/config";
-
+import ProductBox from '../../Component/ProductBox'
 
 const height = Dimensions.get("window").height;
 const width = Dimensions.get("window").width;
@@ -83,7 +83,7 @@ class AllCategory extends Component {
   };
 
   getVenderDetails = () => {
-    let id = _get(this.props, "route.params.item.Id", 0);
+    let id = _get(this.props, "route.params.item.Id", 1);
 
     const constants = {
       init: "GET_VENDER_DETAILS_INIT",
@@ -102,7 +102,7 @@ class AllCategory extends Component {
   };
 
   getCategoryList = async () => {
-    let id = _get(this.props, "route.params.item.Id", 0);
+    let id = _get(this.props, "route.params.item.Id", 1);
 
     const constants = {
       init: "GET_VENDER_CATEGORY_LIST_INIT",
@@ -366,25 +366,9 @@ class AllCategory extends Component {
   
 
   categorySelectedView = () => {
-    // vendorSubCategoryList
-    console.log('this.state.subCategoryList****',this.state.subCategoryList)
-    console.log('this.props.subCategoryProductsList****',this.props.subCategoryProductsList)
-   // return this.state.subCategoryList.length > 0 ? (
-    return(
-      // this.state.subCategoryList.length > 0?
-
     
-        // this.state.subCategoryList &&
-        // this.props.subCategoryProductsList.map((item) => 
-        // {
-           
-        //     Object.assign(item, { itemPrice: item.MinRate, Qty: 1 });
-        //     Object.assign(item, { count: 1 });
-        //   //  console.log('Item get subCategoryProductsList ---- ',item)
-        //   return(
-        //        this.listItemView(item)
-        //        );
-        // })
+    return(
+    
 <FlatList   
 style={{borderWidth:0}}
  data={this.props.subCategoryProductsList}
@@ -433,35 +417,69 @@ emptyList=()=>{
 
   dispatchToDetails = (item) => {
     console.log("dispatchToDetails---- ", item);
+    
     // this.props.navigation.navigate('DetailsScreen',{"item":item})
   };
 
+
+
+  boxRenderView = () => {
+     let productList = this.props.subCategoryProductsList||[];
+
+
+       
+        return (
+            <View style={styles.boxParentView}>
+                    {productList.map((items)=>{
+                        return(
+                            <ProductBox item={items} 
+                           // handleInput={this.handleInputValue} 
+
+                            /> 
+                        )
+                                 
+            })}
+            </View>
+           
+        )
+    }
+
+
   main = () => {
+    const {IsSingle} = this.props.companyInfo;
     console.log('All List ************* ', _get(this.props, "vendorSubCategoryList", []))
     return (
       <View style={{ marginBottom: 10 }}>
         <Header title="All Category" props={this.props} right={false} />
 
-        <ScrollView contentContainerStyle={{ borderWidth: 0 }}>
-          {this.venderInfoView()}
+        <ScrollView contentContainerStyle={{ borderWidth: 0 }}
+        showsVerticalScrollIndicator={true}
+        >
+          {!IsSingle?
+            this.venderInfoView()
+            : null
+            }
           {this.upperView()}
          
           {
           _get(this.props, "subCategoryProductsList.length", []) > 0 ? 
             <View
               style={{
-                width: "100%",
+                width: "97%",
                 justifyContent: "flex-start",
+                //borderWidth:1,
+                alignSelf:'center',
                 flexDirection: "row",
                 flexWrap: "wrap",
                 marginBottom: 150,
-                marginLeft: 10,
+                marginLeft: 0,
+                
               }}
             >
            
-            { this.props.isLoad?this.loading():this.categorySelectedView()}
+            {/* { this.props.isLoad?this.loading():this.categorySelectedView()} */}
 
-              {/* { this.props.isLoad?this.loading():this.categorySelectedView()} */}
+              { this.props.isLoad?this.loading():this.boxRenderView()}
             </View>
 
           :
@@ -578,62 +596,62 @@ return(
   };
 
 
-   boxRender = (item) => {
+  //  boxRender = (item) => {
   
-   // console.log("Box Render subCategoryProductsList--- ", item);
+  //   console.log("Box Render subCategoryProductsList--- ", item);
 
-    return (
-      <TouchableOpacity style={styles.boxView} activeOpacity={0.4}>
-      <View style={{flex:0.3,borderWidth:1}}>
-        <View
-          style={{
-            height: 25,
-            width: 40,
-            borderRadius: 5,
-            backgroundColor: "#ffe6e6",
-            alignItems: "center",
-            justifyContent: "center",
+  //   return (
+  //     <TouchableOpacity style={styles.boxView} activeOpacity={0.4}>
+  //     <View style={{flex:0.3,borderWidth:1}}>
+  //       <View
+  //         style={{
+  //           height: 25,
+  //           width: 40,
+  //           borderRadius: 5,
+  //           backgroundColor: "#ffe6e6",
+  //           alignItems: "center",
+  //           justifyContent: "center",
             
-          }}
-        >
-          <Text style={{ color: "orangered" }}>5%</Text>
-        </View>
+  //         }}
+  //       >
+  //         <Text style={{ color: "orangered" }}>5%</Text>
+  //       </View>
 
-        <Image
-          style={{
-            height: 50,
-            width: 50,
-            resizeMode: "contain",
-            alignSelf: "center",
-            borderWidth:1
-          }}
-          source={{ uri: imageBaseUrl + item.Image }}
-     //   source={require('../../assets/images/cart/g2.png')}
-        />
+  //       <Image
+  //         style={{
+  //           height: 50,
+  //           width: 50,
+  //           resizeMode: "contain",
+  //           alignSelf: "center",
+  //           borderWidth:1
+  //         }}
+  //         source={{ uri: imageBaseUrl + item.Image }}
+  //    //   source={require('../../assets/images/cart/g2.png')}
+  //       />
 
-        </View>
+  //       </View>
 
-        <View style={{ justifyContent: "center", padding: 10,flex:0.7,borderWidth:1 }}>
+  //       <View style={{ justifyContent: "center", padding: 10,flex:0.7,borderWidth:1 }}>
           
-          <Text style={{ fontSize: 15, fontWeight: "600" }}>
-            {_get(item, "Name", "--")}
+  //         <Text style={{ fontSize: 15, fontWeight: "600" }}>
+  //           {_get(item, "Name", "--")}
            
-          </Text>
+  //         </Text>
 
-        </View>
+  //       </View>
 
-        <View style={styles.priceAndAdd}>
-          <Text style={{ fontSize: 15, fontWeight: "400", color: "green" }}>
-            $0.8/kg{" "}
-          </Text>
-          <TouchableOpacity style={styles.add}>
-            <Text style={{ color: "red" }}>+</Text>
-          </TouchableOpacity>
-        </View>
+  //       <View style={styles.priceAndAdd}>
+  //         <Text style={{ fontSize: 15, fontWeight: "400", color: "green" }}>
+  //           $0.8/kg{" "}
+  //         </Text>
+  //         <TouchableOpacity style={styles.add}>
+  //           <Text style={{ color: "red" }}>+</Text>
+  //         </TouchableOpacity>
+  //       </View>
 
-      </TouchableOpacity>
-    );
-  };
+  //     </TouchableOpacity>
+  //   );
+  // };
 
 listItemView=(item)=>{
        Object.assign(item, { itemPrice: item.MinRate, Qty: 1 });
@@ -833,7 +851,17 @@ const styles = StyleSheet.create({
        marginTop:15,
        padding:10
    
-   }
+   },
+   boxParentView: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    width: '100%',
+    marginTop: 0,
+    flexWrap: 'wrap',
+    justifyContent: 'flex-start',
+    marginBottom:57,
+    
+},
 });
 const mapStateToProps = (state) => ({
   vendorCategoryList: state.commonReducer.vendorCategoryList,
@@ -841,6 +869,7 @@ const mapStateToProps = (state) => ({
   vendorSubCategoryList: state.commonReducer.vendorSubCategoryList,
   subCategoryProductsList: state.commonReducer.subCategoryProductsList,
   isLoad: state.commonReducer.isLoad,
+  companyInfo: state.commonReducer.companyInfo,
 });
 
 const mapDispatchToProps = (dispatch) => ({
